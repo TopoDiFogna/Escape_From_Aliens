@@ -11,5 +11,6 @@ public class App
         System.out.println( "Hello World!" );
         //Altro test
         //altra riga di commento
+        //ancora un altra riga finta
     }
 }
