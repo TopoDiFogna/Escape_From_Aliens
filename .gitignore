@@ -1,9 +1,8 @@
 /target/
 /.classpath
-/Layered.atxa
 /.settings
+/bin
 .Ds_store
 *~
 .metadata
 ._*
-/bin
