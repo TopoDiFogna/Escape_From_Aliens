@@ -14,21 +14,21 @@ import Map.Sector;
  * @author Arianna
  */
 public class SectorVoid extends Sector {
-	// Start of user code (user defined attributes for SectorVoid)
+    // Start of user code (user defined attributes for SectorVoid)
 
-	// End of user code
+    // End of user code
 
-	/**
-	 * The constructor.
-	 */
-	public SectorVoid() {
-		// Start of user code constructor for SectorVoid)
-		super();
-		// End of user code
-	}
+    /**
+     * The constructor.
+     */
+    public SectorVoid() {
+        // Start of user code constructor for SectorVoid)
+        super();
+        // End of user code
+    }
 
-	// Start of user code (user defined methods for SectorVoid)
+    // Start of user code (user defined methods for SectorVoid)
 
-	// End of user code
+    // End of user code
 
 }

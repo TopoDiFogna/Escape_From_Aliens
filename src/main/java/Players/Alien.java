@@ -14,41 +14,43 @@ import Players.Player;
  * @author Arianna
  */
 public class Alien extends Player {
-	/**
-	 * Description of the property hasKilled.
-	 */
-	private Boolean hasKilled = Boolean.FALSE;
+    /**
+     * Description of the property hasKilled.
+     */
+    private Boolean hasKilled = Boolean.FALSE;
 
-	// Start of user code (user defined attributes for Alien)
+    // Start of user code (user defined attributes for Alien)
 
-	// End of user code
+    // End of user code
 
-	/**
-	 * The constructor.
-	 */
-	public Alien() {
-		// Start of user code constructor for Alien)
-		super();
-		// End of user code
-	}
+    /**
+     * The constructor.
+     */
+    public Alien() {
+        // Start of user code constructor for Alien)
+        super();
+        // End of user code
+    }
 
-	// Start of user code (user defined methods for Alien)
+    // Start of user code (user defined methods for Alien)
 
-	// End of user code
-	/**
-	 * Returns hasKilled.
-	 * @return hasKilled 
-	 */
-	public Boolean getHasKilled() {
-		return this.hasKilled;
-	}
+    // End of user code
+    /**
+     * Returns hasKilled.
+     * 
+     * @return hasKilled
+     */
+    public Boolean getHasKilled() {
+        return this.hasKilled;
+    }
 
-	/**
-	 * Sets a value to attribute hasKilled. 
-	 * @param newHasKilled 
-	 */
-	public void setHasKilled(Boolean newHasKilled) {
-		this.hasKilled = newHasKilled;
-	}
+    /**
+     * Sets a value to attribute hasKilled.
+     * 
+     * @param newHasKilled
+     */
+    public void setHasKilled(Boolean newHasKilled) {
+        this.hasKilled = newHasKilled;
+    }
 
 }

@@ -34,10 +34,12 @@ public class SectorDeckFactory {
      * @param noiseInYourSectorNumber
      * @return
      */
-    public Object createSectorDeck(int silenceNumber,
-            int noiseInAnySectorNumber, int noiseInYourSectorNumber) {
+    public Deck createSectorDeck(int silenceNumber, int noiseInAnySectorNumber,
+            int noiseInYourSectorNumber) {
+        Deck mazzo = null;
         // Start of user code for method createSectorDeck
         // End of user code
+        return mazzo;
     }
 
     /**

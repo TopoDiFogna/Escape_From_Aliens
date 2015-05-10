@@ -3,9 +3,12 @@
  *******************************************************************************/
 package Status;
 
+import Controller.Lobby;
 import Players.Player;
+
 import java.util.HashSet;
 // Start of user code (user defined imports)
+import java.util.List;
 
 // End of user code
 
@@ -33,7 +36,7 @@ public class Lobbies {
 	/**
 	 * Description of the property lobbys.
 	 */
-	public HashSet<Lobby> lobbys = new HashSet<Lobby>();
+	public Lobby lobbys = new Lobby();
 	
 	// Start of user code (user defined attributes for Lobbies)
 	
@@ -52,7 +55,7 @@ public class Lobbies {
 	 * Description of the method setLobbyName.
 	 * @param lobbyName 
 	 */
-	public void setLobbyName(EString lobbyName) {
+	public void setLobbyName(String lobbyName) {
 		// Start of user code for method setLobbyName
 		// End of user code
 	}
@@ -61,9 +64,9 @@ public class Lobbies {
 	 * Description of the method getLobbyName.
 	 * @return 
 	 */
-	public EString getLobbyName() {
+	public String getLobbyName() {
 		// Start of user code for method getLobbyName
-		EString getLobbyName = null;
+		String getLobbyName = null;
 		return getLobbyName;
 		// End of user code
 	}
@@ -72,7 +75,7 @@ public class Lobbies {
 	 * Description of the method setMapName.
 	 * @param mapName 
 	 */
-	public void setMapName(EString mapName) {
+	public void setMapName(String mapName) {
 		// Start of user code for method setMapName
 		// End of user code
 	}
@@ -81,9 +84,9 @@ public class Lobbies {
 	 * Description of the method getMapName.
 	 * @return 
 	 */
-	public EString getMapName() {
+	public String getMapName() {
 		// Start of user code for method getMapName
-		EString getMapName = null;
+		String getMapName = null;
 		return getMapName;
 		// End of user code
 	}
@@ -92,7 +95,7 @@ public class Lobbies {
 	 * Description of the method setPlayerList.
 	 * @param playerList 
 	 */
-	public void setPlayerList(EEList playerList) {
+	public void setPlayerList(List playerList) {
 		// Start of user code for method setPlayerList
 		// End of user code
 	}
@@ -101,7 +104,7 @@ public class Lobbies {
 	 * Description of the method getPlayerList.
 	 * @param  
 	 */
-	public void getPlayerList(EEList ) {
+	public void getPlayerList(List playerList) {
 		// Start of user code for method getPlayerList
 		// End of user code
 	}
@@ -109,51 +112,12 @@ public class Lobbies {
 	// Start of user code (user defined methods for Lobbies)
 	
 	// End of user code
-	/**
-	 * Returns mapName.
-	 * @return mapName 
-	 */
-	public String getMapName() {
-		return this.mapName;
-	}
 	
-	/**
-	 * Sets a value to attribute mapName. 
-	 * @param newMapName 
-	 */
-	public void setMapName(String newMapName) {
-	    this.mapName = newMapName;
-	}
-
-	/**
-	 * Returns lobbyName.
-	 * @return lobbyName 
-	 */
-	public String getLobbyName() {
-		return this.lobbyName;
-	}
-	
-	/**
-	 * Sets a value to attribute lobbyName. 
-	 * @param newLobbyName 
-	 */
-	public void setLobbyName(String newLobbyName) {
-	    this.lobbyName = newLobbyName;
-	}
-
-	/**
-	 * Returns playerList.
-	 * @return playerList 
-	 */
-	public HashSet<Player> getPlayerList() {
-		return this.playerList;
-	}
-
 	/**
 	 * Returns lobbys.
 	 * @return lobbys 
 	 */
-	public HashSet<Lobby> getLobbys() {
+	public Lobby getLobby() {
 		return this.lobbys;
 	}
 

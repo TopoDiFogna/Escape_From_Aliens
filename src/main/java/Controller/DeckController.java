@@ -17,7 +17,7 @@ public class DeckController {
     /**
      * Description of the property decks.
      */
-    public HashSet<Deck> decks = new HashSet<Deck>();
+    public Deck decks = new Deck();
 
     // Start of user code (user defined attributes for DeckController)
 
@@ -50,7 +50,7 @@ public class DeckController {
      * 
      * @return decks
      */
-    public HashSet<Deck> getDecks() {
+    public Deck getDecks() {
         return this.decks;
     }
 

@@ -34,6 +34,7 @@ public class EscapeHatchDeckFactory {
      * @return
      */
     public Deck createEscapeHatchDeck(int greenNumber, int redNumber) {
+        Deck mazzo = null;
         // Start of user code for method createEscapeHatchDeck
         // End of user code
         return mazzo;
