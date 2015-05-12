@@ -1,34 +1,23 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package model.players;
 
 import model.players.Player;
 
-// End of user code
-
 /**
- * Description of Human.
+ * Type of Player. Humans have to escape from aliens.
  * 
- * @author Arianna
+ * @author Paolo
  */
 public class Human extends Player {
     /**
-     * Description of the property escaped.
+     * Boolean. If a human escapes is removed from the game as a winner. 
      */
     private boolean escaped = false;
-
-    // Start of user code (user defined attributes for Human)
-
-    // End of user code
-
+    
     /**
      * The constructor.
      */
-    public Human() {
-        // Start of user code constructor for Human)
-        super();
-        // End of user code
+    public Human(String name) {
+        super(name);
     }
 
     /**
@@ -43,25 +32,21 @@ public class Human extends Player {
         // End of user code
     }
 
-    // Start of user code (user defined methods for Human)
-
-    // End of user code
     /**
-     * Returns escaped.
+     * Returns if a player has escaped hence has win.
      * 
-     * @return escaped
+     * @return escaped tells if a player has escaped hence win
      */
     public boolean getEscaped() {
         return this.escaped;
     }
 
     /**
-     * Sets a value to attribute escaped.
+     * Sets a human as escaped.
      * 
-     * @param newEscaped
      */
-    public void setEscaped(boolean newEscaped) {
-        this.escaped = newEscaped;
+    public void setEscaped() {
+        this.escaped = true;
     }
 
 }
