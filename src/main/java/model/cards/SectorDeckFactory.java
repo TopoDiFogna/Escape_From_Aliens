@@ -1,11 +1,4 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package model.cards;
-
-// Start of user code (user defined imports)
-
-// End of user code
 
 /**
  * Description of SectorDeckFactory.
@@ -13,12 +6,11 @@ package model.cards;
  * @author Arianna
  */
 public class SectorDeckFactory {
-    // Start of user code (user defined attributes for SectorDeckFactory)
-
-    // End of user code
+   // private static final silenceNumber=5;
+    
 
     /**
-     * The constructor.
+     * Constructor.
      */
     public SectorDeckFactory() {
         // Start of user code constructor for SectorDeckFactory)
@@ -49,9 +41,5 @@ public class SectorDeckFactory {
         // Start of user code for method addCard
         // End of user code
     }
-
-    // Start of user code (user defined methods for SectorDeckFactory)
-
-    // End of user code
 
 }

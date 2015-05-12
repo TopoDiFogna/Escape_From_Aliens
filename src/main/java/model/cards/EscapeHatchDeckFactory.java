@@ -1,11 +1,4 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package model.cards;
-
-// Start of user code (user defined imports)
-
-// End of user code
 
 /**
  * Description of EscapeHatchDeckFactory.
@@ -18,7 +11,7 @@ public class EscapeHatchDeckFactory {
     // End of user code
 
     /**
-     * The constructor.
+     * Constructor.
      */
     public EscapeHatchDeckFactory() {
         // Start of user code constructor for EscapeHatchDeckFactory)
@@ -47,9 +40,5 @@ public class EscapeHatchDeckFactory {
         // Start of user code for method addCard
         // End of user code
     }
-
-    // Start of user code (user defined methods for EscapeHatchDeckFactory)
-
-    // End of user code
 
 }
