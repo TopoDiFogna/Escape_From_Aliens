@@ -31,11 +31,6 @@ public abstract class Player {
     protected boolean activePlayer = false;
 
     /**
-     * Description of the property cards.
-     */
-    protected HashSet<Card> cards = new HashSet<Card>();
-
-    /**
      * Description of the property sectors.
      */
     public Sector sectors = null;
@@ -148,8 +143,8 @@ public abstract class Player {
      * 
      * @return cards
      */
-    public HashSet<Card> getCards() {
-        return this.cards;
+    public Card getCards() {
+        return this.getCards();
     }
 
     /**
