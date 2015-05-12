@@ -1,213 +1,146 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package model.players;
 
-import java.util.HashSet;
-// Start of user code (user defined imports)
+import java.util.ArrayList;
 
-
-
-import controller.PlayerController;
 import model.cards.Card;
 import model.map.Sector;
 
-// End of user code
-
 /**
- * Description of Player.
+ * The generic entity who plays the game
  * 
- * @author Arianna
+ * @author Paolo
  */
 public abstract class Player {
     /**
      * Description of the property hasMoved.
+     * maybe not necessary, no purpose
      */
-    private boolean hasMoved = false;
+    protected boolean hasMoved = false;
 
     /**
-     * Description of the property activePlayer.
+     *  Tells if the player can move 1 sector faster,
+     *  in case of human it becomes true for the turn when the players uses the card adrenaline,
+     *  in case of alien become definetly true after the player has killed a human  
      */
-    protected boolean activePlayer = false;
-
+    protected Boolean canMoveFaster = false;
+    
     /**
-     * Description of the property sectors.
+     *  True if the player is still alive and in-game 
      */
-    public Sector sectors = null;
-
+    protected boolean status = true;
+    
     /**
-     * Description of the property playerControllers.
+     * List of cards a player has in his hand
      */
-    public PlayerController playerControllers = new PlayerController();
-
+    protected ArrayList<Card> cards = new ArrayList<>(3);
+    
     /**
-     * Description of the property alive.
+     * The sector where the player currently is.
      */
-    protected boolean alive = false;
-
+    protected Sector currentSector = null;
+    
     /**
-     * Description of the property canMoveFaster.
+     * Unique id for every player.
      */
-    protected Boolean canMoveFaster = Boolean.FALSE;
-
-    // Start of user code (user defined attributes for Player)
-
-    // End of user code
+    protected final int playerId;
+    
+    /**
+     * Used to count players; incremental unique number.
+     */
+    private static int counter=0;
+    
+    /**
+     * Nickname chosen by the player
+     */
+    protected final String name;
 
     /**
      * The constructor.
      */
-    public Player() {
-        // Start of user code constructor for Player)
-        super();
-        // End of user code
+    public Player(String name) {
+        this.playerId=counter;
+        counter++;
+        this.name=name;
     }
 
     /**
-     * Description of the method isAlive.
+     * Tells if the player is alive or dead. 
+     * By default it's true, becomes false if a player is killed either bay human or alien.
      * 
-     * @return
+     * @return the status of the player, either dead or alive
      */
     public boolean isAlive() {
-        // Start of user code for method isAlive
-        boolean isAlive = false;
-        return isAlive;
-        // End of user code
+        return this.status;
     }
 
     /**
-     * Description of the method setAlive.
+     * Sets the status of the player as dead after he's killed. alive can be changed only to false. No player can be revived
      * 
-     * @return
      */
-    public boolean setAlive() {
-        // Start of user code for method setAlive
-        boolean setAlive = false;
-        return setAlive;
-        // End of user code
+    public void setDead() {
+        this.status = false;
     }
 
     /**
-     * Description of the method getSector.
+     * Returns the sector where the player currently is.
+     * Initially it is the home sector of the faction the it depends of what moves has done the player.
+     * It can never be a Void Sector.
      * 
-     * @return
+     * @return the sector where the player currently is.
      */
     public Sector getSector() {
-        // Start of user code for method getSector
-        Sector getSector = null;
-        return getSector;
-        // End of user code
-    }
+        return this.currentSector;
 
-    // Start of user code (user defined methods for Player)
-
-    // End of user code
-    /**
-     * Returns hasMoved.
-     * 
-     * @return hasMoved
-     */
-    public boolean getHasMoved() {
-        return this.hasMoved;
     }
 
     /**
-     * Sets a value to attribute hasMoved.
+     * Returns the cards the player has in his hand.
      * 
-     * @param newHasMoved
+     * @return A list containing the cards the player has in his hand
      */
-    public void setHasMoved(boolean newHasMoved) {
-        this.hasMoved = newHasMoved;
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+    
+    /**
+     * Adds card to the card list used to store the cards the player has in his hands.
+     * 
+     * @param card the new card to be added at the end of the list
+     */
+    public void addCard(Card card) {
+        cards.add(card);
     }
 
     /**
-     * Returns activePlayer.
+     * Sets a new value to attribute sector.
+     * It's the destination after a move.
      * 
-     * @return activePlayer
+     * @param sector the destination after a move
      */
-    public boolean getActivePlayer() {
-        return this.activePlayer;
+    public void setSector(Sector sector) {
+        this.currentSector = sector;
     }
 
     /**
-     * Sets a value to attribute activePlayer.
-     * 
-     * @param newActivePlayer
+     *  Tells if the player can move 1 sector faster
+     *  in case of human it becomes true for the turn when the players uses the card adrenaline
+     *  in case of alien become definetly true after the player has killed a human
+     *  
+     * @return a boolean: true if the player can move vaster, false otherwise.
      */
-    public void setActivePlayer(boolean newActivePlayer) {
-        this.activePlayer = newActivePlayer;
-    }
-
-    /**
-     * Returns cards.
-     * 
-     * @return cards
-     */
-    public Card getCards() {
-        return this.getCards();
-    }
-
-    /**
-     * Returns sectors.
-     * 
-     * @return sectors
-     */
-    public Sector getSectors() {
-        return this.sectors;
-    }
-
-    /**
-     * Sets a value to attribute sectors.
-     * 
-     * @param newSectors
-     */
-    public void setSectors(Sector newSectors) {
-        this.sectors = newSectors;
-    }
-
-    /**
-     * Returns playerControllers.
-     * 
-     * @return playerControllers
-     */
-    public PlayerController getPlayerControllers() {
-        return this.playerControllers;
-    }
-
-    /**
-     * Returns alive.
-     * 
-     * @return alive
-     */
-    public boolean getAlive() {
-        return this.alive;
-    }
-
-    /**
-     * Sets a value to attribute alive.
-     * 
-     * @param newAlive
-     */
-    public void setAlive(boolean newAlive) {
-        this.alive = newAlive;
-    }
-
-    /**
-     * Returns canMoveFaster.
-     * 
-     * @return canMoveFaster
-     */
-    public Boolean getCanMoveFaster() {
+    public boolean getCanMoveFaster() {
         return this.canMoveFaster;
     }
 
     /**
-     * Sets a value to attribute canMoveFaster.
-     * 
-     * @param newCanMoveFaster
+     *  Tells if the player can move 1 sector faster
+     *  in case of human it becomes true for the turn when the players uses the card adrenaline
+     *  in case of alien become definetly true after the player has killed a human
+     *  
+     * @param canMoveFaster sets the value for moving faster
      */
-    public void setCanMoveFaster(Boolean newCanMoveFaster) {
-        this.canMoveFaster = newCanMoveFaster;
+    public void setCanMoveFaster(boolean canMoveFaster) {
+        this.canMoveFaster = canMoveFaster;
     }
 
 }

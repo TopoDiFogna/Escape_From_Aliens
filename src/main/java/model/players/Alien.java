@@ -1,6 +1,3 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package model.players;
 
 import model.players.Player;
@@ -25,9 +22,9 @@ public class Alien extends Player {
     /**
      * The constructor.
      */
-    public Alien() {
+    public Alien(String name) {
         // Start of user code constructor for Alien)
-        super();
+        super(name);
         // End of user code
     }
 
