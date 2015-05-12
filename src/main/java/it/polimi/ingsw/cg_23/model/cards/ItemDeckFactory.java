@@ -27,9 +27,7 @@ public class ItemDeckFactory {
      * @param adrenalineNumber
      * @return
      */
-    public Deck createItemDeck(int attackNumber, int teleportNumber,
-            int sedativesNumber, int spotlightNumber, int defenceNumber,
-            int adrenalineNumber) {
+    public Deck createItemDeck(int attackNumber, int teleportNumber, int sedativesNumber, int spotlightNumber, int defenceNumber, int adrenalineNumber) {
         Deck mazzo = null;
         // Start of user code for method createItemDeck
         // End of user code

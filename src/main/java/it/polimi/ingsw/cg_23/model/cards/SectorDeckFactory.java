@@ -5,9 +5,7 @@ package it.polimi.ingsw.cg_23.model.cards;
  * 
  * @author Arianna
  */
-public class SectorDeckFactory {
-   // private static final silenceNumber=5;
-    
+public class SectorDeckFactory {    
 
     /**
      * Constructor.
@@ -26,8 +24,7 @@ public class SectorDeckFactory {
      * @param noiseInYourSectorNumber
      * @return
      */
-    public Deck createSectorDeck(int silenceNumber, int noiseInAnySectorNumber,
-            int noiseInYourSectorNumber) {
+    public Deck createSectorDeck(int silenceNumber, int noiseInAnySectorNumber, int noiseInYourSectorNumber) {
         Deck mazzo = null;
         // Start of user code for method createSectorDeck
         // End of user code

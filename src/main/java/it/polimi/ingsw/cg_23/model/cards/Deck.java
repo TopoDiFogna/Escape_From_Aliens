@@ -1,13 +1,6 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package it.polimi.ingsw.cg_23.model.cards;
 
 import java.util.List;
-
-// Start of user code (user defined imports)
-
-// End of user code
 
 /**
  * Description of Deck.
@@ -25,12 +18,8 @@ public class Deck {
      */
     public List<Card> mazzo = null;
 
-    // Start of user code (user defined attributes for Deck)
-
-    // End of user code
-
     /**
-     * The constructor.
+     * Constructor.
      */
     public Deck() {
         // Start of user code constructor for Deck)

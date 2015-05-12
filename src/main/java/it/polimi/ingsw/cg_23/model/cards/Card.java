@@ -6,5 +6,12 @@ package it.polimi.ingsw.cg_23.model.cards;
  * @author Arianna
  */
 public abstract class Card {
+    
+    /**
+     * Constructor.
+     */
+    public Card(){
+        
+    }
    
 }
