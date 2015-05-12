@@ -1,0 +1,52 @@
+package it.polimi.ingsw.cg_23.model.players;
+
+import it.polimi.ingsw.cg_23.model.players.Player;
+
+// End of user code
+
+/**
+ * Description of Alien.
+ * 
+ * @author Arianna
+ */
+public class Alien extends Player {
+    /**
+     * Description of the property hasKilled.
+     */
+    private Boolean hasKilled = Boolean.FALSE;
+
+    // Start of user code (user defined attributes for Alien)
+
+    // End of user code
+
+    /**
+     * The constructor.
+     */
+    public Alien(String name) {
+        // Start of user code constructor for Alien)
+        super(name);
+        // End of user code
+    }
+
+    // Start of user code (user defined methods for Alien)
+
+    // End of user code
+    /**
+     * Returns hasKilled.
+     * 
+     * @return hasKilled
+     */
+    public Boolean getHasKilled() {
+        return this.hasKilled;
+    }
+
+    /**
+     * Sets a value to attribute hasKilled.
+     * 
+     * @param newHasKilled
+     */
+    public void setHasKilled(Boolean newHasKilled) {
+        this.hasKilled = newHasKilled;
+    }
+
+}
