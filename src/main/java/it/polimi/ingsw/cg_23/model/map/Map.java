@@ -1,6 +1,3 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package it.polimi.ingsw.cg_23.model.map;
 
 import it.polimi.ingsw.cg_23.model.map.SectorAlien;
@@ -10,28 +7,27 @@ import it.polimi.ingsw.cg_23.model.map.SectorHuman;
 import it.polimi.ingsw.cg_23.model.map.SectorSecure;
 import it.polimi.ingsw.cg_23.model.map.SectorVoid;
 
-// End of user code
-
 /**
- * Description of Map.
- * 
- * @author Arianna
+ * Description of Map. The map is where the game is played.
+ * It's divided in sectors and has a maximum fixed size.
+ *  
+ * @author Paolo
  */
 public class Map {
     /**
-     * Description of the property SIZENUMBER.
+     * Maximum columns in the map.
      */
-    private final static int SIZENUMBER = 0;
+    private final static int SIZENUMBER = 23;
 
+    /**
+     * Maximum rows in the map.
+     */
+    private final static int SIZELETTER = 14;
+    
     /**
      * Description of the property sectorDangerous.
      */
     private final SectorDangerous sectorDangerous = null;
-
-    /**
-     * Description of the property SIZELETTER.
-     */
-    private final static int SIZELETTER = 0;
 
     /**
      * Description of the property sectorSecure.
@@ -58,31 +54,43 @@ public class Map {
      */
     private final SectorEscapeHatch sectorEscapeHatch = null;
 
-    private Sector sectors;
-
-    // Start of user code (user defined attributes for Map)
-
-    // End of user code
+    /**
+     * Sectors of the map: rows x columns
+     * 
+     */
+    private Sector[][] sectors = new Sector[SIZENUMBER][SIZELETTER];
 
     /**
      * The constructor.
      */
-    public Map() {
-        // Start of user code constructor for Map)
-        super();
-        // End of user code
+    public Map(Sector[][] sectors) {
+        this.sectors=sectors;
     }
-
-    // Start of user code (user defined methods for Map)
-
-    // End of user code
     /**
-     * Returns SIZENUMBER.
+     * Returns max rows of the map.
      * 
-     * @return SIZENUMBER
+     * @return SIZENUMBER max rows of the map
      */
-    public static int getSIZENUMBER() {
+    public int getSIZENUMBER() {
         return SIZENUMBER;
+    }
+    
+    /**
+     * Returns max colums of the map.
+     * 
+     * @return SIZELETTER max colums of the map
+     */
+    public int getSIZELETTER() {
+        return SIZELETTER;
+    }
+    
+    /**
+     * Returns the map as a array[SIZENUMBER]x[SIZELETTER].
+     * 
+     * @return sectors
+     */
+    public Sector[][] getSector() {
+        return this.sectors;
     }
 
     /**
@@ -92,15 +100,6 @@ public class Map {
      */
     public SectorDangerous getSectorDangerous() {
         return this.sectorDangerous;
-    }
-
-    /**
-     * Returns SIZELETTER.
-     * 
-     * @return SIZELETTER
-     */
-    public static int getSIZELETTER() {
-        return SIZELETTER;
     }
 
     /**
@@ -119,15 +118,6 @@ public class Map {
      */
     public SectorAlien getSectorAlien() {
         return this.sectorAlien;
-    }
-
-    /**
-     * Returns sectors.
-     * 
-     * @return sectors
-     */
-    public Sector getSector() {
-        return this.sectors;
     }
 
     /**
