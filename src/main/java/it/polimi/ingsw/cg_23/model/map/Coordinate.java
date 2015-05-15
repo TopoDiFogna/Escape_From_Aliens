@@ -1,8 +1,8 @@
 package it.polimi.ingsw.cg_23.model.map;
 
 /**
- * Description of Coordinate.
- * 
+ * The Coordinate of the every sector in the map.
+ *  
  * @author Paolo
  */
 public class Coordinate {
