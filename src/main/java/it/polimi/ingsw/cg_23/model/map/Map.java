@@ -24,12 +24,13 @@ public class Map {
     private Sector[][] sectors = new Sector[SIZENUMBER][SIZELETTER];
 
     /**
-     * The Constructor
+     * The Constructor. Not really used to create the map. we use another method for that.
      * 
      * @param sectors sectors of the map
      */
-    public Map(Sector[][] sectors) {
-        this.sectors=sectors;
+    
+    //TODO finish javadoc with appropriate method
+    private Map() {
     }
     
     /**

@@ -1,102 +1,46 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package it.polimi.ingsw.cg_23.model.map;
-
-// Start of user code (user defined imports)
-
-// End of user code
 
 /**
  * Description of Coordinate.
  * 
- * @author Arianna
+ * @author Paolo
  */
 public class Coordinate {
     /**
-     * Description of the property lettera.
+     * First part of the coordinate identifier. <br>
+     * Letter of the coordinate; we use number so it's simpler to do math calculation.
      */
-    private int lettera = 0;
+    private final int letter;
 
     /**
-     * Description of the property numero.
+     * Second part of the coordinate identifier. <br>
+     * Number part of the coordinate.
      */
-    private int numero = 0;
-
-    // Start of user code (user defined attributes for Coordinate)
-
-    // End of user code
+    private final int number;
 
     /**
      * The constructor.
      */
-    public Coordinate() {
-        // Start of user code constructor for Coordinate)
-        super();
-        // End of user code
+    public Coordinate(int letter, int number) {
+        this.letter=letter;
+        this.number=number;
     }
-
     /**
-     * Description of the method equals.
+     * Returns the first identifier of the coordinate.<br>
+     * It's codified as an int.
      * 
-     * @return
+     * @return lettera int that is the second identifier of the coordinate
      */
-    public Boolean equals() {
-        // Start of user code for method equals
-        Boolean equals = Boolean.FALSE;
-        return equals;
-        // End of user code
+    public int getLetter() {
+        return this.letter;
     }
-
+    
     /**
-     * Description of the method hashCode.
+     * Returns the second identifier of the coordinate.
      * 
-     * @return
+     * @return number int that is the second identifier of the coordinate
      */
-    public int hashCode() {
-        // Start of user code for method hashCode
-        int hashCode = 0;
-        return hashCode;
-        // End of user code
+    public int getNumber() {
+        return this.number;
     }
-
-    // Start of user code (user defined methods for Coordinate)
-
-    // End of user code
-    /**
-     * Returns lettera.
-     * 
-     * @return lettera
-     */
-    public int getLettera() {
-        return this.lettera;
-    }
-
-    /**
-     * Sets a value to attribute lettera.
-     * 
-     * @param newLettera
-     */
-    public void setLettera(int newLettera) {
-        this.lettera = newLettera;
-    }
-
-    /**
-     * Returns numero.
-     * 
-     * @return numero
-     */
-    public int getNumero() {
-        return this.numero;
-    }
-
-    /**
-     * Sets a value to attribute numero.
-     * 
-     * @param newNumero
-     */
-    public void setNumero(int newNumero) {
-        this.numero = newNumero;
-    }
-
 }

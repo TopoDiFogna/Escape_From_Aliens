@@ -1,6 +1,3 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package it.polimi.ingsw.cg_23.model.status;
 
 import it.polimi.ingsw.cg_23.controller.GameInitializer;
@@ -24,7 +21,7 @@ public class Match {
     /**
      * Description of the property maps.
      */
-    public Map maps = new Map();
+    //TODO public Map maps = new Map();
 
     /**
      * Description of the property sectorDeck.
@@ -86,9 +83,9 @@ public class Match {
      * 
      * @return maps
      */
-    public Map getMaps() {
+    /*public Map getMaps() {
         return this.maps;
-    }
+    }*/
 
     /**
      * Returns sectorDeck.
