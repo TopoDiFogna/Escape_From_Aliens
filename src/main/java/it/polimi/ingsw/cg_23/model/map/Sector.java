@@ -1,110 +1,78 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package it.polimi.ingsw.cg_23.model.map;
+
+import java.util.ArrayList;
 
 import it.polimi.ingsw.cg_23.model.map.Coordinate;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
-// End of user code
-
 /**
- * Description of Sector.
+ * A sector is where a player is on the map when he's alive and playing.
  * 
- * @author Arianna
+ * @author Paolo
  */
 public abstract class Sector extends Coordinate {
     
     /**
-     * Description of the property crossable.
+     * The players who are in the sector is saved here
      */
-    protected Boolean crossable = Boolean.FALSE;
-
-    // Start of user code (user defined attributes for Sector)
-
-    // End of user code
+    private ArrayList<Player> player = null;
+    
+    /**
+     * Tells us if the sector is crossable by the players.
+     */
+    protected boolean crossable;
+    
+    /**
+     * The type of sector taken from SectorTypeEnum enumeration.
+     */
+    private final SectorTypeEnum type;
 
     /**
-     * The constructor.
+     * The constructor. Creates the sector specifying type and if it's crossable.
      */
-    public Sector() {
-        // Start of user code constructor for Sector)
-        super();
-        // End of user code
+    public Sector(int letter, int number, SectorTypeEnum type, boolean crossable) {
+        super(letter, number);
+        this.type=type;
+        this.crossable=crossable;
     }
 
     /**
-     * Description of the method getPlayer.
+     * This method  gives the players who are in this sector as a list.
      * 
-     * @return
+     * @return the players in the sector as a list
      */
-    public Player getPlayer() {
-        // Start of user code for method getPlayer
-        Player getPlayer = null;
-        return getPlayer;
-        // End of user code
+    public ArrayList<Player> getPlayer() {
+        return player;
     }
 
     /**
-     * Description of the method setPlayer.
+     * Sets the position of a player after he moves.
      * 
-     * @param player
+     * @param player the player who enters the sector
      */
     public void setPlayer(Player player) {
-        // Start of user code for method setPlayer
-        // End of user code
+        this.player.add(player);
+    }
+
+    public SectorTypeEnum getType() {
+        return type;
     }
 
     /**
-     * Description of the method isCrossable.
+     * Returns a boolean that is true if the sector is crossable by any alive player
      * 
-     * @return
+     * @return a boolean. True if the sector is crossable by any alive player, false otherwise
      */
-    public Boolean isCrossable() {
-        // Start of user code for method isCrossable
-        Boolean isCrossable = Boolean.FALSE;
-        return isCrossable;
-        // End of user code
-    }
-
-    /**
-     * Description of the method setCrossable.
-     * 
-     * @param value
-     */
-    public void setCrossable(boolean value) {
-        // Start of user code for method setCrossable
-        // End of user code
-    }
-
-    // Start of user code (user defined methods for Sector)
-
-    // End of user code
-    /**
-     * Returns sectors.
-     * 
-     * @return sectors
-     */
-    public Sector getSector() {
-        return this.getSector();
-    }
-
-    /**
-     * Returns crossable.
-     * 
-     * @return crossable
-     */
-    public Boolean getCrossable() {
+    public boolean isCrossable() {
         return this.crossable;
     }
 
     /**
-     * Sets a value to attribute crossable.
+     * This method set an escape hatch sector as not crossable if used.<br>
+     * Not used for other sectors becase they are always crossable or not crossable since the map is create
      * 
-     * @param newCrossable
      */
-    public void setCrossable(Boolean newCrossable) {
-        this.crossable = newCrossable;
+    public void setEscapeHatchSectorNotCrossable() {
+        this.crossable=false;
     }
-
 }

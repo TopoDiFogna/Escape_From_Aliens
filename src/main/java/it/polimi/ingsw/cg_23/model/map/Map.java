@@ -1,169 +1,62 @@
-/*******************************************************************************
- * 2015, All rights reserved.
- *******************************************************************************/
 package it.polimi.ingsw.cg_23.model.map;
 
-import it.polimi.ingsw.cg_23.model.map.SectorAlien;
-import it.polimi.ingsw.cg_23.model.map.SectorDangerous;
-import it.polimi.ingsw.cg_23.model.map.SectorEscapeHatch;
-import it.polimi.ingsw.cg_23.model.map.SectorHuman;
-import it.polimi.ingsw.cg_23.model.map.SectorSecure;
-import it.polimi.ingsw.cg_23.model.map.SectorVoid;
-
-// End of user code
-
 /**
- * Description of Map.
- * 
- * @author Arianna
+ * The map is where the game is played.
+ * It's divided in sectors and has a maximum fixed size defined by SIZENUMBER and SIZELETTER.
+ *  
+ * @author Paolo
  */
 public class Map {
     /**
-     * Description of the property SIZENUMBER.
+     * Maximum columns in the map.
      */
-    private final static int SIZENUMBER = 0;
+    private final static int SIZENUMBER = 23;
 
     /**
-     * Description of the property sectorDangerous.
+     * Maximum rows in the map.
      */
-    private final SectorDangerous sectorDangerous = null;
+    private final static int SIZELETTER = 14;
 
     /**
-     * Description of the property SIZELETTER.
-     */
-    private final static int SIZELETTER = 0;
-
-    /**
-     * Description of the property sectorSecure.
-     */
-    private final SectorSecure sectorSecure = null;
-
-    /**
-     * Description of the property sectorAlien.
-     */
-    private final SectorAlien sectorAlien = null;
-
-    /**
-     * Description of the property sectorVoid.
-     */
-    private SectorVoid sectorVoid = null;
-
-    /**
-     * Description of the property sectorHuman.
-     */
-    private final SectorHuman sectorHuman = null;
-
-    /**
-     * Description of the property sectorEscapeHatch.
-     */
-    private final SectorEscapeHatch sectorEscapeHatch = null;
-
-    private Sector sectors;
-
-    // Start of user code (user defined attributes for Map)
-
-    // End of user code
-
-    /**
-     * The constructor.
-     */
-    public Map() {
-        // Start of user code constructor for Map)
-        super();
-        // End of user code
-    }
-
-    // Start of user code (user defined methods for Map)
-
-    // End of user code
-    /**
-     * Returns SIZENUMBER.
+     * Sectors of the map: rows x columns
      * 
-     * @return SIZENUMBER
      */
-    public static int getSIZENUMBER() {
+    private Sector[][] sectors = new Sector[SIZENUMBER][SIZELETTER];
+
+    /**
+     * The Constructor. Not really used to create the map. we use another method for that.
+     * 
+     * @param sectors sectors of the map
+     */
+    
+    //TODO finish javadoc with appropriate method
+    private Map() {
+    }
+    
+    /**
+     * Returns max rows of the map.
+     * 
+     * @return SIZENUMBER max rows of the map
+     */
+    public int getSIZENUMBER() {
         return SIZENUMBER;
     }
-
+    
     /**
-     * Returns sectorDangerous.
+     * Returns max colums of the map.
      * 
-     * @return sectorDangerous
+     * @return SIZELETTER max colums of the map
      */
-    public SectorDangerous getSectorDangerous() {
-        return this.sectorDangerous;
-    }
-
-    /**
-     * Returns SIZELETTER.
-     * 
-     * @return SIZELETTER
-     */
-    public static int getSIZELETTER() {
+    public int getSIZELETTER() {
         return SIZELETTER;
     }
-
+    
     /**
-     * Returns sectorSecure.
-     * 
-     * @return sectorSecure
-     */
-    public SectorSecure getSectorSecure() {
-        return this.sectorSecure;
-    }
-
-    /**
-     * Returns sectorAlien.
-     * 
-     * @return sectorAlien
-     */
-    public SectorAlien getSectorAlien() {
-        return this.sectorAlien;
-    }
-
-    /**
-     * Returns sectors.
+     * Returns the map as a array[SIZENUMBER]x[SIZELETTER].
      * 
      * @return sectors
      */
-    public Sector getSector() {
+    public Sector[][] getSector() {
         return this.sectors;
     }
-
-    /**
-     * Returns sectorVoid.
-     * 
-     * @return sectorVoid
-     */
-    public SectorVoid getSectorVoid() {
-        return this.sectorVoid;
-    }
-
-    /**
-     * Sets a value to attribute sectorVoid.
-     * 
-     * @param newSectorVoid
-     */
-    public void setSectorVoid(SectorVoid newSectorVoid) {
-        this.sectorVoid = newSectorVoid;
-    }
-
-    /**
-     * Returns sectorHuman.
-     * 
-     * @return sectorHuman
-     */
-    public SectorHuman getSectorHuman() {
-        return this.sectorHuman;
-    }
-
-    /**
-     * Returns sectorEscapeHatch.
-     * 
-     * @return sectorEscapeHatch
-     */
-    public SectorEscapeHatch getSectorEscapeHatch() {
-        return this.sectorEscapeHatch;
-    }
-
 }
