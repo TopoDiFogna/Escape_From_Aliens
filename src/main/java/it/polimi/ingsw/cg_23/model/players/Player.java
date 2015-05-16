@@ -10,6 +10,7 @@ import java.util.ArrayList;
  * 
  * @author Paolo
  */
+//TODO write card methods
 public abstract class Player {
     /**
      * Description of the property hasMoved.

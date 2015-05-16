@@ -25,7 +25,7 @@ public class Alien extends Player {
      * 
      * @return hasKilled true if the alien has killed some humans
      */
-    public Boolean getHasKilled() {
+    public boolean getHasKilled() {
         return this.hasKilled;
     }
 
