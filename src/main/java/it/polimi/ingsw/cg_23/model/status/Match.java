@@ -18,9 +18,10 @@ import it.polimi.ingsw.cg_23.model.players.Player;
 public class Match {
     /**
      * Description of the property decks.
+     * @TODO next line has error, we need to correct it
      */
-    public Deck decks = new Deck();
-
+    //public Deck<T> deck = new Deck<T>();
+    
     /**
      * Description of the property maps.
      */
@@ -74,12 +75,12 @@ public class Match {
     // End of user code
     /**
      * Returns decks.
-     * 
+     * @TODO error, we must correct it
      * @return decks
      */
-    public Deck getDecks() {
-        return this.decks;
-    }
+    //public Deck getDecks() {
+    //    return this.deck;
+    //}
 
     /**
      * Returns maps.

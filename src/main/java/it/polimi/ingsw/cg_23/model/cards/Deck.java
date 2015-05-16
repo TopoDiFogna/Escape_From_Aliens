@@ -1,41 +1,24 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
- * Description of Deck.
+ * Implements a generic list who extends card.
  * 
  * @author Arianna
  */
-public class Deck {
+public abstract class Deck<T extends Card> extends ArrayList<T> {
+    
     /**
-     * Description of the property cards.
+     * 
      */
-    // public HashSet<Card> cards = new HashSet<Card>();
-
-    /**
-     * Description of the property mazzo.
-     */
-    public List<Card> mazzo = null;
+    //private static final long serialVersionUID = 2229743970656975155L;
 
     /**
      * Constructor.
      */
-    public Deck() {
-        // Start of user code constructor for Deck)
-        super();
-        // End of user code
+    protected Deck(){
+        
     }
-
-    // Start of user code (user defined methods for Deck)
-
-    // End of user code
-    /**
-     * Returns mazzo.
-     * 
-     * @return mazzo
-     */
-    public List<Card> getMazzo() {
-        return this.mazzo;
-    }
+   
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
 /**
- * Description of Card.
+ * Abtract class of card.
  * 
  * @author Arianna
  */
