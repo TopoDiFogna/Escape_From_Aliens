@@ -11,8 +11,7 @@ public class HumanTest {
     public void testHuman() {
         Human human = new Human("dummy");
         assertNotNull(human);
-        assertEquals("dummy", human.getName());
-        //fail("Not yet implemented");
+        //TODO assertEquals("dummy", human.getName());
     }
 
     @Test
@@ -86,7 +85,7 @@ public class HumanTest {
     }
     
     @Test
-    public void testGetCanMoveFasterFalseDefault() {
+    public void testGetCanMoveFasterFalseAsDefault() {
         Human human = new Human("dummy");
         assertFalse(human.getCanMoveFaster());
     }
