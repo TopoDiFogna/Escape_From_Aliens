@@ -20,7 +20,7 @@ public class ItemCard extends Card{
     }
 
     /**
-     * Card type can be one of defined type in ItemCardEnum.
+     * Card type can be one of defined types in ItemCardEnum.
      * 
      * @return type 
      */

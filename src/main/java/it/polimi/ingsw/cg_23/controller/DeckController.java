@@ -16,7 +16,7 @@ public class DeckController {
     /**
      * Description of the property decks.
      */
-    public Deck decks = new Deck();
+    //  TODO public Deck deck = new Deck();
 
     // Start of user code (user defined attributes for DeckController)
 
@@ -49,8 +49,8 @@ public class DeckController {
      * 
      * @return decks
      */
-    public Deck getDecks() {
-        return this.decks;
-    }
+    // TODO public Deck getDecks() {
+    // TODO    return this.deck;
+    //}
 
 }

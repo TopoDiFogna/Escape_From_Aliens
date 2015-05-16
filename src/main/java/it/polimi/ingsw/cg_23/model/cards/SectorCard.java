@@ -2,13 +2,14 @@ package it.polimi.ingsw.cg_23.model.cards;
 
 /**
  * Defines the structure of sector cards.
+ * HasItem by default is false. Only card with item are set true
  * 
  * @author Arianna
  */
 
 public class SectorCard extends Card{
     
-    private final SectorCardEnum type;
+    protected final SectorCardEnum type;
     private boolean hasItem = false;
     /**
      * Constructor.
@@ -39,7 +40,7 @@ public class SectorCard extends Card{
     }
 
     /**
-     * Card type can be one of defined type in SectorCardEnum.
+     * Card type can be one of defined types in SectorCardEnum.
      * 
      * @return type
      */
