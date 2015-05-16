@@ -10,7 +10,7 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * 
  * @author Paolo
  */
-public abstract class Sector extends Coordinate {
+public class Sector extends Coordinate {
     
     /**
      * The players who are in the sector is saved here
@@ -20,7 +20,7 @@ public abstract class Sector extends Coordinate {
     /**
      * Tells us if the sector is crossable by the players.
      */
-    protected boolean crossable;
+    private boolean crossable;
     
     /**
      * The type of sector taken from SectorTypeEnum enumeration.
