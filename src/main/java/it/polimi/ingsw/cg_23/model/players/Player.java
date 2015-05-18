@@ -23,7 +23,7 @@ public abstract class Player {
      *  in case of human it becomes true for the turn when the players uses the card adrenaline,
      *  in case of alien become definetly true after the player has killed a human  
      */
-    protected Boolean canMoveFaster = false;
+    protected boolean canMoveFaster = false;
     
     /**
      *  True if the player is still alive and in-game 
@@ -89,11 +89,10 @@ public abstract class Player {
      * 
      * @return the sector where the player currently is.
      */
-    public Sector getSector() {
+    public Sector getCurrentSector() {
         return this.currentSector;
-
     }
-
+        
     /**
      * Returns the cards the player has in his hand.
      * 
@@ -118,13 +117,13 @@ public abstract class Player {
      * 
      * @param sector the destination after a move
      */
-    public void setSector(Sector sector) {
+    public void setCurrentSector(Sector sector) {
         this.currentSector = sector;
     }
 
     /**
-     *  Tells if the player can move 1 sector faster
-     *  in case of human it becomes true for the turn when the players uses the card adrenaline
+     *  Tells if the player can move 1 sector faster<br>
+     *  in case of human it becomes true for the turn when the players uses the card adrenaline<br>
      *  in case of alien become definetly true after the player has killed a human
      *  
      * @return a boolean: true if the player can move vaster, false otherwise.
@@ -134,14 +133,32 @@ public abstract class Player {
     }
 
     /**
-     *  Tells if the player can move 1 sector faster
-     *  in case of human it becomes true for the turn when the players uses the card adrenaline
-     *  in case of alien become definetly true after the player has killed a human
+     *  Tells if the player can move 1 sector faster<br>
+     *  in case of human it becomes true for the turn when the players uses the card adrenaline<br>
+     *  in case of alien become definetly true after the player has killed a human<br>
      *  
      * @param canMoveFaster sets the value for moving faster
      */
     public void setCanMoveFaster(boolean canMoveFaster) {
         this.canMoveFaster = canMoveFaster;
+    }
+    
+    /**
+     * The id of the player. It's unique.
+     * 
+     * @return the unique player id
+     */
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    /**
+     * Name choosen when joining a game.
+     * 
+     * @return the player name
+     */
+    public String getName() {
+        return name;
     }
 
 }

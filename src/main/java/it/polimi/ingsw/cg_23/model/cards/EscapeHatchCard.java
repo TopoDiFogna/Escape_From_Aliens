@@ -20,7 +20,7 @@ public class EscapeHatchCard extends Card{
     }
 
     /**
-     * Card type can be one of defined type in EscapeHatchCardEnum.
+     * Card type can be one of defined types in EscapeHatchCardEnum.
      * 
      * @return type
      */
