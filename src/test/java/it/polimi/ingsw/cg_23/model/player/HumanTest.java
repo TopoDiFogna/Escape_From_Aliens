@@ -11,7 +11,7 @@ public class HumanTest {
     public void testHuman() {
         Human human = new Human("dummy");
         assertNotNull(human);
-        //TODO assertEquals("dummy", human.getName());
+        assertEquals("dummy", human.getName());
     }
 
     @Test
