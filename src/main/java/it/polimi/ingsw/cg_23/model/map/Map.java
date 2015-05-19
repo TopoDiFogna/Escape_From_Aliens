@@ -1,5 +1,7 @@
 package it.polimi.ingsw.cg_23.model.map;
 
+import it.polimi.ingsw.cg_23.controller.parser.XMLParser;
+
 /**
  * The map is where the game is played.
  * It's divided in sectors and has a maximum fixed size defined by SIZENUMBER and SIZELETTER.
@@ -24,13 +26,14 @@ public class Map {
     private Sector[][] sectors = new Sector[SIZENUMBER][SIZELETTER];
 
     /**
-     * The Constructor. Not really used to create the map. we use another method for that.
+     * The Constructor. Not really used to create the map. we use another class for that.<br>
+     * It calls a parser to pars the XML file that contain the map scheme which returns the map.
      * 
-     * @param sectors sectors of the map
      */
     
-    //TODO finish javadoc with appropriate method
-    private Map() {
+    public Map(String name) {
+        XMLParser parser = new XMLParser();
+        sectors=parser.createMap(name, SIZELETTER, SIZENUMBER);
     }
     
     /**
