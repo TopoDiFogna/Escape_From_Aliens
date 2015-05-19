@@ -7,12 +7,12 @@ import java.util.ArrayList;
  * 
  * @author Arianna
  */
-public abstract class Deck<T extends Card> extends ArrayList<T> {
+public class Deck<T extends Card> extends ArrayList<T> {
     
     /**
-     * 
+     * Serial ID.
      */
-    //private static final long serialVersionUID = 2229743970656975155L;
+    private static final long serialVersionUID = 2229743970656975155L;
 
     /**
      * Constructor.
