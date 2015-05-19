@@ -1,16 +1,19 @@
 package it.polimi.ingsw.cg_23.model.players;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
+import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
 
 /**
  * The generic entity who plays the game
  * 
  * @author Paolo
  */
-//TODO write card methods
+
 public abstract class Player {
     /**
      * Description of the property hasMoved.
@@ -33,7 +36,7 @@ public abstract class Player {
     /**
      * List of cards a player has in his hand
      */
-    protected ArrayList<Card> cards = new ArrayList<>(3);
+    protected ArrayList<Card> cards = new ArrayList<Card>();
     
     /**
      * The sector where the player currently is.
@@ -159,6 +162,22 @@ public abstract class Player {
      */
     public String getName() {
         return name;
+    }
+    
+    
+    /**
+     * Fisrt adds the card to the player hand, then removes the card from the corrisponding deck.
+     * 
+     * @param deck from where the card is drawn
+     */
+    public void drawCard(Deck<Card> deck){
+        Iterator<Card> iterator  = deck.iterator();
+        cards.add(iterator.next());
+        iterator.remove();
+    }
+    
+    public void discardCard(Card card){
+        cards.remove(card);
     }
 
 }
