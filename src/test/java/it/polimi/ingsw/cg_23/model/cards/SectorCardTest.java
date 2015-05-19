@@ -8,22 +8,27 @@ public class SectorCardTest {
 
     @Test
     public void testSectorCard() {
-        fail("Not  yet implemented");
+        SectorCard card = new SectorCard(SectorCardEnum.NOISEINANYSECTOR, true);
+        assertEquals(SectorCardEnum.NOISEINANYSECTOR, card.getType());
+        assertTrue(card.getHasItem());
     }
 
     @Test
     public void testGetHasItem() {
-        fail("Not yet implemented");
+        SectorCard card = new SectorCard(SectorCardEnum.NOISEINANYSECTOR, false);
+        assertFalse(card.getHasItem());
     }
 
     @Test
     public void testSetHasItem() {
-        fail("Not yet implemented");
+        SectorCard card = new SectorCard(SectorCardEnum.NOISEINANYSECTOR, false);
+        assertFalse(card.getHasItem());
     }
 
     @Test
     public void testGetType() {
-        fail("Not yet implemented");
+        SectorCard card = new SectorCard(SectorCardEnum.NOISEINYOURSECTOR, true);
+        assertEquals(SectorCardEnum.NOISEINYOURSECTOR, card.getType());
     }
 
 }

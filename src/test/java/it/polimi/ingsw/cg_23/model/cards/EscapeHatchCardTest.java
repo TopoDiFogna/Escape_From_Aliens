@@ -8,12 +8,14 @@ public class EscapeHatchCardTest {
 
     @Test
     public void testEscapeHatchCard() {
-        fail("Not yet implemented");
+        EscapeHatchCard escapeHatchCard = new EscapeHatchCard(EscapeHatchCardEnum.RED);
+        assertEquals(EscapeHatchCardEnum.RED, escapeHatchCard.getType());
+        
     }
 
     @Test
     public void testGetType() {
-        fail("Not yet implemented");
+        EscapeHatchCard escapeHatchCard = new EscapeHatchCard(EscapeHatchCardEnum.GREEN);
+        assertEquals(EscapeHatchCardEnum.GREEN, escapeHatchCard.getType());
     }
-
 }

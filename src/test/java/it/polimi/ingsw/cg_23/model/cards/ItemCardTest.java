@@ -8,12 +8,14 @@ public class ItemCardTest {
 
     @Test
     public void testItemCard() {
-        fail("Not yet implemented");
+        ItemCard itemCard = new ItemCard(ItemCardEnum.ADRENALINE);
+        assertEquals(ItemCardEnum.ADRENALINE, itemCard.getType());
     }
 
     @Test
     public void testGetType() {
-        fail("Not yet implemented");
+        ItemCard itemCard = new ItemCard(ItemCardEnum.SEDATIVES);
+        assertEquals(ItemCardEnum.SEDATIVES, itemCard.getType());
     }
 
 }
