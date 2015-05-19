@@ -13,7 +13,7 @@ import it.polimi.ingsw.cg_23.model.players.Player;
 public class Sector extends Coordinate {
     
     /**
-     * The players who are in the sector is saved here
+     * The List of players who are in the sector is saved here
      */
     private ArrayList<Player> player = null;
     
@@ -34,6 +34,10 @@ public class Sector extends Coordinate {
         super(letter, number);
         this.type=type;
         this.crossable=crossable;
+    }
+    
+    public boolean isNearby(){  //TODO implement this
+        return false;
     }
 
     /**
@@ -69,7 +73,7 @@ public class Sector extends Coordinate {
 
     /**
      * This method set an escape hatch sector as not crossable if used.<br>
-     * Not used for other sectors becase they are always crossable or not crossable since the map is create
+     * Not used for other sectors because they are always crossable or not crossable since the map is create
      * 
      */
     public void setEscapeHatchSectorNotCrossable() {

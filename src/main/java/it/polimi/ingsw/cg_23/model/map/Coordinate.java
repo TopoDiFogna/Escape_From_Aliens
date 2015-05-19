@@ -29,7 +29,7 @@ public class Coordinate {
      * Returns the first identifier of the coordinate.<br>
      * It's codified as an int.
      * 
-     * @return lettera int that is the second identifier of the coordinate
+     * @return letter int that is the second identifier of the coordinate
      */
     public int getLetter() {
         return this.letter;

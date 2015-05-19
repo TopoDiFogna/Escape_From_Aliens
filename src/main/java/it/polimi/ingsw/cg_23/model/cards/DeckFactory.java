@@ -8,8 +8,8 @@ public class DeckFactory {
      * 
      * @param deckType If deckType=0 calls sector factory, if deckType=1 calls item factory, if deckType=2 calls escape hatch factory
      */ 
-    public static Deck<Card> createDeck(int deckType) {
-        Deck<Card> deck;
+    public static Deck<? extends Card> createDeck(int deckType) {
+        Deck<? extends Card> deck;
                 
         switch (deckType) {
             
@@ -30,7 +30,7 @@ public class DeckFactory {
             
             default:
                 // TODO dobbiamo gestire il default, con un eccezione o altro.
-                deck = new SectorDeck<SectorCard>();
+                deck = new Deck<SectorCard>();
             break;
         }
         
@@ -42,8 +42,8 @@ public class DeckFactory {
      * 
      * @return deck
      */
-    private static SectorDeck<SectorCard> createSectorDeck(){
-        SectorDeck<SectorCard> deck = new SectorDeck<SectorCard>();
+    private static Deck<SectorCard> createSectorDeck(){
+        Deck<SectorCard> deck = new Deck<SectorCard>();
         
         /**
          * Creates 5 silence cards and calls add to add cards to the deck.
@@ -81,8 +81,8 @@ public class DeckFactory {
      * 
      * @return deck
      */
-    private static ItemDeck<ItemCard> createItemDeck(){
-        ItemDeck<ItemCard> deck = new ItemDeck<ItemCard>();        
+    private static Deck<ItemCard> createItemDeck(){
+        Deck<ItemCard> deck = new Deck<ItemCard>();        
 
         /**
          * Creates 2 attack cards and calls add to add cards to the deck.
@@ -127,8 +127,8 @@ public class DeckFactory {
      * 
      * @return deck
      */
-    private static EscapeHatchDeck<EscapeHatchCard> createEscapeHatchDeck(){
-        EscapeHatchDeck<EscapeHatchCard> deck = new EscapeHatchDeck<EscapeHatchCard>();        
+    private static Deck<EscapeHatchCard> createEscapeHatchDeck(){
+        Deck<EscapeHatchCard> deck = new Deck<EscapeHatchCard>();        
 
         /**
          * Creates 3 green cards and calls addCard to add cards to the deck.
