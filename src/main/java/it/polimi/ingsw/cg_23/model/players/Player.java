@@ -192,7 +192,7 @@ public abstract class Player {
      * @param card card to be used
      */
     public void useCard(Card card){
-        card.action();
+        //card.action();
         discardCard(card);
     }
 }
