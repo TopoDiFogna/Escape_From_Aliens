@@ -36,11 +36,6 @@ public class AlienTest {
         Alien alien = new Alien("dummy");
         assertTrue(alien.isAlive());
     }
-    
-    @Test
-    public void testIsAliveFalseAfterBeingKilled() {
-        fail("Not yet implemented");
-    }
 
     @Test
     public void testSetDead() {

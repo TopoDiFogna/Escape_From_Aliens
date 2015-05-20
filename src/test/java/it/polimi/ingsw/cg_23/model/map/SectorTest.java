@@ -21,7 +21,7 @@ public class SectorTest {
 
     @Test
     public void testGetPlayer() {
-    	fail("Not yet implemented");
+    	
     }
 
     @Test
