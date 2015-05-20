@@ -39,24 +39,27 @@ public class DeckFactory {
      * 
      * @return deck
      */
-     private static Deck<Card> createSectorDeck(){
+	private static Deck<Card> createSectorDeck(){
         Deck<Card> deck = new Deck<Card>();
         
         /**
          * Creates 5 silence cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 4; i++) {            
-            deck.add(new Card(SilenceCard, false));
+        for(int i = 0; i < 4; i++) { 
+        	SilenceCard card = new SilenceCard(false);
+            deck.add(card);
         }
         
         /**
          * Creates 10 noise in any sector cards (4 with item and 6 without) and calls add to add cards to the deck.
          */
         for(int i = 0; i < 9; i++) {
-            if(i<=3){                
-                deck.add(new SectorCard(SectorCardEnum.NOISEINANYSECTOR, true));
-            } else {                
-                deck.add(new SectorCard(SectorCardEnum.NOISEINANYSECTOR, false));
+            if(i<=3){
+            	NoiseInAnySectorCard card = new NoiseInAnySectorCard(true);
+                deck.add(card);
+            } else {
+            	NoiseInAnySectorCard card = new NoiseInAnySectorCard(false);
+                deck.add(card);
             }
         }
         
@@ -64,11 +67,13 @@ public class DeckFactory {
          * Creates 10 noise in your sector cards (4 with item and 6 without) and calls add to add cards to the deck.
          */
        for(int i = 0; i < 9; i++) {
-            if(i<=3){
-                deck.add(new SectorCard(SectorCardEnum.NOISEINYOURSECTOR, true));
-            } else {               
-                deck.add(new SectorCard(SectorCardEnum.NOISEINYOURSECTOR, false));
-            }
+    	   if(i<=3){
+           	NoiseInYourSectorCard card = new NoiseInYourSectorCard(true);
+               deck.add(card);
+           } else {
+           	NoiseInYourSectorCard card = new NoiseInYourSectorCard(false);
+               deck.add(card);
+           }
         }
         return deck;
     }
@@ -78,43 +83,49 @@ public class DeckFactory {
      * 
      * @return deck
      */
-   /*   private static Deck<ItemCard> createItemDeck(){
-        Deck<ItemCard> deck = new Deck<ItemCard>();        
+	private static Deck<Card> createItemDeck(){
+        Deck<Card> deck = new Deck<Card>();        
 
         /**
          * Creates 2 attack cards and calls add to add cards to the deck.
          */
-    /*   for(int i = 0; i < 1; i++) {
-            deck.add(new ItemCard(ItemCardEnum.ATTACK));
+        for(int i = 0; i < 1; i++) {
+        	AttackCard card = new AttackCard();
+            deck.add(card);
         } 
         /**
          * Creates 2 teleport cards and calls add to add cards to the deck.
          */
-    /*     for(int i = 0; i < 1; i++) {
-            deck.add(new ItemCard(ItemCardEnum.TELEPORT));
+        for(int i = 0; i < 1; i++) {
+            TeleportCard card = new TeleportCard();
+            deck.add(card);
         } 
         /**
          * Creates 2 adrenaline cards and calls add to add cards to the deck.
          */
-    /*    for(int i = 0; i < 1; i++) {
-            deck.add(new ItemCard(ItemCardEnum.ADRENALINE));
+        for(int i = 0; i < 1; i++) {
+            AdrenalineCard card = new AdrenalineCard();
+            deck.add(card);
         }                 
         /**
          * Creates 2 spotlight cards and calls add to add cards to the deck.
          */
-    /*    for(int i = 0; i < 1; i++) {
-            deck.add(new ItemCard(ItemCardEnum.SPOTLIGHT));
+        for(int i = 0; i < 1; i++) {
+        	SpotlightCard card = new SpotlightCard();
+            deck.add(card);
         } 
         /**
          * Creates 3 sedatives cards and calls add to add cards to the deck.
          */
-    /*    for(int i = 0; i < 2; i++) {
-            deck.add(new ItemCard(ItemCardEnum.SEDATIVES));
+        for(int i = 0; i < 2; i++) {
+        	SedativesCard card = new SedativesCard();
+            deck.add(card);
         }                
         /**
          * Creates 1 defence card and calls add to add cards to the deck.
          */
-    /*    deck.add(new ItemCard(ItemCardEnum.DEFENCE));
+        SedativesCard card = new SedativesCard();
+        deck.add(card);
         
         return deck;
     }
@@ -124,22 +135,24 @@ public class DeckFactory {
      * 
      * @return deck
      */
-	/*   private static Deck<EscapeHatchCard> createEscapeHatchDeck(){
-        Deck<EscapeHatchCard> deck = new Deck<EscapeHatchCard>();        
+     private static Deck<Card> createEscapeHatchDeck(){
+	    	Deck<Card> deck = new Deck<Card>();        
 
         /**
          * Creates 3 green cards and calls addCard to add cards to the deck.
          */
-	/*        for(int i = 0; i < 3; i++) {
-            deck.add(new EscapeHatchCard(EscapeHatchCardEnum.GREEN));
-        }                 
+	        for(int i = 0; i < 2; i++) {
+	        	GreenCard card = new GreenCard();
+	        	deck.add(card);
+	        }                 
         /**
          * Creates 3 red cards and calls addCard to add cards to the deck.
          */
-	//       for(int i = 0; i < 3; i++) {
-    //        deck.add(new EscapeHatchCard(EscapeHatchCardEnum.RED));
-    //    }
-    //    return deck;
+	       for(int i = 0; i < 2; i++) {
+	    	   RedCard card = new RedCard();
+	    	   deck.add(card);
+        }
+        return deck;
             
-   // }
+    }
 }
