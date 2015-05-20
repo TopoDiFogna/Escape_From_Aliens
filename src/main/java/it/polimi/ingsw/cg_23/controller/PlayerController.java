@@ -104,5 +104,10 @@ public class PlayerController {
     public Player getPlayers() {
         return this.getPlayers();
     }
+    
+    public boolean HasCard(Player player, Card card){
+    	//TODO deve controllare se il giocatore ha effettivamente la carta prima di giocarla. il return è ovviamente non sempre true, ma poi ci penso    	
+    	return true;
+    }
 
 }

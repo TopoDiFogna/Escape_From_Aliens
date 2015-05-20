@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.players;
 
+import it.polimi.ingsw.cg_23.controller.PlayerController;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.map.Sector;
@@ -192,7 +193,9 @@ public abstract class Player {
      * @param card card to be used
      */
     public void useCard(Card card){
-        //card.action();
+    	//TODO c'è da capire come passare il player, visto che sono dentro la classe player
+    	//PlayerController.hasCard(this.player, card);
+        //card.doAction(this.player);
         discardCard(card);
     }
 }

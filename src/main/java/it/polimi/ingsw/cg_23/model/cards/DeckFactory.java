@@ -8,24 +8,21 @@ public class DeckFactory {
      * 
      * @param deckType If deckType=0 calls sector factory, if deckType=1 calls item factory, if deckType=2 calls escape hatch factory
      */ 
-    public static Deck<? extends Card> createDeck(int deckType) {
+	 /* public static Deck<? extends Card> createDeck(int deckType) {
         Deck<? extends Card> deck;
-                
+    
         switch (deckType) {
             
             case 0:
-                deckType = 0;
                 deck = createSectorDeck();         
             break;
                        
-            case 1:  
-                deckType = 1;
+            case 1:                 
                 deck = createItemDeck();
             break;
             
             case 2:
-                deckType = 2;
-                deck = createEscapeHatchDeck();                
+                deck = createEscapeHatchDeck();
             break;
             
             default:
@@ -42,20 +39,20 @@ public class DeckFactory {
      * 
      * @return deck
      */
-    private static Deck<SectorCard> createSectorDeck(){
-        Deck<SectorCard> deck = new Deck<SectorCard>();
+     private static Deck<Card> createSectorDeck(){
+        Deck<Card> deck = new Deck<Card>();
         
         /**
          * Creates 5 silence cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 5; i++) {            
-            deck.add(new SectorCard(SectorCardEnum.SILENCE, false));
+        for(int i = 0; i < 4; i++) {            
+            deck.add(new Card(SilenceCard, false));
         }
         
         /**
          * Creates 10 noise in any sector cards (4 with item and 6 without) and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 9; i++) {
             if(i<=3){                
                 deck.add(new SectorCard(SectorCardEnum.NOISEINANYSECTOR, true));
             } else {                
@@ -66,7 +63,7 @@ public class DeckFactory {
         /**
          * Creates 10 noise in your sector cards (4 with item and 6 without) and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 10; i++) {
+       for(int i = 0; i < 9; i++) {
             if(i<=3){
                 deck.add(new SectorCard(SectorCardEnum.NOISEINYOURSECTOR, true));
             } else {               
@@ -81,43 +78,43 @@ public class DeckFactory {
      * 
      * @return deck
      */
-    private static Deck<ItemCard> createItemDeck(){
+   /*   private static Deck<ItemCard> createItemDeck(){
         Deck<ItemCard> deck = new Deck<ItemCard>();        
 
         /**
          * Creates 2 attack cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 2; i++) {
+    /*   for(int i = 0; i < 1; i++) {
             deck.add(new ItemCard(ItemCardEnum.ATTACK));
         } 
         /**
          * Creates 2 teleport cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 2; i++) {
+    /*     for(int i = 0; i < 1; i++) {
             deck.add(new ItemCard(ItemCardEnum.TELEPORT));
         } 
         /**
          * Creates 2 adrenaline cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 2; i++) {
+    /*    for(int i = 0; i < 1; i++) {
             deck.add(new ItemCard(ItemCardEnum.ADRENALINE));
         }                 
         /**
          * Creates 2 spotlight cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 2; i++) {
+    /*    for(int i = 0; i < 1; i++) {
             deck.add(new ItemCard(ItemCardEnum.SPOTLIGHT));
         } 
         /**
          * Creates 3 sedatives cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 3; i++) {
+    /*    for(int i = 0; i < 2; i++) {
             deck.add(new ItemCard(ItemCardEnum.SEDATIVES));
         }                
         /**
          * Creates 1 defence card and calls add to add cards to the deck.
          */
-        deck.add(new ItemCard(ItemCardEnum.DEFENCE));
+    /*    deck.add(new ItemCard(ItemCardEnum.DEFENCE));
         
         return deck;
     }
@@ -127,22 +124,22 @@ public class DeckFactory {
      * 
      * @return deck
      */
-    private static Deck<EscapeHatchCard> createEscapeHatchDeck(){
+	/*   private static Deck<EscapeHatchCard> createEscapeHatchDeck(){
         Deck<EscapeHatchCard> deck = new Deck<EscapeHatchCard>();        
 
         /**
          * Creates 3 green cards and calls addCard to add cards to the deck.
          */
-        for(int i = 0; i < 3; i++) {
+	/*        for(int i = 0; i < 3; i++) {
             deck.add(new EscapeHatchCard(EscapeHatchCardEnum.GREEN));
         }                 
         /**
          * Creates 3 red cards and calls addCard to add cards to the deck.
          */
-        for(int i = 0; i < 3; i++) {
-            deck.add(new EscapeHatchCard(EscapeHatchCardEnum.RED));
-        }
-        return deck;
+	//       for(int i = 0; i < 3; i++) {
+    //        deck.add(new EscapeHatchCard(EscapeHatchCardEnum.RED));
+    //    }
+    //    return deck;
             
-    }
+   // }
 }
