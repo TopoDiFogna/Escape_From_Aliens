@@ -175,9 +175,24 @@ public abstract class Player {
         cards.add(iterator.next());
         iterator.remove();
     }
-    
-    public void discardCard(Card card){
+     /**
+      * Allow the player to discard card
+      * 
+      * @param card the card to be discarded
+      * @return the card the player has discarded to be added to the discardDeck
+      */
+    public Card discardCard(Card card){
         cards.remove(card);
+        return card;
     }
-
+    
+    /**
+     * Uses the card selected by player and removes it from the player hand
+     * 
+     * @param card card to be used
+     */
+    public void useCard(Card card){
+        card.action();
+        discardCard(card);
+    }
 }
