@@ -1,199 +1,130 @@
 package it.polimi.ingsw.cg_23.model.status;
 
-import it.polimi.ingsw.cg_23.controller.GameInitializer;
+import java.util.ArrayList;
+
 import it.polimi.ingsw.cg_23.model.cards.Deck;
+import it.polimi.ingsw.cg_23.model.cards.EscapeHatchCard;
+import it.polimi.ingsw.cg_23.model.cards.ItemCard;
+import it.polimi.ingsw.cg_23.model.cards.SectorCard;
 import it.polimi.ingsw.cg_23.model.map.Map;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
-// End of user code
 
 /**
  * Description of Match.
  * 
- * @author Arianna
+ * @author Paolo
  */
 public class Match {
+       
     /**
-     * Description of the property decks.
-     * @TODO next line has error, we need to correct it
+     * Description of the property map.
      */
-    //public Deck<T> deck = new Deck<T>();
+    private final Map map;
     
     /**
-     * Description of the property maps.
+     * The deck containing sector cards.
      */
-    //TODO public Map maps = new Map();
-
+    private Deck<SectorCard> sectorDeck;
+    
     /**
-     * Description of the property sectorDeck.
+     * The deck containing item cards.
      */
-    private Deck sectorDeck = null;
-
+    private Deck<ItemCard> itemDeck;
+    
     /**
-     * Description of the property gameInitializers.
+     * The deck containing escape hatch card.
      */
-    public GameInitializer gameInitializers = new GameInitializer();
-
+    private Deck<EscapeHatchCard> escapeHatchDeck;
+    
+    
     /**
-     * Description of the property escapeHatchDeck.
+     * List of players in this match
      */
-    private Deck escapeHatchDeck = null;
+    private ArrayList<Player> players;
 
     /**
      * Description of the property turnNumber.
      */
-    private int turnNumber = 0;
+    private int turnNumber;
 
-    /**
-     * Description of the property map.
-     */
-    private Map map = null;
-
-    /**
-     * Description of the property itemDeck.
-     */
-    private Deck itemDeck = null;
-
-    // Start of user code (user defined attributes for Match)
-
-    // End of user code
 
     /**
      * The constructor.
      */
-    public Match() {
-        // Start of user code constructor for Match)
-        super();
-        // End of user code
+    public Match(Map map, Deck<SectorCard> sectorDeck, Deck<ItemCard> itemDeck, Deck<EscapeHatchCard> escapeHatchDeck, ArrayList<Player> players){
+        
+        this.map=map;
+        this.sectorDeck=sectorDeck;
+        this.itemDeck=itemDeck;
+        this.escapeHatchDeck=escapeHatchDeck;
+        this.players=players;
+        turnNumber=0;
     }
-
-    // Start of user code (user defined methods for Match)
-
-    // End of user code
+    
     /**
-     * Returns decks.
-     * @TODO error, we must correct it
-     * @return decks
-     */
-    //public Deck getDecks() {
-    //    return this.deck;
-    //}
-
-    /**
-     * Returns maps.
+     * Returns the map.
      * 
-     * @return maps
-     */
-    /*public Map getMaps() {
-        return this.maps;
-    }*/
-
-    /**
-     * Returns sectorDeck.
-     * 
-     * @return sectorDeck
-     */
-    public Deck getSectorDeck() {
-        return this.sectorDeck;
-    }
-
-    /**
-     * Sets a value to attribute sectorDeck.
-     * 
-     * @param newSectorDeck
-     */
-    public void setSectorDeck(Deck newSectorDeck) {
-        this.sectorDeck = newSectorDeck;
-    }
-
-    /**
-     * Returns gameInitializers.
-     * 
-     * @return gameInitializers
-     */
-    public GameInitializer getGameInitializers() {
-        return this.gameInitializers;
-    }
-
-    /**
-     * Returns players.
-     * 
-     * @return players
-     */
-    public Player getPlayers() {
-        return this.getPlayers();
-    }
-
-    /**
-     * Returns escapeHatchDeck.
-     * 
-     * @return escapeHatchDeck
-     */
-    public Deck getEscapeHatchDeck() {
-        return this.escapeHatchDeck;
-    }
-
-    /**
-     * Sets a value to attribute escapeHatchDeck.
-     * 
-     * @param newEscapeHatchDeck
-     */
-    public void setEscapeHatchDeck(Deck newEscapeHatchDeck) {
-        this.escapeHatchDeck = newEscapeHatchDeck;
-    }
-
-    /**
-     * Returns turnNumber.
-     * 
-     * @return turnNumber
-     */
-    public int getTurnNumber() {
-        return this.turnNumber;
-    }
-
-    /**
-     * Sets a value to attribute turnNumber.
-     * 
-     * @param newTurnNumber
-     */
-    public void setTurnNumber(int newTurnNumber) {
-        this.turnNumber = newTurnNumber;
-    }
-
-    /**
-     * Returns map.
-     * 
-     * @return map
+     * @return map 
      */
     public Map getMap() {
         return this.map;
     }
 
     /**
-     * Sets a value to attribute map.
+     * Returns the current state of sectorDeck.
      * 
-     * @param newMap
+     * @return decks
      */
-    public void setMap(Map newMap) {
-        this.map = newMap;
+    public Deck<SectorCard> getSectorDeck() {
+        
+       return this.sectorDeck;
     }
-
+    
     /**
-     * Returns itemDeck.
+     * Returns the current state of escapeHatchDeck.
+     * 
+     * @return escapeHatchDeck
+     */
+    public Deck<EscapeHatchCard> getEscapeHatchDeck() {
+        
+        return this.escapeHatchDeck;
+    }
+    
+    /**
+     * Returns the current state of itemDeck.
      * 
      * @return itemDeck
      */
-    public Deck getItemDeck() {
+    public Deck<ItemCard> getItemDeck() {
+        
         return this.itemDeck;
     }
 
     /**
-     * Sets a value to attribute itemDeck.
+     * Returns players.
      * 
-     * @param newItemDeck
+     * @return players a list containing all players.
      */
-    public void setItemDeck(Deck newItemDeck) {
-        this.itemDeck = newItemDeck;
+    public ArrayList<Player> getPlayers() {
+        
+        return this.players;
     }
 
+    /**
+     * Returns the number of the turn.
+     * 
+     * @return turnNumber an int indicating the current turn number
+     */
+    public int getTurnNumber() {
+        
+        return this.turnNumber;
+    }
+
+    /**
+     * Adds 1 to turnNumber and returns the value.
+     */
+    public void nextTurn() {
+        turnNumber++;
+    }
 }
