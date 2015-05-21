@@ -106,15 +106,6 @@ public abstract class Player {
     }
     
     /**
-     * Adds card to the card list used to store the cards the player has in his hands.
-     * 
-     * @param card the new card to be added at the end of the list
-     */
-    public void addCard(Card card) {
-        cards.add(card);
-    }
-
-    /**
      * Sets a new value to attribute sector.
      * It's the destination after a move.
      * 

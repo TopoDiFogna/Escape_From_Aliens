@@ -21,18 +21,6 @@ public class Human extends Player {
     }
 
     /**
-     * Description of the method hasDefenceCard.
-     * 
-     * @return
-     */
-    public boolean hasDefenceCard() {
-        // Start of user code for method hasDefenceCard
-        boolean hasDefenceCard = false;
-        return hasDefenceCard;
-        // End of user code
-    }
-
-    /**
      * Returns if a player has escaped hence has win.
      * 
      * @return escaped tells if a player has escaped hence win
