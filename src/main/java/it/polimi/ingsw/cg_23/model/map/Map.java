@@ -12,12 +12,12 @@ public class Map {
     /**
      * Maximum columns in the map.
      */
-    private final static int SIZENUMBER = 23;
+    private final static int SIZENUMBER = 14;
 
     /**
      * Maximum rows in the map.
      */
-    private final static int SIZELETTER = 14;
+    private final static int SIZELETTER = 23;
 
     /**
      * Sectors of the map: rows x columns

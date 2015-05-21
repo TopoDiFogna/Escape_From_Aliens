@@ -8,17 +8,20 @@ public class CoordinateTest {
 
     @Test
     public void testCoordinate() {
-        fail("Not yet implemented");
+        Coordinate coordinate = new Coordinate(1, 1);
+        assertNotNull(coordinate);
     }
 
     @Test
     public void testGetLetter() {
-        fail("Not yet implemented");
+        Coordinate coordinate = new Coordinate(3, 1);
+        assertEquals(3, coordinate.getLetter());
     }
 
     @Test
     public void testGetNumber() {
-        fail("Not yet implemented");
+        Coordinate coordinate = new Coordinate(1, 5);
+        assertEquals(5, coordinate.getNumber());
     }
 
 }
