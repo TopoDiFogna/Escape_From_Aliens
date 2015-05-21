@@ -1,6 +1,7 @@
 package it.polimi.ingsw.cg_23.model.map;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import it.polimi.ingsw.cg_23.model.map.Coordinate;
 import it.polimi.ingsw.cg_23.model.players.Player;
@@ -15,7 +16,7 @@ public class Sector extends Coordinate {
     /**
      * The List of players who are in the sector is saved here
      */
-    private ArrayList<Player> player = null;
+    private List<Player> players = new ArrayList<Player>();
     
     /**
      * Tells us if the sector is crossable by the players.
@@ -30,7 +31,7 @@ public class Sector extends Coordinate {
     /**
      * List of sectors near this sector
      */
-    private ArrayList<Sector> nearSectors=null; //TODO description
+    private List<Sector> nearSectors = new ArrayList<Sector>();//TODO description
 
     /**
      * The constructor. Creates the sector specifying type and if it's crossable.
@@ -50,16 +51,19 @@ public class Sector extends Coordinate {
     public boolean isNearby(Sector neighbor){
         
         //if we are moving vertically
-        if(neighbor.getLetter() == this.getLetter() && Math.abs(neighbor.getNumber()-this.getNumber()) == 1) return true;
+        if(neighbor.getLetter() == this.getLetter() && Math.abs(neighbor.getNumber()-this.getNumber()) == 1) 
+            return true;
         
         //if moving horizontally from even column
         if(this.getLetter()%2 == 0 && Math.abs(neighbor.getLetter() - this.getLetter()) == 1){
-            if(neighbor.getNumber()-this.getNumber() == 1 || neighbor.getNumber() == this.getNumber()) return true;
+            if(neighbor.getNumber()-this.getNumber() == 1 || neighbor.getNumber() == this.getNumber()) 
+                return true;
         }
         
         //if moving horizontally from odd column
         if(this.getLetter()%2 == 1 && Math.abs(neighbor.getLetter() - this.getLetter()) == 1){
-            if(neighbor.getNumber() == this.getNumber() || neighbor.getNumber()-this.getNumber() == -1) return true;
+            if(neighbor.getNumber() == this.getNumber() || neighbor.getNumber()-this.getNumber() == -1) 
+                return true;
         }
         
         return false;
@@ -71,7 +75,7 @@ public class Sector extends Coordinate {
      * @return the players in the sector as a list
      */
     public ArrayList<Player> getPlayer() {
-        return player;
+        return (ArrayList<Player>) players;
     }
 
     /**
@@ -80,7 +84,7 @@ public class Sector extends Coordinate {
      * @param player the player who enters the sector
      */
     public void setPlayer(Player player) {
-        this.player.add(player);
+        this.players.add(player);
     }
 
     public SectorTypeEnum getType() {
