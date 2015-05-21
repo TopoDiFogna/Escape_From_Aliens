@@ -26,6 +26,11 @@ public class Sector extends Coordinate {
      * The type of sector taken from SectorTypeEnum enumeration.
      */
     private final SectorTypeEnum type;
+    
+    /**
+     * List of sectors near this sector
+     */
+    private ArrayList<Sector> nearSectors=null; //TODO description
 
     /**
      * The constructor. Creates the sector specifying type and if it's crossable.
@@ -36,7 +41,27 @@ public class Sector extends Coordinate {
         this.crossable=crossable;
     }
     
-    public boolean isNearby(){  //TODO implement this
+    /**
+     * Controls if a sector is near this sector using a mathematical algorithm.
+     * 
+     * @param neighbor the sector to test nearness
+     * @return true if se specified sector is near this sector, false otherwise
+     */
+    public boolean isNearby(Sector neighbor){
+        
+        //if we are moving vertically
+        if(neighbor.getLetter() == this.getLetter() && Math.abs(neighbor.getNumber()-this.getNumber()) == 1) return true;
+        
+        //if moving horizontally from even column
+        if(this.getLetter()%2 == 0 && Math.abs(neighbor.getLetter() - this.getLetter()) == 1){
+            if(neighbor.getNumber()-this.getNumber() == 1 || neighbor.getNumber() == this.getNumber()) return true;
+        }
+        
+        //if moving horizontally from odd column
+        if(this.getLetter()%2 == 1 && Math.abs(neighbor.getLetter() - this.getLetter()) == 1){
+            if(neighbor.getNumber() == this.getNumber() || neighbor.getNumber()-this.getNumber() == -1) return true;
+        }
+        
         return false;
     }
 
@@ -78,5 +103,16 @@ public class Sector extends Coordinate {
      */
     public void setEscapeHatchSectorNotCrossable() {
         this.crossable=false;
+    }
+    
+    /**
+     * Adds a sector to the nearSetors List only if not void
+     * 
+     * @param sector the sector to be added as a neighbor
+     */
+    public void addNeighbor(Sector sector){
+        if(sector.getType() != SectorTypeEnum.VOID){
+            nearSectors.add(sector);
+        }
     }
 }
