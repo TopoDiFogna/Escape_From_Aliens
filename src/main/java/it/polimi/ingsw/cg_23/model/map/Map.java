@@ -1,6 +1,6 @@
 package it.polimi.ingsw.cg_23.model.map;
 
-import it.polimi.ingsw.cg_23.controller.parser.XMLParser;
+import it.polimi.ingsw.cg_23.controller.MapInitializer;
 
 /**
  * The map is where the game is played.
@@ -32,8 +32,9 @@ public class Map {
      */
     
     public Map(String name) {
-        XMLParser parser = new XMLParser();
-        sectors=parser.createMap(name, SIZELETTER, SIZENUMBER);
+        
+        sectors=MapInitializer.createMap(name, SIZELETTER, SIZENUMBER);
+        //MapController.createNeighbors(SIZELETTER, SIZENUMBER, sectors);//TODO implementation
     }
     
     /**
