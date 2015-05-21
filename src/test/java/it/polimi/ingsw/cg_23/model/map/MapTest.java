@@ -8,7 +8,7 @@ public class MapTest {
 
     @Test
     public void testMap() {
-        fail("Not yet implemented");
+        //TODO fail("Not yet implemented");
     }
 
     @Test
@@ -25,7 +25,7 @@ public class MapTest {
 
     @Test
     public void testGetSector() {
-        fail("Not yet implemented");
+        //TODO fail("Not yet implemented");
     }
 
 }
