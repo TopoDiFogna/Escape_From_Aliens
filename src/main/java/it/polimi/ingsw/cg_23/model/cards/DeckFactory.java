@@ -8,7 +8,7 @@ public class DeckFactory {
      * 
      * @param deckType If deckType=0 calls sector factory, if deckType=1 calls item factory, if deckType=2 calls escape hatch factory
      */ 
-	 /* public static Deck<? extends Card> createDeck(int deckType) {
+	public static Deck<? extends Card> createDeck(int deckType) {
         Deck<? extends Card> deck;
     
         switch (deckType) {
@@ -27,7 +27,7 @@ public class DeckFactory {
             
             default:
                 // TODO dobbiamo gestire il default, con un eccezione o altro.
-                deck = new Deck<SectorCard>();
+                deck = new Deck<Card>();
             break;
         }
         

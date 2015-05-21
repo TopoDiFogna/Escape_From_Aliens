@@ -10,7 +10,7 @@ public abstract class Card {
     /**
      * Constructor.
      */
-    public Card(){
+    protected Card(){
         
     }
    
