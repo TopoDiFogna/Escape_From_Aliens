@@ -105,8 +105,15 @@ public class PlayerController {
         return this.getPlayers();
     }
     
+    /**
+     * This boolean method is true if the selected player has a specific card, is false if he hasn't.
+     * @param player
+     * @param card
+     * @return a boolean 
+     */
     public boolean HasCard(Player player, Card card){
-    	//TODO deve controllare se il giocatore ha effettivamente la carta prima di giocarla. il return è ovviamente non sempre true, ma poi ci penso    	
+    	//TODO deve controllare se il giocatore ha effettivamente la carta prima di giocarla. 
+    	//il return è ovviamente non sempre true, ma poi ci penso    	
     	return true;
     }
 

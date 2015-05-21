@@ -122,9 +122,9 @@ public class DeckFactory {
             deck.add(card);
         }                
         /**
-         * Creates 1 defence card and calls add to add cards to the deck.
+         * Creates 1 defense card and calls add to add cards to the deck.
          */
-        SedativesCard card = new SedativesCard();
+        DefenseCard card = new DefenseCard();
         deck.add(card);
         
         return deck;
