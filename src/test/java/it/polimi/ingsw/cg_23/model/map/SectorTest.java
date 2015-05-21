@@ -122,4 +122,40 @@ public class SectorTest {
         Sector sector = new Sector(3, 3, SectorTypeEnum.VOID, true);
         assertFalse(sector.isNearby(new Sector(3, 7, SectorTypeEnum.VOID, true)));
     }
+    
+    @Test
+    public void testIsNotNearbyEvenColumnDifferentNumber(){
+        Sector sector = new Sector(4, 3, SectorTypeEnum.VOID, true);
+        assertFalse(sector.isNearby(new Sector(7, 3, SectorTypeEnum.VOID, true)));
+    }
+    
+    @Test
+    public void testIsNotNearbyEvenColumnDifferentNumber2(){
+        Sector sector = new Sector(4, 3, SectorTypeEnum.VOID, true);
+        assertFalse(sector.isNearby(new Sector(5, 0, SectorTypeEnum.VOID, true)));
+    }
+    
+    @Test
+    public void testIsNotNearbyOddColumnDifferentNumber(){
+        Sector sector = new Sector(5, 3, SectorTypeEnum.VOID, true);
+        assertFalse(sector.isNearby(new Sector(6, 6, SectorTypeEnum.VOID, true)));
+    }
+    
+    @Test
+    public void testAddNeighborVoid(){
+        Sector sector = new Sector(5, 3, SectorTypeEnum.VOID, true);
+        sector.addNeighbors(new Sector(1, 1, SectorTypeEnum.VOID, true));
+        List<Sector> list = new ArrayList<Sector>();
+        assertEquals(list, sector.getNeighbors());       
+    }
+    
+    @Test
+    public void testAddNeighbor(){
+        Sector sector = new Sector(5, 3, SectorTypeEnum.DANGEROUS, true);
+        Sector sectorExpected = new Sector(1, 1, SectorTypeEnum.DANGEROUS, true);
+        sector.addNeighbors(sectorExpected);
+        List<Sector> list = new ArrayList<Sector>();
+        list.add(sectorExpected);
+        assertEquals(list, sector.getNeighbors());       
+    }
 }

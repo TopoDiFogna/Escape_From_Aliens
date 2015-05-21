@@ -31,7 +31,7 @@ public class Sector extends Coordinate {
     /**
      * List of sectors near this sector
      */
-    private List<Sector> nearSectors = new ArrayList<Sector>();//TODO description
+    private List<Sector> neighbors = new ArrayList<Sector>();//TODO description
 
     /**
      * The constructor. Creates the sector specifying type and if it's crossable.
@@ -114,9 +114,13 @@ public class Sector extends Coordinate {
      * 
      * @param sector the sector to be added as a neighbor
      */
-    public void addNeighbor(Sector sector){
+    public void addNeighbors(Sector sector){
         if(sector.getType() != SectorTypeEnum.VOID){
-            nearSectors.add(sector);
+            neighbors.add(sector);
         }
+    }
+    
+    public List<Sector> getNeighbors(){
+        return this.neighbors;
     }
 }

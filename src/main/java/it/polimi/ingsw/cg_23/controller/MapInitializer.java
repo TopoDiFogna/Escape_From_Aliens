@@ -31,66 +31,66 @@ public class MapInitializer {
             for(int number=1;number<=sizeNumber;number++){
                 
                 if(number>1 && number<sizeNumber){
-                    map[letter][number].addNeighbor(map[letter][number-1]);
-                    map[letter][number].addNeighbor(map[letter][number+1]);
+                    map[letter][number].addNeighbors(map[letter][number-1]);
+                    map[letter][number].addNeighbors(map[letter][number+1]);
                 }
                 
-                if(number==1) map[letter][number].addNeighbor(map[letter][number+1]);
+                if(number==1) map[letter][number].addNeighbors(map[letter][number+1]);
                 
-                if(number==sizeNumber) map[letter][number].addNeighbor(map[letter][number-1]);
+                if(number==sizeNumber) map[letter][number].addNeighbors(map[letter][number-1]);
 
                 //if the column is even
                 if(letter%2 == 0){ //sector with all neighbors
                     if(letter != 1 && number != sizeNumber){
-                        map[letter][number].addNeighbor(map[letter+1][number]);
-                        map[letter][number].addNeighbor(map[letter+1][number+1]);  
-                        map[letter][number].addNeighbor(map[letter-1][number]);
-                        map[letter][number].addNeighbor(map[letter-1][number+1]);
+                        map[letter][number].addNeighbors(map[letter+1][number]);
+                        map[letter][number].addNeighbors(map[letter+1][number+1]);  
+                        map[letter][number].addNeighbors(map[letter-1][number]);
+                        map[letter][number].addNeighbors(map[letter-1][number+1]);
                     }
                     else if(number == 1){//sector with no top sector
-                        map[letter][number].addNeighbor(map[letter+1][number]);
-                        map[letter][number].addNeighbor(map[letter+1][number+1]);
-                        map[letter][number].addNeighbor(map[letter-1][number]);
-                        map[letter][number].addNeighbor(map[letter-1][number+1]);
+                        map[letter][number].addNeighbors(map[letter+1][number]);
+                        map[letter][number].addNeighbors(map[letter+1][number+1]);
+                        map[letter][number].addNeighbors(map[letter-1][number]);
+                        map[letter][number].addNeighbors(map[letter-1][number+1]);
                     }
                     else if(number == sizeNumber){
-                        map[letter][number].addNeighbor(map[letter-1][number]);
-                        map[letter][number].addNeighbor(map[letter+1][number]);
+                        map[letter][number].addNeighbors(map[letter-1][number]);
+                        map[letter][number].addNeighbors(map[letter+1][number]);
                     }
                 }
                 
                 if(letter%2 == 1){//if the column is odd
                     if(letter != 1 && number != 1){//sector with all neighbor
-                        map[letter][number].addNeighbor(map[letter+1][number-1]);
-                        map[letter][number].addNeighbor(map[letter+1][number]);
-                        map[letter][number].addNeighbor(map[letter-1][number-1]);
-                        map[letter][number].addNeighbor(map[letter-1][number]);
+                        map[letter][number].addNeighbors(map[letter+1][number-1]);
+                        map[letter][number].addNeighbors(map[letter+1][number]);
+                        map[letter][number].addNeighbors(map[letter-1][number-1]);
+                        map[letter][number].addNeighbors(map[letter-1][number]);
                 
                     }
                     else if(letter != 1 && letter != sizeLetter && number == 1){//top sector
-                        map[letter][number].addNeighbor(map[letter-1][number]);
-                        map[letter][number].addNeighbor(map[letter+1][number]);
+                        map[letter][number].addNeighbors(map[letter-1][number]);
+                        map[letter][number].addNeighbors(map[letter+1][number]);
                     }
                     else if(letter != 1 && letter != sizeLetter && number == sizeNumber){//bottom sector
-                        map[letter][number].addNeighbor(map[letter+1][number-1]);
-                        map[letter][number].addNeighbor(map[letter+1][number]);
-                        map[letter][number].addNeighbor(map[letter-1][number-1]);
-                        map[letter][number].addNeighbor(map[letter-1][number]);
+                        map[letter][number].addNeighbors(map[letter+1][number-1]);
+                        map[letter][number].addNeighbors(map[letter+1][number]);
+                        map[letter][number].addNeighbors(map[letter-1][number-1]);
+                        map[letter][number].addNeighbors(map[letter-1][number]);
                     }
                     
                     else if(letter == 1 && number == 1){//top left sector
-                        map[letter][number].addNeighbor(map[letter+1][number]);                       
+                        map[letter][number].addNeighbors(map[letter+1][number]);                       
                     }
                     else if(letter == sizeLetter && number == 1){//top right sector
-                        map[letter][number].addNeighbor(map[letter-1][number]);                       
+                        map[letter][number].addNeighbors(map[letter-1][number]);                       
                     }
                     else if(letter == 1 && number == sizeNumber){//bottom left sector
-                        map[letter][number].addNeighbor(map[letter+1][number-1]);
-                        map[letter][number].addNeighbor(map[letter+1][number]);
+                        map[letter][number].addNeighbors(map[letter+1][number-1]);
+                        map[letter][number].addNeighbors(map[letter+1][number]);
                     }
                     else if(letter == sizeLetter && number == sizeNumber){//bottom right sector
-                        map[letter][number].addNeighbor(map[letter-1][number-1]);
-                        map[letter][number].addNeighbor(map[letter-1][number]);
+                        map[letter][number].addNeighbors(map[letter-1][number-1]);
+                        map[letter][number].addNeighbors(map[letter-1][number]);
                     }
                 }
             }
