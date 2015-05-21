@@ -68,6 +68,15 @@ public abstract class Player {
     }
 
     /**
+     * Numbers of player
+     * 
+     * @return an int which count how many players have been created
+     */
+    public static int getCounter() {
+        return counter;
+    }
+
+    /**
      * Tells if the player is alive or dead. 
      * By default it's true, becomes false if a player is killed either bay human or alien.
      * 
@@ -157,7 +166,7 @@ public abstract class Player {
     
     
     /**
-     * Fisrt adds the card to the player hand, then removes the card from the corrisponding deck.
+     * First adds the card to the player hand, then removes the card from the corresponding deck.
      * 
      * @param deck from where the card is drawn
      */

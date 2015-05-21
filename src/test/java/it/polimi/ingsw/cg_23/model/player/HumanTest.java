@@ -1,6 +1,8 @@
 package it.polimi.ingsw.cg_23.model.player;
 
 import static org.junit.Assert.*;
+import it.polimi.ingsw.cg_23.model.map.Sector;
+import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 import it.polimi.ingsw.cg_23.model.players.Human;
 
 import org.junit.Test;
@@ -11,12 +13,18 @@ public class HumanTest {
     public void testHuman() {
         Human human = new Human("dummy");
         assertNotNull(human);
-        assertEquals("dummy", human.getName());
     }
-
+    
     @Test
-    public void testHasDefenceCard() {
-        fail("Not yet implemented");
+    public void testHumanName(){
+        Human human = new Human("dummy");
+        assertEquals("dummy", human.getName()); 
+    }
+    
+    @Test
+    public void testHumanId(){
+        Human human = new Human("dummy");
+        assertEquals(human.getCounter()-1, human.getPlayerId());
     }
 
     @Test
@@ -26,10 +34,9 @@ public class HumanTest {
     }
     
     @Test
-    public void testGetEscapedTrue() {
-        //Human human = new Human("dummy");
-        //assertFalse(human.getEscaped());
-        fail("Not yet implemented");
+    public void testGetEscapedFalseAsDefault() {
+        Human human = new Human("dummy");
+        assertFalse(human.getEscaped());
     }
 
     @Test
@@ -46,11 +53,6 @@ public class HumanTest {
     }
     
     @Test
-    public void testIsAliveFalseAfterBeingKilled() {
-        fail("Not yet implemented");
-    }
-
-    @Test
     public void testSetDead() {
         Human human = new Human("dummy");
         human.setDead();
@@ -59,22 +61,23 @@ public class HumanTest {
 
     @Test
     public void testGetSector() {
-        fail("Not yet implemented");
+        Sector sector = new Sector(1, 1, SectorTypeEnum.VOID, true);
+        Human human = new Human("dummy");
+        human.setCurrentSector(sector);
+        assertEquals(sector, human.getCurrentSector());
     }
 
     @Test
     public void testGetCards() {
-        fail("Not yet implemented");
-    }
-
-    @Test
-    public void testAddCard() {
-        fail("Not yet implemented");
+        fail("Not yet implemented");        
     }
 
     @Test
     public void testSetSector() {
-        fail("Not yet implemented");
+        Sector sector = new Sector(1, 1, SectorTypeEnum.VOID, true);
+        Human human = new Human("dummy");
+        human.setCurrentSector(sector);
+        assertEquals(sector, human.getCurrentSector());
     }
 
     @Test
