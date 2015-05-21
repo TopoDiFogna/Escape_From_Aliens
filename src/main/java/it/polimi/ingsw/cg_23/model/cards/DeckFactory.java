@@ -15,18 +15,18 @@ public class DeckFactory {
             
             case 0:
                 deckType = 0;
-                deck = createSectorDeck();         
-            break;
-                       
+                deck = createSectorDeck();
+                return deck;
+                
             case 1:  
                 deckType = 1;
                 deck = createItemDeck();
-            break;
+            	return deck;
             
             case 2:
                 deckType = 2;
                 deck = createEscapeHatchDeck();                
-            break;
+            	return deck;
             
             default:
                 // TODO dobbiamo gestire il default, con un eccezione o altro.

@@ -1,0 +1,32 @@
+<map>
+	<sector>
+		<type>void</type>
+		<letter>1</letter>
+		<number>1</number>
+		<crossable>true</crossable>
+	</sector>
+	<sector>
+		<type>void</type>
+		<letter>1</letter>
+		<number>1</number>
+		<crossable>true</crossable>
+	</sector>
+	<sector>
+		<type>void</type>
+		<letter>1</letter>
+		<number>1</number>
+		<crossable>true</crossable>
+	</sector>
+	<sector>
+		<type>void</type>
+		<letter>1</letter>
+		<number>1</number>
+		<crossable>true</crossable>
+	</sector>
+	<sector>
+		<type>void</type>
+		<letter>1</letter>
+		<number>1</number>
+		<crossable>true</crossable>
+	</sector>
+</map>

@@ -78,9 +78,9 @@ public class XMLParser extends DefaultHandler{
         Element docEle = dom.getDocumentElement();
 
         //get a nodelist of elements from the converted XML file
-        NodeList nodeList = docEle.getElementsByTagName("Sector");
+        NodeList nodeList = docEle.getElementsByTagName("sector");
         if(nodeList != null && nodeList.getLength() > 0) {
-            for(int i = 0 ; i < nodeList.getLength();i++) {
+            for(int i=0; i < nodeList.getLength(); i++) {
 
                 //get the employee element
                 Element element = (Element)nodeList.item(i);
@@ -158,7 +158,7 @@ public class XMLParser extends DefaultHandler{
      */
     private SectorTypeEnum getSectorTypeValue(Element ele, String tagName) {
         //TODO in production application you would catch the exception
-        String value = getTextValue(ele, tagName);
+        String value = getTextValue(ele, tagName).toUpperCase();
         return SectorTypeEnum.valueOf(value);
     }
 
