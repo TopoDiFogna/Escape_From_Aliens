@@ -9,14 +9,14 @@ public class DeckFactory {
      * 
      * @param deckType If deckType=0 calls sector factory, if deckType=1 calls item factory, if deckType=2 calls escape hatch factory
      */ 
-	public static Deck<? extends Card> createDeck(int deckType) {
-        Deck<? extends Card> deck;
+	public static Deck<Card> createDeck(int deckType) {
+        Deck<Card> deck;
     
         switch (deckType) {
             
             case 0:
                 deck = createSectorDeck();         
-            break;
+                return deck;
                        
             case 1:                 
                 deck = createItemDeck();
@@ -24,14 +24,12 @@ public class DeckFactory {
             
             case 2:
                 deck = createEscapeHatchDeck();
-            break;
+                return deck;
             
             default:
                 deck = new Deck<Card>();
-            break;
+                return deck;
         }
-        
-        return deck;
     }
     
     /**
