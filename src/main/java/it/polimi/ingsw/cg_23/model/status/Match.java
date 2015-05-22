@@ -2,10 +2,8 @@ package it.polimi.ingsw.cg_23.model.status;
 
 import java.util.ArrayList;
 
+import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
-import it.polimi.ingsw.cg_23.model.cards.EscapeHatchCard;
-import it.polimi.ingsw.cg_23.model.cards.ItemCard;
-import it.polimi.ingsw.cg_23.model.cards.SectorCard;
 import it.polimi.ingsw.cg_23.model.map.Map;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
@@ -25,17 +23,17 @@ public class Match {
     /**
      * The deck containing sector cards.
      */
-    private Deck<SectorCard> sectorDeck;
+    private Deck<Card> sectorDeck;
     
     /**
      * The deck containing item cards.
      */
-    private Deck<ItemCard> itemDeck;
+    private Deck<Card> itemDeck;
     
     /**
      * The deck containing escape hatch card.
      */
-    private Deck<EscapeHatchCard> escapeHatchDeck;
+    private Deck<Card> escapeHatchDeck;
     
     
     /**
@@ -52,7 +50,7 @@ public class Match {
     /**
      * The constructor.
      */
-    public Match(Map map, Deck<SectorCard> sectorDeck, Deck<ItemCard> itemDeck, Deck<EscapeHatchCard> escapeHatchDeck, ArrayList<Player> players){
+    public Match(Map map, Deck<Card> sectorDeck, Deck<Card> itemDeck, Deck<Card> escapeHatchDeck, ArrayList<Player> players){
         
         this.map=map;
         this.sectorDeck=sectorDeck;
@@ -76,7 +74,7 @@ public class Match {
      * 
      * @return decks
      */
-    public Deck<SectorCard> getSectorDeck() {
+    public Deck<Card> getSectorDeck() {
         
        return this.sectorDeck;
     }
@@ -86,7 +84,7 @@ public class Match {
      * 
      * @return escapeHatchDeck
      */
-    public Deck<EscapeHatchCard> getEscapeHatchDeck() {
+    public Deck<Card> getEscapeHatchDeck() {
         
         return this.escapeHatchDeck;
     }
@@ -96,7 +94,7 @@ public class Match {
      * 
      * @return itemDeck
      */
-    public Deck<ItemCard> getItemDeck() {
+    public Deck<Card> getItemDeck() {
         
         return this.itemDeck;
     }
