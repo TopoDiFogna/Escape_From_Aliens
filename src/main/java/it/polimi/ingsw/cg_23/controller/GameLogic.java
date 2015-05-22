@@ -71,9 +71,11 @@ public class GameLogic {
      * @return a boolean (true if he has card, false if he hasn't)
      */
     public boolean hasCard(Player player, Card card) {
-    	if (player.getCards().contains(card)) {
-    		return true;
-    	}
+        
+        for (Card cards : player.getCards()) {
+            if(cards.getClass().equals(card.getClass()))
+                return true;
+        }
     	return false;
     }
     
