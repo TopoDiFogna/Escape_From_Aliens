@@ -170,7 +170,7 @@ public abstract class Player {
      * 
      * @param deck from where the card is drawn
      */
-    public void drawCard(Deck<Card> deck){
+    public void drawCard(Deck<Card> deck){//TODO probably here we have some problems
         Iterator<Card> iterator  = deck.iterator();
         cards.add(iterator.next());
         iterator.remove();

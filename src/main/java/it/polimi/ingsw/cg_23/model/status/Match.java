@@ -1,8 +1,13 @@
 package it.polimi.ingsw.cg_23.model.status;
 
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
+import it.polimi.ingsw.cg_23.controller.MapInitializer;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
+import it.polimi.ingsw.cg_23.model.cards.DeckFactory;
 import it.polimi.ingsw.cg_23.model.cards.EscapeHatchCard;
 import it.polimi.ingsw.cg_23.model.cards.ItemCard;
 import it.polimi.ingsw.cg_23.model.cards.SectorCard;
@@ -35,6 +40,21 @@ public class Match {
     /**
      * The deck containing escape hatch card.
      */
+    private Deck<EscapeHatchCard> escapeHatchDeckDiscarded = (Deck<EscapeHatchCard>) DeckFactory.createDeck(3);
+    
+    /**
+     * The deck containing sector cards.
+     */
+    private Deck<SectorCard> sectorDeckDiscarded = (Deck<SectorCard>) new DeckFactory().createDeck(3);
+    
+    /**
+     * The deck containing item cards.
+     */
+    private Deck<ItemCard> itemDeckDiscarded = (Deck<ItemCard>) new DeckFactory().createDeck(3);
+    
+    /**
+     * The deck containing escape hatch card.
+     */
     private Deck<EscapeHatchCard> escapeHatchDeck;
     
     
@@ -48,17 +68,29 @@ public class Match {
      */
     private int turnNumber;
 
+    private HashMap<Player, Socket> socketMap = new HashMap<Player, Socket>();
+    
+    private GameState matchState;
+    
+    private String name;
+    
 
     /**
      * The constructor.
      */
-    public Match(Map map, Deck<SectorCard> sectorDeck, Deck<ItemCard> itemDeck, Deck<EscapeHatchCard> escapeHatchDeck, ArrayList<Player> players){
+    public Match(String mapName, Player player, Socket socket){//TODO assign players to right sector
         
-        this.map=map;
-        this.sectorDeck=sectorDeck;
-        this.itemDeck=itemDeck;
-        this.escapeHatchDeck=escapeHatchDeck;
+        this.name=mapName;
+        this.map=new Map(mapName);
+        this.sectorDeck=(Deck<SectorCard>) DeckFactory.createDeck(0);
+        this.itemDeck=(Deck<ItemCard>) DeckFactory.createDeck(1);
+        this.escapeHatchDeck=(Deck<EscapeHatchCard>) DeckFactory.createDeck(2);
         this.players=players;
+        Collections.shuffle(sectorDeck);
+        Collections.shuffle(itemDeck);
+        Collections.shuffle(escapeHatchDeck);
+        addPlayer(player, socket);
+        matchState = GameState.WAITING;
         turnNumber=0;
     }
     
@@ -101,6 +133,43 @@ public class Match {
         return this.itemDeck;
     }
 
+    public Deck<EscapeHatchCard> getEscapeHatchDeckDiscarded() {
+        return escapeHatchDeckDiscarded;
+    }
+
+    public Deck<SectorCard> getSectorDeckDiscarded() {
+        return sectorDeckDiscarded;
+    }
+
+    public Deck<ItemCard> getItemDeckDiscarded() {
+        return itemDeckDiscarded;
+    }
+
+    public void setSectorDeck(Deck<SectorCard> sectorDeck) {
+        this.sectorDeck = sectorDeck;
+    }
+
+    public void setItemDeck(Deck<ItemCard> itemDeck) {
+        this.itemDeck = itemDeck;
+    }
+
+    public void setEscapeHatchDeckDiscarded(
+            Deck<EscapeHatchCard> escapeHatchDeckDiscarded) {
+        this.escapeHatchDeckDiscarded = escapeHatchDeckDiscarded;
+    }
+
+    public void setSectorDeckDiscarded(Deck<SectorCard> sectorDeckDiscarded) {
+        this.sectorDeckDiscarded = sectorDeckDiscarded;
+    }
+
+    public void setItemDeckDiscarded(Deck<ItemCard> itemDeckDiscarded) {
+        this.itemDeckDiscarded = itemDeckDiscarded;
+    }
+
+    public void setEscapeHatchDeck(Deck<EscapeHatchCard> escapeHatchDeck) {
+        this.escapeHatchDeck = escapeHatchDeck;
+    }
+
     /**
      * Returns players.
      * 
@@ -126,5 +195,9 @@ public class Match {
      */
     public void nextTurn() {
         turnNumber++;
+    }
+    
+    public void addPlayer(Player player, Socket socket){
+        socketMap.put(player, socket);
     }
 }
