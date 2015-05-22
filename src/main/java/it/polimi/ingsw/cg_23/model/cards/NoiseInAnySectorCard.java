@@ -17,11 +17,15 @@ public class NoiseInAnySectorCard extends Card implements Action {
 	 * The boolean hasItem indicates if the card has the item symbol. <br>
 	 * If hasItem is true the player (both humans and aliens) picks-up an Item card from ItemDeck. 
 	 */
-	boolean hasItem;
+	private final boolean hasItem;
 	public NoiseInAnySectorCard(boolean hasItem) {
-		//TODO constructor
+		this.hasItem=hasItem;
 	}
 	
+	public boolean hasItem() {
+		return hasItem;
+	}
+
 	/**
 	 * This method implements the method in Action interface. <br>
 	 * This method is auto-called when player pick-up this card. <br>

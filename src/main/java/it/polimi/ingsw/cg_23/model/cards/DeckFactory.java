@@ -3,8 +3,9 @@ package it.polimi.ingsw.cg_23.model.cards;
 public class DeckFactory {    
 
     /**
-     * Creates decks based on the parameter taken.
-     * In every cases we call the relative methods for creating and adding cards to the right deck.
+     * Creates decks based on the parameter taken. <br>
+     * In every cases we call the relative methods for creating and adding cards to the right deck. <br>
+     * In the default case of the switch we create an empty deck, used for cards discarded.
      * 
      * @param deckType If deckType=0 calls sector factory, if deckType=1 calls item factory, if deckType=2 calls escape hatch factory
      */ 
@@ -26,7 +27,6 @@ public class DeckFactory {
             break;
             
             default:
-                // TODO dobbiamo gestire il default, con un eccezione o altro.
                 deck = new Deck<Card>();
             break;
         }
@@ -45,7 +45,7 @@ public class DeckFactory {
         /**
          * Creates 5 silence cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 4; i++) { 
+        for(int i = 0; i < 5; i++) { 
         	SilenceCard card = new SilenceCard(false);
             deck.add(card);
         }
@@ -53,7 +53,7 @@ public class DeckFactory {
         /**
          * Creates 10 noise in any sector cards (4 with item and 6 without) and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 9; i++) {
+        for(int i = 0; i < 10; i++) {
             if(i<=3){
             	NoiseInAnySectorCard card = new NoiseInAnySectorCard(true);
                 deck.add(card);
@@ -66,7 +66,7 @@ public class DeckFactory {
         /**
          * Creates 10 noise in your sector cards (4 with item and 6 without) and calls add to add cards to the deck.
          */
-       for(int i = 0; i < 9; i++) {
+       for(int i = 0; i < 10; i++) {
     	   if(i<=3){
            	NoiseInYourSectorCard card = new NoiseInYourSectorCard(true);
                deck.add(card);
@@ -89,35 +89,35 @@ public class DeckFactory {
         /**
          * Creates 2 attack cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 2; i++) {
         	AttackCard card = new AttackCard();
             deck.add(card);
         } 
         /**
          * Creates 2 teleport cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 2; i++) {
             TeleportCard card = new TeleportCard();
             deck.add(card);
         } 
         /**
          * Creates 2 adrenaline cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 2; i++) {
             AdrenalineCard card = new AdrenalineCard();
             deck.add(card);
         }                 
         /**
          * Creates 2 spotlight cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 2; i++) {
         	SpotlightCard card = new SpotlightCard();
             deck.add(card);
         } 
         /**
          * Creates 3 sedatives cards and calls add to add cards to the deck.
          */
-        for(int i = 0; i < 2; i++) {
+        for(int i = 0; i < 3; i++) {
         	SedativesCard card = new SedativesCard();
             deck.add(card);
         }                
@@ -141,14 +141,14 @@ public class DeckFactory {
         /**
          * Creates 3 green cards and calls addCard to add cards to the deck.
          */
-	        for(int i = 0; i < 2; i++) {
+	        for(int i = 0; i < 3; i++) {
 	        	GreenCard card = new GreenCard();
 	        	deck.add(card);
 	        }                 
         /**
          * Creates 3 red cards and calls addCard to add cards to the deck.
          */
-	       for(int i = 0; i < 2; i++) {
+	       for(int i = 0; i < 3; i++) {
 	    	   RedCard card = new RedCard();
 	    	   deck.add(card);
         }

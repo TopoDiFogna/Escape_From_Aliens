@@ -17,11 +17,15 @@ public class SilenceCard extends Card implements Action {
 	 * The boolean hasItem indicates if the card has the item symbol. <br>
 	 * This boolean here is always false, because silence hasn't item symbol, but we added it here to semplify the SectorDeck creation.
 	 */
-	boolean hasItem;
+	private final boolean hasItem;
 	public SilenceCard(boolean hasItem){
-		
+		this.hasItem=hasItem;
 	}
 	
+	public boolean isHasItem() {
+		return hasItem;
+	}
+
 	/**
 	 * This method implements the method in Action interface. <br>
 	 * This method is auto-called when player pick-up this card. <br>
