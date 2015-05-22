@@ -21,8 +21,7 @@ public class GreenCard extends Card {
 	 */
 	@Override
 	public void doAction(Player player) {
-		//TODO metodo del controller che farà player.setEscaped();
-		//TODO quando esisterà il controllore qua chiamerò un metodo per togliere i player scappati dalla lista player
+		//TODO player.useGreen();
 	}
 
 }

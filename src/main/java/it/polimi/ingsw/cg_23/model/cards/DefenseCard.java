@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
@@ -19,7 +20,7 @@ public class DefenseCard extends Card {
 	 * This card can not be used from human, but auto-used when human is attacked.
 	 */
 	@Override
-	public void doAction(Player player) {
+	public void doAction(Player player, GameLogic controller) {
 		
 	}
 

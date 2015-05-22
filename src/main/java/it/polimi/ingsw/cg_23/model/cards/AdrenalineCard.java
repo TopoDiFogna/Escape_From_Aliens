@@ -1,9 +1,10 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
- * The adrenaline card gives humans to move 2 sectors instead 1. It must be used before move.
+ * The adrenaline card gives humans the possibility to move 2 sectors instead 1.
  * 
  * @author Arianna
  */
@@ -16,11 +17,11 @@ public class AdrenalineCard extends Card {
 	}
 	
 	/**
-	 * In this case gives the player the possibility to move 2 sectors instead 2.
+	 * Calls the specific method in GameLogic class.
 	 */
 	@Override
-	public void doAction(Player player) {
-		player.setCanMoveFaster(true);
+	public void doAction(Player player, GameLogic controller) {
+		controller.useAdrenaline(player);
 	}
 
 }

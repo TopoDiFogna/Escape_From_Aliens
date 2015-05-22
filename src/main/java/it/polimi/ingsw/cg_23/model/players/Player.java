@@ -185,14 +185,4 @@ public abstract class Player {
         cards.remove(card);
         return card;
     }
-    
-    /**
-     * Uses the card selected by player and removes it from the player hand
-     * 
-     * @param card card to be used
-     */
-    public void useCard(Card card){
-        card.doAction(this);
-        discardCard(card);
-    }
 }

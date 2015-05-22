@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
@@ -29,14 +30,10 @@ public class NoiseInYourSectorCard extends Card{
 
 	/**
 	 * This method is auto-called when player pick-up this card. <br>
-	 * Asks controller to ask view to ask user in what sector there is noise.
 	 */
 	@Override
-	public void doAction(Player player) {
-		//TODO nel controller c'è da creare un metodo per passargli il mio settore player.getCurrentSector()
-		if(hasItem){
-			//TODO altro metodo del controller che sa da che mazzo pescare, nel controller chiamerò il metodo drawCard() che c'è nel player
-		}
+	public void doAction(Player player, GameLogic controller) {
+		controller.useNoiseInYourSector(player);
 	}
-
+	
 }
