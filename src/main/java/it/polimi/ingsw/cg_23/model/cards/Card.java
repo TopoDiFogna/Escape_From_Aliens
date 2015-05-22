@@ -1,5 +1,7 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.model.players.Player;
+
 /**
  * Abtract class of card.
  * 
@@ -10,8 +12,14 @@ public abstract class Card {
     /**
      * Constructor.
      */
-    public Card(){
+    protected Card(){
         
     }
+    
+    /**
+	 * This method is implemented in every card classes with different actions. 
+	 * @param player who uses the card
+	 */	
+    public abstract void doAction(Player player);
    
 }
