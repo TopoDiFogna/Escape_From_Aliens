@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.players;
 
+import it.polimi.ingsw.cg_23.controller.PlayerController;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.map.Sector;
@@ -41,7 +42,7 @@ public abstract class Player {
     /**
      * The sector where the player currently is.
      */
-    protected Sector currentSector = null;
+    protected Sector currentSector;
     
     /**
      * Unique id for every player.
@@ -170,7 +171,7 @@ public abstract class Player {
      * 
      * @param deck from where the card is drawn
      */
-    public void drawCard(Deck<Card> deck){
+    public void drawCard(Deck<Card> deck){//TODO probably here we have some problems
         Iterator<Card> iterator  = deck.iterator();
         cards.add(iterator.next());
         iterator.remove();
@@ -192,7 +193,7 @@ public abstract class Player {
      * @param card card to be used
      */
     public void useCard(Card card){
-        //card.action();
+        card.doAction(this);
         discardCard(card);
     }
 }
