@@ -2,8 +2,6 @@ package it.polimi.ingsw.cg_23.controller;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
-import it.polimi.ingsw.cg_23.model.cards.NoiseInYourSectorCard;
-import it.polimi.ingsw.cg_23.model.map.Map;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 import it.polimi.ingsw.cg_23.model.players.Alien;
@@ -49,7 +47,7 @@ public class GameLogic {
             }
         }
         
-        if(player instanceof Alien && ((Alien) player).getHasKilled()){//three step
+        if(player instanceof Alien && ((Alien) player).getHasKilled()){//three step, alien after killing someone
             for (Sector sector : player.getCurrentSector().getNeighbors()){
                 for (Sector neighbor : sector.getNeighbors()) {
                     if(neighbor.getNeighbors().contains(destination))
@@ -137,7 +135,7 @@ public class GameLogic {
 	 */
 	public void useGreen(Human player) {
 		player.setEscaped();
-		removeAfterWinnig(player);
+		removeAfterWinning(player);
 	}
 	
 	
@@ -211,7 +209,7 @@ public class GameLogic {
 		//TODO
 	}
 	
-	public void removeAfterWinnig(Player player){
+	public void removeAfterWinning(Player player){
 		//TODO
 	}
 }
