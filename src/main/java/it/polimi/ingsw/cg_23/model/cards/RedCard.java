@@ -7,23 +7,20 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * If a human picks-up this card, he must reach another escape hatch sector to save himself.
  * @author Arianna
  */
-public class RedCard extends Card implements Action {
+public class RedCard extends Card{
 	
 	/**
-	 * deckType tells in what deck we must put this card (in this case 2 indicates EscapeHatchDeck).	
+	 * constructor
 	 */
-	protected int deckType=2;
 	public RedCard() {
-		// TODO cosntructor
 	}
 
 	/**
-	 * This method implements the method in Action interface. <br>
 	 * Set this escape hatch sector as unusable.
 	 */
 	@Override
 	public void doAction(Player player) {
-		// TODO dobbiamo settare a "non utilizzabile" questo settore scialuppa.
+		// TODO nel controller dobbiamo settare a "non utilizzabile" questo settore scialuppa.
 
 	}
 

@@ -7,17 +7,17 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * This card asks the human to chose in what sector other player hear noise.
  * @author Arianna
  */
-public class NoiseInAnySectorCard extends Card implements Action {
+public class NoiseInAnySectorCard extends Card{
 	
-	/**
-	 * deckType tells in what deck we must put this card (in this case 0 indicates SectorDeck).	
-	 */
-	protected int deckType=0;
 	/**
 	 * The boolean hasItem indicates if the card has the item symbol. <br>
 	 * If hasItem is true the player (both humans and aliens) picks-up an Item card from ItemDeck. 
 	 */
 	private final boolean hasItem;
+	
+	/**
+	 * constructor
+	 */
 	public NoiseInAnySectorCard(boolean hasItem) {
 		this.hasItem=hasItem;
 	}
@@ -27,13 +27,14 @@ public class NoiseInAnySectorCard extends Card implements Action {
 	}
 
 	/**
-	 * This method implements the method in Action interface. <br>
-	 * This method is auto-called when player pick-up this card. <br>
 	 * Asks controller to ask view to ask user in what sector there is noise.
 	 */
 	@Override
 	public void doAction(Player player) {
-		// TODO Auto-generated method stub
+		// il controller deve chiedere alla view di chiedere al giocatore in input il settore che vuole esporre
+		if(hasItem){
+			//TODO altro metodo del controller che sa da che mazzo pescare, nel controller chiamerò il metodo drawCard() che c'è nel player
+		}
 
 	}
 

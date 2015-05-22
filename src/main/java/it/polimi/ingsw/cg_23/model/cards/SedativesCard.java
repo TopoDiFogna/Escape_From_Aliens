@@ -6,23 +6,20 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * When human uses this card he doesn't must pick-up a SectorCard. <br>
  * @author Arianna
  */
-public class SedativesCard extends Card implements Action {
+public class SedativesCard extends Card {
 
 	/**
-	 * deckType tells in what deck we must put this card (in this case 1 indicates ItemDeck).	
+	 * constructor
 	 */
-	protected int deckType=1;
 	public SedativesCard() {
-		// TODO constructor
 	}
 	
 	/**
-	 * This method implements the method in Action interface. <br>
 	 * This method prevents human to pick-up card.
 	 */
 	@Override
 	public void doAction(Player player) {
-		// TODO Auto-generated method stub
+		// TODO nel controller è come se passassi su un settore sicuro (dopo il controllo del tipo di settore di destinazione si fa un IF: per controllare se prima ès tata usata questa carta 
 	}
 
 }

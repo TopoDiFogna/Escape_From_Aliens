@@ -62,4 +62,42 @@ public class Map {
     public Sector[][] getSector() {
         return this.sectors;
     }
+    
+    /**
+     * @return the human sector of the current map
+     */
+    public Sector getHumanSector(){
+    	int i=0, j=0;
+    	boolean flag=false;
+    	for(i=0; i < SIZELETTER; i++){
+    		for(j=0; j < SIZENUMBER; j++){
+    			if(sectors[i][j].getType()==SectorTypeEnum.HUMAN){
+    				flag=true;
+    				break;
+    			}
+    		}
+    		if(flag)
+    			break;
+    	}
+    	return sectors[i][j];
+    }
+    
+    /**
+     * @return the alien sector of the current map
+     */
+    public Sector getAlienSector(){
+    	int i=0, j=0;
+    	boolean flag=false;
+    	for(i=0; i < SIZELETTER; i++){
+    		for(j=0; j < SIZENUMBER; j++){
+    			if(sectors[i][j].getType()==SectorTypeEnum.ALIEN){
+    				flag=true;
+    				break;
+    			}
+    		}
+    		if(flag)
+    			break;
+    	}
+    	return sectors[i][j];
+    }
 }

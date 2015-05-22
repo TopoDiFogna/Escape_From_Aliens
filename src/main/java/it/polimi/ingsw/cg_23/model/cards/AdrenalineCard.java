@@ -7,24 +7,20 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * 
  * @author Arianna
  */
-public class AdrenalineCard extends Card implements Action {
+public class AdrenalineCard extends Card {
 	
 	/**
-	 * deckType tells in what deck we must put this card (in this case 1 indicates ItemDeck).	
+	 * constructor
 	 */
-	protected int deckType=1;
 	public AdrenalineCard() {
-		// TODO constructor
 	}
 	
 	/**
-	 * This method implements the method in Action interface. <br>
 	 * In this case gives the player the possibility to move 2 sectors instead 2.
 	 */
 	@Override
 	public void doAction(Player player) {
-		// TODO Player.setCanMoveFaster(true);
-
+		player.setCanMoveFaster(true);
 	}
 
 }

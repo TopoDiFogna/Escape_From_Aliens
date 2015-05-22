@@ -42,7 +42,7 @@ public abstract class Player {
     /**
      * The sector where the player currently is.
      */
-    protected Sector currentSector = null;
+    protected Sector currentSector;
     
     /**
      * Unique id for every player.
@@ -193,9 +193,7 @@ public abstract class Player {
      * @param card card to be used
      */
     public void useCard(Card card){
-    	//TODO c'è da capire come passare il player, visto che sono dentro la classe player
-    	//PlayerController.hasCard(this.player, card);
-        //card.doAction(this.player);
+        card.doAction(this);
         discardCard(card);
     }
 }

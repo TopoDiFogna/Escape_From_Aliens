@@ -7,27 +7,22 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * If a human picks-up this card, he wins! 
  * @author Arianna
  */
-public class GreenCard extends Card implements Action {
+public class GreenCard extends Card {
 	
 	/**
-	 * deckType tells in what deck we must put this card (in this case 2 indicates EscapeHatchDeck).	
+	 * constructor
 	 */
-	protected int deckType=2;
 	public GreenCard() {
-		// TODO constructor
 	}
 
 	/**
-	 * This method implements the method in Action interface. <br>
 	 * This method set as true human attribute escaped.
 	 * Set this escape hatch sector as unusable.
 	 */
 	@Override
 	public void doAction(Player player) {
-		// TODO Player.Human.setEscaped(true);
-		//oltre a dirgli che è scappato, dobbiamo pensare a come gestire l'eliminazione del giocatore dalla partita, ora che ha vinto
-		//e dobbiamo settare a "non utilizzabile" questo settore scialuppa.
-
+		//TODO metodo del controller che farà player.setEscaped();
+		//TODO quando esisterà il controllore qua chiamerò un metodo per togliere i player scappati dalla lista player
 	}
 
 }
