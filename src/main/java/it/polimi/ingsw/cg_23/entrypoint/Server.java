@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.entrypoint;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -16,25 +17,34 @@ public class Server {
     private GameManager gameManager;
 
     public Server() {
-        gameManager = new GameManager();
         this.startSocket();
     }
     
     
     public void startSocket(){
         
-        //Creat a new thread pool
+        //Create a new thread pool
         ExecutorService executor = Executors.newCachedThreadPool();
         
         //initialize server socket
-        ServerSocket serverSocket = new ServerSocket(SOCKET_PORT);
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(SOCKET_PORT);
+        } catch (IOException e1) {
+            System.err.println("ERROR: Cannot run server on port: "+SOCKET_PORT+"!");
+        }
         
         System.out.println("SERVER: Ready");
         
         while(isRunning()){
             
             //waiting for connections
-            Socket socket = serverSocket.accept();
+            Socket socket = null;
+            try {
+                socket = serverSocket.accept();
+            } catch (IOException e) {
+                System.err.println("ERROR: Cannot accept client connection!");
+            }
             
             
             gameManager = new GameManager(socket);
