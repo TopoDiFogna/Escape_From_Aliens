@@ -71,7 +71,7 @@ public class Match {
     
     private GameState matchState;
     
-    private String name;
+    private final String name;
 
 
     
@@ -92,7 +92,7 @@ public class Match {
         Collections.shuffle(itemDeck);
         Collections.shuffle(escapeHatchDeck);
         addPlayer(player, socket);
-        matchState = GameState.WAITING;
+        setMatchState(GameState.WAITING);
         turnNumber=0;
     }
     
@@ -201,5 +201,17 @@ public class Match {
     
     public void addPlayer(Player player, Socket socket){
         socketMap.put(player, socket);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public GameState getMatchState() {
+        return matchState;
+    }
+
+    public void setMatchState(GameState matchState) {
+        this.matchState = matchState;
     }
 }

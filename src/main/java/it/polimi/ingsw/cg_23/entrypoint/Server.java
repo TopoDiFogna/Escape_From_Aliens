@@ -16,11 +16,17 @@ public class Server {
     
     private GameManager gameManager;
 
+    /**
+     * Constructor: spawns the server and launches it
+     */
     public Server() {
         this.startSocket();
     }
     
-    
+    /**
+     * Connection handling.<br>
+     * If cannot accept a client connection doesn't try to add to the GameManager.
+     */
     public void startSocket(){
         
         //Create a new thread pool
@@ -38,21 +44,22 @@ public class Server {
         
         while(isRunning()){
             
-            //waiting for connections
+            boolean error = false; //resets the error flag
+            
             Socket socket = null;
+            
             try {
-                socket = serverSocket.accept();
+                socket = serverSocket.accept(); //waiting for connections
             } catch (IOException e) {
                 System.err.println("ERROR: Cannot accept client connection!");
+                error=true;  
             }
             
+            if(!error){
+                gameManager = new GameManager(socket);//creates a new game manager for this socket
             
-            gameManager = new GameManager(socket);
-            
-            
-            //this.addClient(view, partita, controller);
-            
-            executor.submit(gameManager);
+                executor.submit(gameManager);//runs the game manager
+            }
         }
     }
     
@@ -60,7 +67,11 @@ public class Server {
         return true;
     }
     
-    
+    /**
+     * Entry point for the server.
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
         
         //create the server and starts it
