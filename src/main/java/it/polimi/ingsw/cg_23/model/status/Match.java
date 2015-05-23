@@ -10,16 +10,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-
-
-
+import java.util.Observable;
 
 /**
  * Description of Match.
  * 
  * @author Paolo
  */
-public class Match {
+public class Match extends Observable{
        
     /**
      * Description of the property map.

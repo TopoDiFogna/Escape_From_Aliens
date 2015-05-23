@@ -8,12 +8,24 @@ import java.util.concurrent.Executors;
 
 import it.polimi.ingsw.cg_23.network.GameManager;
 
-
+/**
+ * From here we start the server.<br>
+ * It accepts connection and passes them to the game manager
+ * 
+ * @author Paolo
+ *
+ */
 
 public class Server {
     
+    /**
+     * The port the server listen on
+     */
     private final static int SOCKET_PORT=10412;
     
+    /**
+     * The game manager will handle connection to give them a game
+     */
     private GameManager gameManager;
 
     /**
@@ -22,6 +34,8 @@ public class Server {
     public Server() {
         this.startSocket();
     }
+    
+    private boolean running=false;
     
     /**
      * Connection handling.<br>
@@ -39,6 +53,8 @@ public class Server {
         } catch (IOException e1) {
             System.err.println("ERROR: Cannot run server on port: "+SOCKET_PORT+"!");
         }
+        
+        running = true;
         
         System.out.println("SERVER: Ready");
         
@@ -63,8 +79,14 @@ public class Server {
         }
     }
     
+    /**
+     * Tells if the server is running
+     * 
+     * @return the status of the server, true when running, false otherwise.
+     */
     private boolean isRunning(){
-        return true;
+        
+        return running;
     }
     
     /**

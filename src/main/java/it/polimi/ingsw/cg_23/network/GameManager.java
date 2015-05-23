@@ -1,5 +1,8 @@
 package it.polimi.ingsw.cg_23.network;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
+import it.polimi.ingsw.cg_23.model.players.Alien;
+import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
 
@@ -52,15 +55,18 @@ public class GameManager implements Communicator, Runnable{
      * Make a player join the specified game.
      * 
      * @param socket the socket of the player joining
-     * @param map map tthe player wants to join
+     * @param map map the player wants to join
      */
-    private void joinGame(Socket socket, String map){
+    /*private void joinGame(View view, Match match, GameLogic gameLogic){//TODO finish this
         
-    }
+        view.addObserver(gameLogic);
+        
+        match.addObserver(view);
+    }*/
 
     
     /**
-     * Overridden method because this class implemets Runnable<br>
+     * Overridden method because this class implements Runnable<br>
      * 
      * Asks the player for a map to play and calls joinGame to make it play
      * 
@@ -69,15 +75,18 @@ public class GameManager implements Communicator, Runnable{
     public void run() {
         
         send("Welcome to Escape From The Aliens In Outer Space!!");
-        send("Which map you wanto to play?");
+        send("Which map you want to play?");
         String mapName = receive().toLowerCase();
         
         for (Match match : matches) {
             if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING){
-                //TODO add the player to the match
+                //joinGame(view, match, new GameLogic(match));
+                sockets.remove(socket);
             }
             else{
-                //TODO creates a new match, sets match state to waiting and adds the player
+                send("Enter your name: ");
+                String name = receive();
+                //joinGame(view, new Match(mapName, new Alien(name), socket), new GameLogic(match));
                 sockets.remove(socket);
             }
         }
@@ -85,7 +94,10 @@ public class GameManager implements Communicator, Runnable{
     }
 
 
-
+    /**
+     * Sends connection to the clients
+     * 
+     */
     @Override
     public void send(String msg) {
         
@@ -106,7 +118,11 @@ public class GameManager implements Communicator, Runnable{
     }
 
 
-
+    /**
+     * Receives strings from the clients and returns them
+     * 
+     * @return the line received
+     */
     @Override
     public String receive() {
         
@@ -126,7 +142,10 @@ public class GameManager implements Communicator, Runnable{
     }
 
 
-
+    /**
+     * Closes the connection with a client
+     * 
+     */
     @Override
     public void close() {
         try {
