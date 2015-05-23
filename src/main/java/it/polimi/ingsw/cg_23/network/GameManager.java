@@ -1,37 +1,40 @@
-package it.polimi.ingsw.cg_23.controller;
+package it.polimi.ingsw.cg_23.network;
 
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
-import it.polimi.ingsw.cg_23.network.Communicator;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Scanner;
 
-public class GameManager extends Observable implements Communicator,Observer, Runnable{
-    
-    /**
-     * The only instance of this class
-     */
-    private static GameManager instance;
+public class GameManager implements Communicator, Runnable{
     
     /**
      * List of socket connected but still chosing a map
      */
     private static List<Socket> sockets = new ArrayList<Socket>();
     
+    /**
+     * List of all matches
+     */
     private static List<Match> matches = new ArrayList<Match>();
     
+    /**
+     * Scanner to read client input
+     */
     private Scanner socketIn;
     
+    /**
+     * PrintWriter to send client output
+     */
     private PrintWriter socketOut;
     
-    
+    /**
+     * The socket of the player who is connecting to join a game
+     */
     private Socket socket;
     
     /**
@@ -45,18 +48,17 @@ public class GameManager extends Observable implements Communicator,Observer, Ru
     }
     
     
-    
+    /**
+     * Make a player join the specified game.
+     * 
+     * @param socket the socket of the player joining
+     * @param map map tthe player wants to join
+     */
     private void joinGame(Socket socket, String map){
         
     }
 
     
-    @Override
-    public void update(Observable o, Object arg) {
-        // TODO Auto-generated method stub
-        
-    }
-
     /**
      * Overridden method because this class implemets Runnable<br>
      * 
@@ -78,7 +80,8 @@ public class GameManager extends Observable implements Communicator,Observer, Ru
                 //TODO creates a new match, sets match state to waiting and adds the player
                 sockets.remove(socket);
             }
-        }       
+        }
+
     }
 
 

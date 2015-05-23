@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import it.polimi.ingsw.cg_23.controller.GameManager;
+import it.polimi.ingsw.cg_23.network.GameManager;
 
 
 
