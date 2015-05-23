@@ -85,11 +85,11 @@ public class Match extends Observable{
         this.sectorDeck=DeckFactory.createDeck(0);
         this.itemDeck=DeckFactory.createDeck(1);
         this.escapeHatchDeck=DeckFactory.createDeck(2);
-        this.players.add(player);
         Collections.shuffle(sectorDeck);
         Collections.shuffle(itemDeck);
         Collections.shuffle(escapeHatchDeck);
-        addPlayer(player, socket);
+        addNewPlayerToList(player);
+        addNewPlayerToMap(player, socket);
         setMatchState(GameState.WAITING);
         turnNumber=0;
     }
@@ -180,6 +180,10 @@ public class Match extends Observable{
         return this.players;
     }
 
+    public void addNewPlayerToList(Player player) {
+        this.players.add(player);
+    }
+
     /**
      * Returns the number of the turn.
      * 
@@ -197,7 +201,7 @@ public class Match extends Observable{
         turnNumber++;
     }
     
-    public void addPlayer(Player player, Socket socket){
+    public void addNewPlayerToMap(Player player, Socket socket){
         socketMap.put(player, socket);
     }
 

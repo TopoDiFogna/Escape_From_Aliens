@@ -2,9 +2,12 @@ package it.polimi.ingsw.cg_23.network;
 
 import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Alien;
+import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.view.ClientHandler;
+import it.polimi.ingsw.cg_23.view.View;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +15,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GameManager implements Communicator, Runnable{
     
@@ -54,15 +59,62 @@ public class GameManager implements Communicator, Runnable{
     /**
      * Make a player join the specified game.
      * 
-     * @param socket the socket of the player joining
-     * @param map map the player wants to join
+     * @param view the client handler
+     * @param match the match the client will join
+     * @param gameLogic the rules of the game
      */
-    /*private void joinGame(View view, Match match, GameLogic gameLogic){//TODO finish this
+    private void joinGame(ClientHandler view, Match match, GameLogic gameLogic){
+        
+        ExecutorService executor = Executors.newCachedThreadPool();
+        
+        int nAlien = 0; //number of aliens in the match
+        
+        int nHuman = 0;//numbaer of humans in the match
         
         view.addObserver(gameLogic);
         
         match.addObserver(view);
-    }*/
+        
+        Player newPlayer;
+        send("Enter your name: ");
+        String name = receive();
+        
+        for (Player player : match.getPlayers()) {
+            if(player instanceof Alien){
+                nAlien++;
+            }
+            else
+                nHuman++;
+        }
+        
+        if(nAlien>nHuman)
+            newPlayer = new Human(name);
+        else
+            newPlayer = new Human(name);
+            
+        match.addNewPlayerToMap(new Alien(name), socket);
+        match.addNewPlayerToList(newPlayer);
+        
+        executor.submit(view);
+    }
+    
+    /**
+     * Make the client join a fresh game.
+     * 
+     * @param view the client handler
+     * @param match the match the client will join
+     * @param gameLogic the rules of the game
+     */
+    private void joinNewGame(ClientHandler view, Match match, GameLogic gameLogic){
+        
+        ExecutorService executor = Executors.newCachedThreadPool();
+        
+        view.addObserver(gameLogic);
+        
+        match.addObserver(view);
+        
+        executor.submit(view);
+    }
 
     
     /**
@@ -78,25 +130,29 @@ public class GameManager implements Communicator, Runnable{
         send("Which map you want to play?");
         String mapName = receive().toLowerCase();
         
+        
+        //TODO synchronized??? maybe yes
         for (Match match : matches) {
             if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING){
-                //joinGame(view, match, new GameLogic(match));
+                ClientHandler clientHandler = new ClientHandler(socket);
+                joinGame(clientHandler, match, new GameLogic(match));
                 sockets.remove(socket);
             }
             else{
                 send("Enter your name: ");
                 String name = receive();
-                //joinGame(view, new Match(mapName, new Alien(name), socket), new GameLogic(match));
+                ClientHandler clientHandler = new ClientHandler(socket);
+                joinNewGame(clientHandler, new Match(mapName, new Alien(name), socket), new GameLogic(match));
                 sockets.remove(socket);
             }
         }
-
     }
 
 
     /**
-     * Sends connection to the clients
+     * Sends Strings to the client
      * 
+     * @param msg the string to sent to the client
      */
     @Override
     public void send(String msg) {
