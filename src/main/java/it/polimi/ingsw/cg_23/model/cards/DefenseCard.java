@@ -21,6 +21,7 @@ public class DefenseCard extends Card {
 	 */
 	@Override
 	public void doAction(Player player, GameLogic controller) {
+		controller.useDefense(player);
 		
 	}
 

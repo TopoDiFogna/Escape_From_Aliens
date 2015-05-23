@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
@@ -20,8 +21,8 @@ public class GreenCard extends Card {
 	 * Set this escape hatch sector as unusable.
 	 */
 	@Override
-	public void doAction(Player player) {
-		//TODO player.useGreen();
+	public void doAction(Player player, GameLogic controller) {
+		controller.useGreen(player);
 	}
 
 }

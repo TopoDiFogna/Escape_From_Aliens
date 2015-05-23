@@ -1,7 +1,12 @@
 package it.polimi.ingsw.cg_23.controller;
 
+import java.util.Collections;
+
 import it.polimi.ingsw.cg_23.model.cards.Card;
+import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
+import it.polimi.ingsw.cg_23.model.cards.NoiseInAnySectorCard;
+import it.polimi.ingsw.cg_23.model.cards.NoiseInYourSectorCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 import it.polimi.ingsw.cg_23.model.players.Alien;
@@ -55,7 +60,6 @@ public class GameLogic {
                 }
             }
         }
-
         return false;
     }
 
@@ -124,8 +128,10 @@ public class GameLogic {
 		}
     }   
     
-    
-    public void useDefense(){
+    /**
+	 * This card can not be used from human, but auto-used when human is attacked.
+	 */
+    public void useDefense(Player player){
     	
     }
     
@@ -133,19 +139,22 @@ public class GameLogic {
 	 * This method set as true human attribute escaped.
 	 * Set this escape hatch sector as unusable.
 	 */
-	public void useGreen(Human player) {
-		player.setEscaped();
+	public void useGreen(Player player) {
+		Human human = (Human) player;
+		human.setEscaped();
 		removeAfterWinning(player);
 	}
 	
-	
-	public void useNoiseInAnySector(){
-		
+	/**
+	 * Asks view to ask user in what sector there is noise.
+	 */
+	public void useNoiseInAnySector(Player player){
+		//TODO bisogna chiedere alla view di chiedere all'utente di passargli il settore di cui vuole comunicare il rumore
 	}
 	
 	/**
 	 * This method is auto-called when player pick-up this card. <br>
-	 * It get the current sector and check if the card has the item
+	 * It get the current sector and check if the card has the item.
 	 */
 	public void useNoiseInYourSector(Player player){
 		player.getCurrentSector();
@@ -160,16 +169,21 @@ public class GameLogic {
 		player.getCurrentSector().setEscapeHatchSectorNotCrossable();
 	}
 	
-	
-	public void useSedatives(){
-		
+	/**
+	 * This method prevents human to pick-up card when in dangerous sector.
+	 */
+	public void useSedatives(Player player){
+		// TODO nel controller è come se passassi su un settore sicuro (dopo il controllo del tipo di settore di destinazione si 
+				//fa un IF: per controllare se prima è stata usata questa carta 
 	}
 	
-	
-	public void useSilence(){
-		
-	}
-	
+	/**
+	 * This method is auto-called when player pick-up this card. <br>
+	 * The action simply notify the view to tells other players "silence".
+	 */
+	public void useSilence(Player player){
+		//TODO notifica la view che ha pescato la carta silenzio 
+	}	
 
 	/**
 	 * This method asks view to ask human player the sector. <br>
@@ -196,20 +210,158 @@ public class GameLogic {
 	 */
 	public void useTeleport(Player player){
 		player.setCurrentSector(match.getMap().getHumanSector());
+	}	
+	
+	
+	public void drawSectorCard(Player player){
+		Card itemCard = null;
+		Deck<Card> sectorDeck = match.getSectorDeck();
+		Deck<Card> itemDeck = match.getItemDeck();
+		Card sectorCard = null;
+		int i = 0;
+		
+		/**
+		 * If sector deck is empty, shuffles sector deck discarded and put the new deck in sector deck.
+		 */
+		if(match.getSectorDeck().isEmpty()){
+			shuffleSectorDeck();
+		}
+		
+		/**
+		 * i is the index of the last position of the arraylist sector deck. <br>
+		 * Player pick-up the last card of the deck and remove it from the deck.
+		 */
+		pickSectorCard(sectorDeck, sectorCard, i);
+		
+		/**
+		 * If the drawn card is the type NoiseInAnySectorCard, cast the card, and do control on item and deck item.
+		 */
+		if(sectorCard instanceof NoiseInAnySectorCard) {
+			
+			NoiseInAnySectorCard newSectorCard = (NoiseInAnySectorCard) sectorCard;			
+			/**
+			 * If the card hasItem and the ItemDeck isn't empty, draws an item card and adds it in player hand. <br>
+			 * If the item deck is empty, shuffles it, draws and add the card.
+			 */
+			if((newSectorCard.hasItem()) && (!match.getItemDeck().isEmpty())){
+				pickItemCard(itemDeck, itemCard, i);
+			} else if((newSectorCard.hasItem()) && (match.getItemDeck().isEmpty())){
+				shuffleItemDeck();
+				pickItemCard(itemDeck, itemCard, i);
+			}
+			/**
+			 * If the drawn card is the type NoiseInYourSectorCard, cast the card, and do control on item and deck item.
+			 */
+		} else if (sectorCard instanceof NoiseInYourSectorCard) {
+			
+			NoiseInYourSectorCard newSectorCard = (NoiseInYourSectorCard) sectorCard;
+			/**
+			 * If the card hasItem and the ItemDeck isn't empty, draws an item card and adds it in player hand. <br>
+			 * If the item deck is empty, shuffles it, draws and add the card.
+			 */
+			if((newSectorCard.hasItem()) && (!match.getItemDeck().isEmpty())){
+				pickItemCard(itemDeck, itemCard, i);
+			} else if((newSectorCard.hasItem()) && (match.getItemDeck().isEmpty())){
+				shuffleItemDeck();
+				pickItemCard(itemDeck, itemCard, i);
+			}		
+		}
+		
+		/**
+		 * Checks if player already has 3 cards. If yes ask player what he want to do: use or discard one of 4 cards 
+		 */
+		countItemCard(player, itemCard);
+		
+		/**
+		 * Finally calls method for use sector card.
+		 */
+		useOtherCard(player, sectorCard);
 	}
 	
-	
-	public void drawSectorCard(){
-		//TODO prnde il mazzo, controlla che il mazzo non sia vuoto (se vuoto prende il mazzo degli scarti lo mischia e lo mette giù.
-		//se è vuoto esce), pesca, prende la carta e guarda ti che tipo è, guarda se ha l'oggetto, in caso pesca la carta oggetto 
-		//(e controlla se può tenerle in mano o deve scartarne una), ora finalmente fa card.doAction()
+	/**
+	 * This method shuffles cards sector discarded, and replace the old deck with the new one.
+	 */
+	public void shuffleSectorDeck(){
+		Collections.shuffle(match.getSectorDeckDiscarded());
+		this.match.setSectorDeck(this.match.getSectorDeckDiscarded());
 	}
 	
+	/**
+	 * Checks if discard deck is not empty. <br>
+	 * If it isn't empty shuffles cards item discarded, and replace the old deck with the new one. <br>
+	 * It it is empty tells the view the item cards are finished.
+	 */
+	public void shuffleItemDeck(){
+		if(!match.getItemDeckDiscarded().isEmpty()){
+			Collections.shuffle(match.getItemDeckDiscarded());
+			this.match.setItemDeck(this.match.getItemDeckDiscarded());
+		} else {
+			//TODO messaggio dalla view che informa che non ci sono più carte item disponibili
+		}
+	}
+	
+	/**
+	 * Adds the new card to the list of player's card. <br>
+	 * If the list is now 4 elements, asks view to ask player what he want to do. <br>
+	 * If he want can use one of 4 cards (calling useItemCard method) or if he want to discard one (calling discardCard method).
+	 * @param player
+	 * @param itemCard
+	 */
+	public void countItemCard(Player player, Card itemCard){
+		player.getCards().add(itemCard);
+
+		if(player.getCards().size() >= 3){
+			int choice=0;
+			//TODO chiedere alla view di chiedere al giocatore cosa vuole fare
+			//da controllare lo switch, perchè secondo me non passa la carta giusta da usare
+			switch (choice) {
+				case 0:
+					useItemCard(player, itemCard);
+				case 1:
+					player.discardCard(itemCard);
+				default:
+					//TODO la view deve notificare l'errore di scelta
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * i is the index of the last position of the arraylist sector deck. <br>
+	 * Player pick-up the last card of the deck and remove it from the deck.
+	 */
+	public void pickSectorCard(Deck<Card> sectorDeck, Card sectorCard, int i){
+		i = match.getSectorDeck().lastIndexOf(sectorDeck);
+		sectorCard = match.getSectorDeck().get(i);
+		match.getSectorDeck().remove(i);
+	}
+	
+	/**
+	 * i is the index of the last position of the arraylist item deck. <br>
+	 * Player pick-up the last card of the deck and remove it from the deck.
+	 */
+	public void pickItemCard(Deck<Card> itemDeck, Card itemCard, int i){
+		i = match.getItemDeck().lastIndexOf(itemCard);
+		itemCard = match.getItemDeck().get(i);
+		match.getItemDeck().remove(i);
+	}
+	
+	/**
+	 * The dead player is removed from players list after his death. 
+	 * @param player
+	 */
 	public void removeAfterDying(Player player){
-		//TODO
+		match.getPlayers().remove(player);
+		//notifica la view e dice al player che è morto D:
 	}
 	
+	/**
+	 * The escaped player is removed from player list after his victory.
+	 * @param player
+	 */
 	public void removeAfterWinning(Player player){
-		//TODO
+		match.getPlayers().remove(player);
+		//notifica la view e dice al player che ha vinto \o/
 	}
+	
 }
