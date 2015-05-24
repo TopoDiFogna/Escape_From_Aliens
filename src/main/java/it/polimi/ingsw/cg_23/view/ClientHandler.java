@@ -34,7 +34,7 @@ public class ClientHandler extends View implements Runnable{
      * @param arg what to notify to the client
      */
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, Object arg) {//TODO make this as pub-sub
         
         System.out.println("SERVER: sending the message to the client");
         

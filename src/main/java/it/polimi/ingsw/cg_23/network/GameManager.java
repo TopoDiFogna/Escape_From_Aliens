@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -26,9 +28,9 @@ public class GameManager implements Communicator, Runnable{
     private static List<Socket> sockets = new ArrayList<Socket>();
     
     /**
-     * List of all matches
+     * Map of all matches with their controller
      */
-    private static List<Match> matches = new ArrayList<Match>();
+    private static Map<Match, GameLogic> matches = new HashMap<Match, GameLogic>();
     
     /**
      * Scanner to read client input
@@ -59,11 +61,11 @@ public class GameManager implements Communicator, Runnable{
     /**
      * Make a player join the specified game.
      * 
-     * @param view the client handler
+     * @param clientHandler the client handler
      * @param match the match the client will join
      * @param gameLogic the rules of the game
      */
-    private void joinGame(ClientHandler view, Match match, GameLogic gameLogic){
+    private void joinGame(ClientHandler clientHandler, Match match, GameLogic gameLogic){
         
         ExecutorService executor = Executors.newCachedThreadPool();
         
@@ -71,9 +73,9 @@ public class GameManager implements Communicator, Runnable{
         
         int nHuman = 0;//numbaer of humans in the match
         
-        view.addObserver(gameLogic);
+        clientHandler.addObserver(gameLogic);
         
-        match.addObserver(view);
+        match.addObserver(clientHandler);
         
         Player newPlayer;
         send("Enter your name: ");
@@ -95,25 +97,29 @@ public class GameManager implements Communicator, Runnable{
         match.addNewPlayerToMap(new Alien(name), socket);
         match.addNewPlayerToList(newPlayer);
         
-        executor.submit(view);
+        executor.submit(clientHandler);
     }
     
     /**
      * Make the client join a fresh game.
      * 
-     * @param view the client handler
+     * @param clientHandler what will handle clients requests
      * @param match the match the client will join
      * @param gameLogic the rules of the game
      */
-    private void joinNewGame(ClientHandler view, Match match, GameLogic gameLogic){
+    private void joinNewGame(ClientHandler clientHandler, Match match, GameLogic gameLogic){
         
         ExecutorService executor = Executors.newCachedThreadPool();
         
-        view.addObserver(gameLogic);
+        clientHandler.addObserver(gameLogic);
         
-        match.addObserver(view);
+        match.addObserver(clientHandler);
         
-        executor.submit(view);
+        //TODO create broker for pub-sub
+        
+        executor.submit(clientHandler);
+        
+        //TODO here we manage when to start the game?
     }
 
     
@@ -132,17 +138,20 @@ public class GameManager implements Communicator, Runnable{
         
         
         //TODO synchronized??? maybe yes
-        for (Match match : matches) {
+        for (Match match : matches.keySet()) {
             if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING){
                 ClientHandler clientHandler = new ClientHandler(socket);
-                joinGame(clientHandler, match, new GameLogic(match));
+                joinGame(clientHandler, match, matches.get(match));
                 sockets.remove(socket);
             }
             else{
                 send("Enter your name: ");
                 String name = receive();
                 ClientHandler clientHandler = new ClientHandler(socket);
-                joinNewGame(clientHandler, new Match(mapName, new Alien(name), socket), new GameLogic(match));
+                Match newMatch = new Match(mapName, new Alien(name), socket);
+                GameLogic newGameLogic = new GameLogic(newMatch);
+                joinNewGame(clientHandler, newMatch, newGameLogic);
+                matches.put(newMatch, newGameLogic);
                 sockets.remove(socket);
             }
         }
