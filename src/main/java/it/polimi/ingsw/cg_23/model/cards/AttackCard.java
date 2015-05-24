@@ -2,6 +2,7 @@ package it.polimi.ingsw.cg_23.model.cards;
 
 
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
@@ -23,14 +24,9 @@ public class AttackCard extends Card {
 	 * The action calls attack method in PlayerController class (Attack method is the same for humans and aliens).
 	 */
 	@Override
-	public void doAction(Player player) {
-		for (Player players : player.getCurrentSector().getPlayer()) {
-			if(players!=player && !players.getCards().contains(new DefenseCard())){
-				players.setDead();
-				//TODO quando esisterà il controllore qua chiamerò un metodo per togliere i player morti dalla lista player
-			}
-		}
-				
+	public void doAction(Player player, GameLogic controller) {
+		controller.useAttack(player);
+					
 	}
 
 }

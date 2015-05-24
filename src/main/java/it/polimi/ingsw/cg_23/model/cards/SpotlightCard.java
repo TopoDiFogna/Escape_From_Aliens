@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
@@ -20,9 +21,8 @@ public class SpotlightCard extends Card{
 	 * If this sector aren't empty the model notify the view that communicate the position of this players. 
 	 */
 	@Override
-	public void doAction(Player player) {
-		// TODO il controller prende il settore dall'utente, e vede se nel settore e in quelli vicini c'è qualcuno e lo notifica alla view che lo stampa
-
+	public void doAction(Player player, GameLogic controller) {
+		controller.useSpotlight(player);
 	}
 
 }

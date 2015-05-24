@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
@@ -18,9 +19,8 @@ public class TeleportCard extends Card{
 	 * The humans is moved to the starting human sector.
 	 */
 	@Override
-	public void doAction(Player player) {
-		//TODO player.setCurrentSector(getHumanSector);
-		//dobbiamo capire come prendere il settore umano, visto che nella mappa quel metodo non è statico e non possso metterlo statico
+	public void doAction(Player player, GameLogic controller) {
+		controller.useTeleport(player);
 	}
 
 }
