@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
@@ -19,8 +20,8 @@ public class RedCard extends Card{
 	 * Set this escape hatch sector as unusable.
 	 */
 	@Override
-	public void doAction(Player player) {
-		// TODO nel controller dobbiamo settare a "non utilizzabile" questo settore scialuppa.
+	public void doAction(Player player, GameLogic controller) {
+		controller.useRed(player);
 
 	}
 
