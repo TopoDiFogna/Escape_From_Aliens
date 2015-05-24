@@ -1,6 +1,8 @@
 package it.polimi.ingsw.cg_23.controller;
 
 import java.util.Collections;
+import java.util.Observable;
+import java.util.Observer;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
@@ -19,7 +21,7 @@ import it.polimi.ingsw.cg_23.model.status.Match;
  * 
  * @author Paolo
  */
-public class GameLogic {
+public class GameLogic implements Observer{
 
     private Match match;
 
@@ -364,5 +366,12 @@ public class GameLogic {
 		match.getPlayers().remove(player);
 		//notifica la view e dice al player che ha vinto \o/
 	}
+
+    @Override
+    public void update(Observable o, Object arg) {
+        // TODO Auto-generated method stub
+        //take player action and processes it
+        
+    }
 	
 }
