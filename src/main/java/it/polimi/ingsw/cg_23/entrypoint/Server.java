@@ -27,6 +27,11 @@ public class Server {
      * The game manager will handle connection to give them a game
      */
     private GameManager gameManager;
+    
+    /**
+     * Error to handle client connection
+     */
+    private boolean error;
 
     /**
      * Constructor: spawns the server and launches it
@@ -60,7 +65,7 @@ public class Server {
         
         while(isRunning()){
             
-            boolean error = false; //resets the error flag
+            error = false; //resets the error flag
             
             Socket socket = null;
             
