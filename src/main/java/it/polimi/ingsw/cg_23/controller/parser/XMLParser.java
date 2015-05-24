@@ -89,7 +89,7 @@ public class XMLParser extends DefaultHandler{
                 Sector sector = getSector(element);
 
                 //add it to the map array
-                map[sector.getNumber()][sector.getLetter()]=sector;
+                map[sector.getLetter()][sector.getNumber()]=sector;
             }
         }
     }
