@@ -16,7 +16,7 @@ public class Server {
     private GameManager gameManager;
 
     public Server() {
-        gameManager = new GameManager();
+ //       gameManager = new GameManager();
         this.startSocket();
     }
     
@@ -27,17 +27,17 @@ public class Server {
         ExecutorService executor = Executors.newCachedThreadPool();
         
         //initialize server socket
-        ServerSocket serverSocket = new ServerSocket(SOCKET_PORT);
+ //       ServerSocket serverSocket = new ServerSocket(SOCKET_PORT);
         
         System.out.println("SERVER: Ready");
         
         while(isRunning()){
             
             //waiting for connections
-            Socket socket = serverSocket.accept();
+//            Socket socket = serverSocket.accept();
             
             
-            gameManager = new GameManager(socket);
+ //           gameManager = new GameManager(socket);
             
             
             //this.addClient(view, partita, controller);
