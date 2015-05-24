@@ -43,7 +43,7 @@ public class GameLogic implements Observer{
      * @param destination where the player wants to move
      * @return true if the player can move to the chosen sector, false otherwise
      */
-    public boolean mossaValida(Player player, Sector destination) {
+    public boolean validMove(Player player, Sector destination) {
         
         if (destination.getType() == SectorTypeEnum.VOID || destination.getType() == SectorTypeEnum.HUMAN || destination.getType() == SectorTypeEnum.ALIEN) //can't enter in
             return false;

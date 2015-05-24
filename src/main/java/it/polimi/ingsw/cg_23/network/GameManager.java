@@ -7,7 +7,6 @@ import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
 import it.polimi.ingsw.cg_23.view.ClientHandler;
-import it.polimi.ingsw.cg_23.view.View;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -94,7 +93,7 @@ public class GameManager implements Communicator, Runnable{
         else
             newPlayer = new Human(name);
             
-        match.addNewPlayerToMap(new Alien(name), socket);
+        match.addNewPlayerToMap(newPlayer, socket);
         match.addNewPlayerToList(newPlayer);
         
         executor.submit(clientHandler);
