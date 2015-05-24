@@ -7,8 +7,10 @@ import java.util.Observer;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
+import it.polimi.ingsw.cg_23.model.cards.GreenCard;
 import it.polimi.ingsw.cg_23.model.cards.NoiseInAnySectorCard;
 import it.polimi.ingsw.cg_23.model.cards.NoiseInYourSectorCard;
+import it.polimi.ingsw.cg_23.model.cards.RedCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 import it.polimi.ingsw.cg_23.model.players.Alien;
@@ -21,7 +23,9 @@ import it.polimi.ingsw.cg_23.model.status.Match;
  * 
  * @author Paolo
  */
+
 public class GameLogic implements Observer{
+
 
     private Match match;
 
@@ -66,49 +70,6 @@ public class GameLogic implements Observer{
     }
 
     
-    /**
-     * This boolean method is true if the selected player has a specific card, is false if he hasn't. <br>
-     * We control if player has in his hand the card, using ArrayList contains() method.
-     * 
-     * @param player
-     * @param card player want to use
-     * @return a boolean (true if he has card, false if he hasn't)
-     */
-    public boolean hasCard(Player player, Card card) {
-        
-        for (Card cards : player.getCards()) {
-            if(cards.getClass().equals(card.getClass()))
-                return true;
-        }
-    	return false;
-    }
-    
-    /**
-     * This method is only for Item card, that the player must have to use them.<br>
-     * First of all we check if player has the card he want to use, if he has it calls the method doAction in the card.<br>
-     * When the card has finished to do its action, the method calls discardCard to put the card in the discardDeck and delete it from player hand. <br>
-     * Uses the card selected by player and removes it from the player hand.
-     * 
-     * @param player who use the card
-     * @param card used
-     */
-    public void useItemCard(Player player, Card card){
-        if(hasCard(player, card)){
-        	card.doAction(player, this);
-        	player.discardCard(card);
-        }
-    }
-    
-    /**
-     * Is the same method of useItemCard, but it doesn't check if the player has the card, because he only picks-up, uses and discards card immediatly.
-     * 
-     * @param player
-     * @param card
-     */
-    public void useOtherCard(Player player, Card card){
-        card.doAction(player, this);
-        player.discardCard(card);
-    }
     
     /**
 	 * Set human the possibility to move 2 sector instead 1.
@@ -214,13 +175,66 @@ public class GameLogic implements Observer{
 		player.setCurrentSector(match.getMap().getHumanSector());
 	}	
 	
+	/**
+     * This boolean method is true if the selected player has a specific card, is false if he hasn't. <br>
+     * We control if player has in his hand the card, using ArrayList contains() method.
+     * 
+     * @param player
+     * @param card player want to use
+     * @return a boolean (true if he has card, false if he hasn't)
+     */
+    public boolean hasCard(Player player, Card card) {
+        
+        for (Card cards : player.getCards()) {
+            if(cards.getClass().equals(card.getClass()))
+                return true;
+        }
+    	return false;
+    }
+    
+    /**
+     * This method is only for Item card, that the player must have to use them.<br>
+     * First of all we check if player has the card he want to use, if he has it calls the method doAction in the card.<br>
+     * When the card has finished to do its action, the method calls discardCard to put the card in the discardDeck and delete it from player hand. <br>
+     * Uses the card selected by player and removes it from the player hand.
+     * 
+     * @param player who use the card
+     * @param card used
+     */
+    public void useItemCard(Player player, Card card){
+        if(hasCard(player, card)){
+        	card.doAction(player, this);
+        	discardCard(player, card);
+        }
+    }
+    
+    /**
+     * Is the same method of useItemCard, but it doesn't check if the player has the card, because he only picks-up, uses and discards card immediatly.
+     * 
+     * @param player
+     * @param card
+     */
+    public void useOtherCard(Player player, Card card){
+        card.doAction(player, this);
+        if(card instanceof GreenCard || card instanceof RedCard)
+        	match.getEscapeHatchDeckDiscarded().add(card);
+        else
+        	match.getSectorDeckDiscarded().add(card);
+    }
+    
+    public void discardCard(Player player, Card card){
+    	player.getCards().remove(card);
+    	match.getItemDeckDiscarded().add(card);
+    }
+    	
+    public void drawEscapeHatchCard(Player player, Card card){
+    	Card escapeHatchCard = match.getEscapeHatchDeck().get(0);
+		match.getEscapeHatchDeck().remove(0);
+		useOtherCard(player, escapeHatchCard);
+    }
 	
-	public void drawSectorCard(Player player){
-		Card itemCard = null;
-		Deck<Card> sectorDeck = match.getSectorDeck();
-		Deck<Card> itemDeck = match.getItemDeck();
-		Card sectorCard = null;
-		int i = 0;
+		
+	public void drawSectorCard(Player player){	
 		
 		/**
 		 * If sector deck is empty, shuffles sector deck discarded and put the new deck in sector deck.
@@ -228,55 +242,24 @@ public class GameLogic implements Observer{
 		if(match.getSectorDeck().isEmpty()){
 			shuffleSectorDeck();
 		}
+				
+		Card sectorCard = pickSectorCard();
 		
-		/**
-		 * i is the index of the last position of the arraylist sector deck. <br>
-		 * Player pick-up the last card of the deck and remove it from the deck.
-		 */
-		pickSectorCard(sectorDeck, sectorCard, i);
-		
-		/**
-		 * If the drawn card is the type NoiseInAnySectorCard, cast the card, and do control on item and deck item.
-		 */
 		if(sectorCard instanceof NoiseInAnySectorCard) {
-			
-			NoiseInAnySectorCard newSectorCard = (NoiseInAnySectorCard) sectorCard;			
-			/**
-			 * If the card hasItem and the ItemDeck isn't empty, draws an item card and adds it in player hand. <br>
-			 * If the item deck is empty, shuffles it, draws and add the card.
-			 */
-			if((newSectorCard.hasItem()) && (!match.getItemDeck().isEmpty())){
-				pickItemCard(itemDeck, itemCard, i);
-			} else if((newSectorCard.hasItem()) && (match.getItemDeck().isEmpty())){
-				shuffleItemDeck();
-				pickItemCard(itemDeck, itemCard, i);
+			NoiseInAnySectorCard newSectorCard = (NoiseInAnySectorCard) sectorCard;	
+			if(newSectorCard.hasItem()){
+				Card itemCard = drawItemDeck();
+				if(itemCard != null)
+					choseHowUseItemCard(player, itemCard);
 			}
-			/**
-			 * If the drawn card is the type NoiseInYourSectorCard, cast the card, and do control on item and deck item.
-			 */
-		} else if (sectorCard instanceof NoiseInYourSectorCard) {
-			
+		} else if (sectorCard instanceof NoiseInYourSectorCard) {			
 			NoiseInYourSectorCard newSectorCard = (NoiseInYourSectorCard) sectorCard;
-			/**
-			 * If the card hasItem and the ItemDeck isn't empty, draws an item card and adds it in player hand. <br>
-			 * If the item deck is empty, shuffles it, draws and add the card.
-			 */
-			if((newSectorCard.hasItem()) && (!match.getItemDeck().isEmpty())){
-				pickItemCard(itemDeck, itemCard, i);
-			} else if((newSectorCard.hasItem()) && (match.getItemDeck().isEmpty())){
-				shuffleItemDeck();
-				pickItemCard(itemDeck, itemCard, i);
-			}		
-		}
-		
-		/**
-		 * Checks if player already has 3 cards. If yes ask player what he want to do: use or discard one of 4 cards 
-		 */
-		countItemCard(player, itemCard);
-		
-		/**
-		 * Finally calls method for use sector card.
-		 */
+			if(newSectorCard.hasItem()){
+				Card itemCard = drawItemDeck();
+				if(itemCard != null)
+					choseHowUseItemCard(player, itemCard);
+			}
+		}				
 		useOtherCard(player, sectorCard);
 	}
 	
@@ -298,9 +281,46 @@ public class GameLogic implements Observer{
 		if(!match.getItemDeckDiscarded().isEmpty()){
 			Collections.shuffle(match.getItemDeckDiscarded());
 			this.match.setItemDeck(this.match.getItemDeckDiscarded());
-		} else {
-			//TODO messaggio dalla view che informa che non ci sono più carte item disponibili
 		}
+	}
+	
+	
+	
+	/**
+	 * i is the index of the last position of the arraylist sector deck. <br>
+	 * Player pick-up the last card of the deck and remove it from the deck.
+	 */
+	public Card pickSectorCard(){
+		Card sectorCard = match.getSectorDeck().get(0);
+		match.getSectorDeck().remove(0);
+		return sectorCard;
+	}
+	
+	/**
+	 * i is the index of the last position of the arraylist item deck. <br>
+	 * Player pick-up the last card of the deck and remove it from the deck.
+	 */
+	public Card pickItemCard(){
+		Card itemCard = match.getItemDeck().get(0);
+		match.getItemDeck().remove(0);
+		return itemCard;
+	}
+	
+	/**
+	 * If the card hasItem and the ItemDeck isn't empty, draws an item card and adds it in player hand. <br>
+	 * If the item deck is empty, shuffles it, draws and add the card.
+	 */
+	public Card drawItemDeck(){
+		Card itemCard;
+		if(!match.getItemDeck().isEmpty()){
+			itemCard = pickItemCard();
+		} else if(match.getItemDeck().isEmpty() && !match.getItemDeckDiscarded().isEmpty()){
+			shuffleItemDeck();
+			itemCard = pickItemCard();
+		} else{
+			itemCard = null;
+		}
+		return itemCard;
 	}
 	
 	/**
@@ -310,43 +330,24 @@ public class GameLogic implements Observer{
 	 * @param player
 	 * @param itemCard
 	 */
-	public void countItemCard(Player player, Card itemCard){
+	public void choseHowUseItemCard(Player player, Card itemCard){
+		int choice=0;
 		player.getCards().add(itemCard);
 
-		if(player.getCards().size() >= 3){
-			int choice=0;
+		if(player.getCards().size() > 3){
+			
 			//TODO chiedere alla view di chiedere al giocatore cosa vuole fare
 			//da controllare lo switch, perchè secondo me non passa la carta giusta da usare
 			switch (choice) {
 				case 0:
 					useItemCard(player, itemCard);
 				case 1:
-					player.discardCard(itemCard);
+					discardCard(player, itemCard);
 				default:
-					//TODO la view deve notificare l'errore di scelta
+					discardCard(player, itemCard);
 				break;
 			}
 		}
-	}
-	
-	/**
-	 * i is the index of the last position of the arraylist sector deck. <br>
-	 * Player pick-up the last card of the deck and remove it from the deck.
-	 */
-	public void pickSectorCard(Deck<Card> sectorDeck, Card sectorCard, int i){
-		i = match.getSectorDeck().lastIndexOf(sectorDeck);
-		sectorCard = match.getSectorDeck().get(i);
-		match.getSectorDeck().remove(i);
-	}
-	
-	/**
-	 * i is the index of the last position of the arraylist item deck. <br>
-	 * Player pick-up the last card of the deck and remove it from the deck.
-	 */
-	public void pickItemCard(Deck<Card> itemDeck, Card itemCard, int i){
-		i = match.getItemDeck().lastIndexOf(itemCard);
-		itemCard = match.getItemDeck().get(i);
-		match.getItemDeck().remove(i);
 	}
 	
 	/**

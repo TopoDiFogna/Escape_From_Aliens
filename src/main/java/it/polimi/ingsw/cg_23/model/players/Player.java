@@ -164,14 +164,5 @@ public abstract class Player {
         return name;
     }
     
-      /**
-      * Allow the player to discard card.
-      * 
-      * @param card the card to be discarded
-      * @return the card the player has discarded to be added to the discardDeck
-      */
-    public Card discardCard(Card card){
-        cards.remove(card);
-        return card;
-    }
+     
 }

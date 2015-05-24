@@ -153,8 +153,7 @@ public class Match extends Observable{
         this.itemDeck = itemDeck;
     }
 
-    public void setEscapeHatchDeckDiscarded(
-            Deck<Card> escapeHatchDeckDiscarded) {
+    public void setEscapeHatchDeckDiscarded(Deck<Card> escapeHatchDeckDiscarded) {
         this.escapeHatchDeckDiscarded = escapeHatchDeckDiscarded;
     }
 
