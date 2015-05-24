@@ -104,6 +104,7 @@ public class GameLogic implements Observer{
 	 */
 	public void useGreen(Player player) {
 		Human human = (Human) player;
+		player.getCurrentSector().setEscapeHatchSectorNotCrossable();
 		human.setEscaped();
 		removeAfterWinning(player);
 	}
