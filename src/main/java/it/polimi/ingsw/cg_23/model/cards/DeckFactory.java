@@ -1,6 +1,10 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
-public class DeckFactory {    
+public class DeckFactory { 
+    
+    private DeckFactory(){
+        //no need to create an object
+    }
 
     /**
      * Creates decks based on the parameter taken. <br>

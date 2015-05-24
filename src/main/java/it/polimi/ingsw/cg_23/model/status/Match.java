@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 
 /**
@@ -58,7 +59,7 @@ public class Match extends Observable{
     /**
      * List of players in this match
      */
-    private ArrayList<Player> players;
+    private List<Player> players;
 
     /**
      * Description of the property turnNumber.
@@ -174,7 +175,7 @@ public class Match extends Observable{
      * 
      * @return players a list containing all players.
      */
-    public ArrayList<Player> getPlayers() {
+    public List<Player> getPlayers() {
         
         return this.players;
     }

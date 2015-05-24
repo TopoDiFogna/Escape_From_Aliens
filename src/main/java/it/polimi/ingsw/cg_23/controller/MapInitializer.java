@@ -4,6 +4,10 @@ import it.polimi.ingsw.cg_23.controller.parser.XMLParser;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 
 public class MapInitializer {
+    
+    private MapInitializer(){
+        //no need to create an object of this type
+    }
 
     /**
      * Creates the map calling the Xml parser

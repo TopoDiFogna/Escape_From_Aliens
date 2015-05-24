@@ -74,7 +74,7 @@ public class Sector extends Coordinate {
      * 
      * @return the players in the sector as a list
      */
-    public ArrayList<Player> getPlayer() {
+    public List<Player> getPlayer() {
         return (ArrayList<Player>) players;
     }
 

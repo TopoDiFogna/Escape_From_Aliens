@@ -6,6 +6,7 @@ import it.polimi.ingsw.cg_23.model.map.Sector;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -36,7 +37,7 @@ public abstract class Player {
     /**
      * List of cards a player has in his hand
      */
-    protected ArrayList<Card> cards = new ArrayList<Card>();
+    protected List<Card> cards = new ArrayList<Card>();
     
     /**
      * The sector where the player currently is.
@@ -110,7 +111,7 @@ public abstract class Player {
      * 
      * @return A list containing the cards the player has in his hand
      */
-    public ArrayList<Card> getCards() {
+    public List<Card> getCards() {
         return cards;
     }
     
