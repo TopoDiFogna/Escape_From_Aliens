@@ -22,7 +22,7 @@ public class SilenceCard extends Card{
 		this.hasItem=hasItem;
 	}
 	
-	public boolean isHasItem() {
+	public boolean HasItem() {
 		return hasItem;
 	}
 

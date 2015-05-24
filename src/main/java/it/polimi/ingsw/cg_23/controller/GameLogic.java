@@ -278,6 +278,7 @@ public class GameLogic {
 		useOtherCard(player, sectorCard);
 	}
 	
+	
 	/**
 	 * This method shuffles cards sector discarded, and replace the old deck with the new one.
 	 */
