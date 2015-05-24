@@ -156,7 +156,7 @@ public abstract class Player {
     }
 
     /**
-     * Name choosen when joining a game.
+     * Name chosen when joining a game.
      * 
      * @return the player name
      */
@@ -164,19 +164,8 @@ public abstract class Player {
         return name;
     }
     
-    
-    /**
-     * First adds the card to the player hand, then removes the card from the corresponding deck.
-     * 
-     * @param deck from where the card is drawn
-     */
-    public void drawCard(Deck<Card> deck){//TODO probably here we have some problems
-        Iterator<Card> iterator  = deck.iterator();
-        cards.add(iterator.next());
-        iterator.remove();
-    }
-     /**
-      * Allow the player to discard card
+      /**
+      * Allow the player to discard card.
       * 
       * @param card the card to be discarded
       * @return the card the player has discarded to be added to the discardDeck

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
@@ -21,7 +22,7 @@ public class SilenceCard extends Card{
 		this.hasItem=hasItem;
 	}
 	
-	public boolean isHasItem() {
+	public boolean HasItem() {
 		return hasItem;
 	}
 
@@ -30,9 +31,8 @@ public class SilenceCard extends Card{
 	 * The action simply notify the view to tells other "silence".
 	 */
 	@Override
-	public void doAction(Player player) {
-		// TODO devo solamente chiedere alla view di scrivere "silenzio".
-
+	public void doAction(Player player, GameLogic controller) {
+		controller.useSilence(player);
 	}
 
 }
