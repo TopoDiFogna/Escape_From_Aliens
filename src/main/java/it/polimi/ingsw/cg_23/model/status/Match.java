@@ -155,8 +155,7 @@ public class Match {
         this.itemDeck = itemDeck;
     }
 
-    public void setEscapeHatchDeckDiscarded(
-            Deck<Card> escapeHatchDeckDiscarded) {
+    public void setEscapeHatchDeckDiscarded(Deck<Card> escapeHatchDeckDiscarded) {
         this.escapeHatchDeckDiscarded = escapeHatchDeckDiscarded;
     }
 
