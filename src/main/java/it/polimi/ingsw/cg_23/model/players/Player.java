@@ -1,11 +1,9 @@
 package it.polimi.ingsw.cg_23.model.players;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
-import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -78,6 +76,14 @@ public abstract class Player {
     }
 
     /**
+     * Sets the status of the player as dead after he's killed. alive can be changed only to false. No player can be revived
+     * 
+     */
+    public void setDead() {
+        this.status = false;
+    }
+    
+    /**
      * Tells if the player is alive or dead. 
      * By default it's true, becomes false if a player is killed either bay human or alien.
      * 
@@ -85,14 +91,6 @@ public abstract class Player {
      */
     public boolean isAlive() {
         return this.status;
-    }
-
-    /**
-     * Sets the status of the player as dead after he's killed. alive can be changed only to false. No player can be revived
-     * 
-     */
-    public void setDead() {
-        this.status = false;
     }
 
     /**

@@ -1,8 +1,10 @@
 package it.polimi.ingsw.cg_23.model.player;
 
 import static org.junit.Assert.*;
+import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
+import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 
 import org.junit.Test;
@@ -69,7 +71,10 @@ public class HumanTest {
 
     @Test
     public void testGetCards() {
-        //fail("Not yet implemented");        
+        Human human = new Human("dummy");
+        AttackCard card = new AttackCard();
+        human.getCards().add(card);
+        assertTrue(human.getCards().contains(card));       
     }
 
     @Test
@@ -115,5 +120,4 @@ public class HumanTest {
         human.setCanMoveFaster(false);
         assertFalse(human.getCanMoveFaster());
     }
-
 }

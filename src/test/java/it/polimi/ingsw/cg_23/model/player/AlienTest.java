@@ -1,6 +1,7 @@
 package it.polimi.ingsw.cg_23.model.player;
 
 import static org.junit.Assert.*;
+import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 import it.polimi.ingsw.cg_23.model.players.Alien;
@@ -58,14 +59,17 @@ public class AlienTest {
     @Test
     public void testGetSector() {
         Sector sector = new Sector(1, 1, SectorTypeEnum.VOID, true);
-        Human human = new Human("dummy");
-        human.setCurrentSector(sector);
-        assertEquals(sector, human.getCurrentSector());
+        Alien alien = new Alien("dummy");
+        alien.setCurrentSector(sector);
+        assertEquals(sector, alien.getCurrentSector());
     }
 
     @Test
     public void testGetCards() {
-        //fail("Not yet implemented");
+        Alien alien = new Alien("dummy");
+        AttackCard card = new AttackCard();
+        alien.getCards().add(card);
+        assertTrue(alien.getCards().contains(card));
     }
 
     @Test
