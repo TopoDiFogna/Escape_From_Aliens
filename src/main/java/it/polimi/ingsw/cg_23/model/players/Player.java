@@ -1,11 +1,9 @@
 package it.polimi.ingsw.cg_23.model.players;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
-import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
