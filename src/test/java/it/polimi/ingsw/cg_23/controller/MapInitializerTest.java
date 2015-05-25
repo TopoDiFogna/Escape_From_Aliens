@@ -13,9 +13,9 @@ public class MapInitializerTest {
 		assertNotNull(parser);
 	}
 
-	@Test
+	/*@Test
 	public void testCreateNeighbors() {
 		fail("Not yet implemented");
-	}
+	}*/
 
 }

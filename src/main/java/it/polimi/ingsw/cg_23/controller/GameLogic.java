@@ -106,15 +106,16 @@ public class GameLogic implements Observer {
      * if they aren't the player who use the card, and set dead the other. <br>
      * useAttack method is the same for humans and aliens.
      */
-    public void useAttack(Player player) {
-        for (Player players : player.getCurrentSector().getPlayer()) {
-            if (players != player
-                    && !players.getCards().contains(new DefenseCard())) {
-                players.setDead();
-                removeAfterDying(player);
+    public void useAttack(Player playerWhoAttack) {
+        for (Player playerAttacked : playerWhoAttack.getCurrentSector().getPlayer()) {
+            if (playerWhoAttack != playerAttacked && !playerAttacked.getCards().contains(new DefenseCard())){
+                playerAttacked.setDead();
+                removeAfterDying(playerAttacked);
+            } else if(playerAttacked.getCards().contains(new DefenseCard())){
+            	useDefense(playerAttacked);
             }
         }
-    }
+}
 
     /**
      * This card can not be used from human, but auto-used when human is attacked.
@@ -130,7 +131,7 @@ public class GameLogic implements Observer {
         Human human = (Human) player;
         player.getCurrentSector().setEscapeHatchSectorNotCrossable();
         human.setEscaped();
-        removeAfterWinning(player);
+        //removeAfterWinning(player);
     }
 
     /**
@@ -418,7 +419,8 @@ public class GameLogic implements Observer {
      * 
      * @param player
      */
-    public void removeAfterDying(Player player) {
+    private void removeAfterDying(Player player) {
+    	if(!player.isAlive())
         match.getPlayers().remove(player);
         // TODO notifica la view e dice al player che è morto D:
     }
@@ -428,8 +430,10 @@ public class GameLogic implements Observer {
      * 
      * @param player
      */
-    public void removeAfterWinning(Player player) {
+    private void removeAfterWinning(Player player) {
+    	if(!player.getCurrentSector().isCrossable()){
         match.getPlayers().remove(player);
-        // notifica la view e dice al player che ha vinto \o/
+    	}
+    	// notifica la view e dice al player che ha vinto \o/
     }
 }
