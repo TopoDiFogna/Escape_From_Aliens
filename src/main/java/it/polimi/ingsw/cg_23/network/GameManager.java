@@ -147,7 +147,7 @@ public class GameManager implements Communicator, Runnable{
                 send("Enter your name: ");
                 String name = receive();
                 ClientHandler clientHandler = new ClientHandler(socket);
-                Match newMatch = new Match(mapName, new Alien(name), socket);
+                Match newMatch = new Match(mapName);
                 GameLogic newGameLogic = new GameLogic(newMatch);
                 joinNewGame(clientHandler, newMatch, newGameLogic);
                 matches.put(newMatch, newGameLogic);

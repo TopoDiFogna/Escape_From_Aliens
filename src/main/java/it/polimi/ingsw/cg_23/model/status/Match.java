@@ -79,7 +79,7 @@ public class Match extends Observable{
      * The constructor.
      */
 
-    public Match(String mapName, Player player, Socket socket){//TODO assign players to right sector
+    public Match(String mapName){//TODO assign players to right sector
         
         this.name=mapName;
         this.map=new Map(mapName);
@@ -89,8 +89,6 @@ public class Match extends Observable{
         Collections.shuffle(sectorDeck);
         Collections.shuffle(itemDeck);
         Collections.shuffle(escapeHatchDeck);
-        addNewPlayerToList(player);
-        addNewPlayerToMap(player, socket);
         setMatchState(GameState.WAITING);
         turnNumber=0;
     }
