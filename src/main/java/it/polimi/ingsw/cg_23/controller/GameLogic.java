@@ -102,8 +102,8 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * For each player in the current sector check if they have defense card and
-     * if they aren't the player who use the card, and set dead the other.
+     * For each player in the current sector check if they have defense card and <br>
+     * if they aren't the player who use the card, and set dead the other. <br>
      * useAttack method is the same for humans and aliens.
      */
     public void useAttack(Player player) {
@@ -117,16 +117,14 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * This card can not be used from human, but auto-used when human is
-     * attacked.
+     * This card can not be used from human, but auto-used when human is attacked.
      */
     public void useDefense(Player player) {
 
     }
 
     /**
-     * This method set as true human attribute escaped. Set this escape hatch
-     * sector as unusable.
+     * This method set as true human attribute escaped. Set this escape hatch sector as unusable.
      */
     public void useGreen(Player player) {
         Human human = (Human) player;
@@ -179,10 +177,8 @@ public class GameLogic implements Observer {
 
     /**
      * This method asks view to ask human player the sector. <br>
-     * After that the controller check if in the selected sector and in the
-     * nearby there are someone. <br>
-     * If this sector aren't empty the model notify the view that communicate
-     * the position of this players.
+     * After that the controller check if in the selected sector and in the nearby there are someone. <br>
+     * If this sector aren't empty the model notify the view that communicate the position of this players.
      */
     public void useSpotlight(Player player) {
         int lettera = 0;
@@ -207,14 +203,11 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * This boolean method is true if the selected player has a specific card,
-     * is false if he hasn't. <br>
-     * We control if player has in his hand the card, using ArrayList contains()
-     * method.
+     * This boolean method is true if the selected player has a specific card, is false if he hasn't. <br>
+     * We check if the card player want to use is the same type of a card he has in his hand.
      * 
      * @param player
-     * @param card
-     *            player want to use
+     * @param card player want to use
      * @return a boolean (true if he has card, false if he hasn't)
      */
     public boolean hasCard(Player player, Card card) {
@@ -228,16 +221,13 @@ public class GameLogic implements Observer {
 
     /**
      * This method is only for Item card, that the player must have to use them.<br>
-     * First of all we check if player has the card he want to use, if he has it
-     * calls the method doAction in the card.<br>
-     * When the card has finished to do its action, the method calls discardCard
-     * to put the card in the discardDeck and delete it from player hand. <br>
-     * Uses the card selected by player and removes it from the player hand.
+     * First of all we check if player has the card he want to use (calling hasCard() method), <br>
+     * if he has it calls the method doAction in the card.<br>
+     * When the card has finished to do its action, the method calls discardCard to put the card in the right discard <br> 
+     * deck and remove it from player hand.
      * 
-     * @param player
-     *            who use the card
-     * @param card
-     *            used
+     * @param player who use the card
+     * @param card used
      */
     public void useItemCard(Player player, Card card) {
         if (hasCard(player, card)) {
@@ -247,8 +237,11 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * Is the same method of useItemCard, but it doesn't check if the player has
-     * the card, because he only picks-up, uses and discards card immediatly.
+     * This method allow player to use sector or escape hatch card, calling doAction() method in the right card. <br>
+     * After that check if is an escape hatch card, putting it in the escape hatch discarded deck, else put it in <br>
+     * sector discarded deck. 
+     * This method, unlike the useItemCard() method, don't check if player has the card in his hand, because these cards are <br>
+     * immediately use.
      * 
      * @param player
      * @param card
@@ -261,23 +254,47 @@ public class GameLogic implements Observer {
             match.getSectorDeckDiscarded().add(card);
     }
 
+    /**
+     * Removes card used by useItemCard() from the player hand and put it in the item discarded deck.
+     * 
+     * @param player who uses the card
+     * @param card used by player
+     */
     public void discardCard(Player player, Card card) {
         player.getCards().remove(card);
         match.getItemDeckDiscarded().add(card);
     }
 
+    /**
+     * When a player enter in an escape hatch sector he calls this method to draw an escape hatch card. <br>
+     * Takes the first card of the array list, removing from the top of the deck. <br>
+     * After that calls the method for using this card and discard it.
+     * 
+     * @param player
+     */
     public void drawEscapeHatchCard(Player player) {
         Card escapeHatchCard = match.getEscapeHatchDeck().get(0);
         match.getEscapeHatchDeck().remove(0);
         useOtherCard(player, escapeHatchCard);
     }
 
+    /**
+     * When player enter in a dangerous sector he calls this method for draw sector card. <br>
+     * First of all this method check if sector deck is empty, if yes shuffle the discarded deck <br>
+     * and replace the empty one with the shuffled one. <br>
+     * After calls the method for picking up a sector card, removing it from sector deck and <br>
+     * returns the card. <br>
+     * Now check if this card is <b> instance of </b> NoiseInAnySectorCard or NoiseInYourSectorCard. <br>
+     * Casts the type and check calling hasItem() method if the card has item symbol. <br>
+     * If yes calls the method for picking up an item card, and if both item deck both item deck discarded aren't <br>
+     * empty check if the player already has 3 item card in his hand calling choseHowUseItemCard() method. <br>
+     * After all these control, finally the method calls the useOtherCard() method for activate the sector card action.
+     * 
+     * @param player
+     */
     public void drawSectorCard(Player player) {
-
-        /**
-         * If sector deck is empty, shuffles sector deck discarded and put the
-         * new deck in sector deck.
-         */
+    	//Check if the sector deck is empty, and if yes calls the shuffle method for shuffle discard deck 
+    	//and replacing the empty deck with the shuffled one.
         if (match.getSectorDeck().isEmpty()) {
             shuffleSectorDeck();
         }
@@ -303,8 +320,7 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * This method shuffles cards sector discarded, and replace the old deck
-     * with the new one.
+     * This method shuffles cards sector discarded, and replace the old deck with the new one.
      */
     public void shuffleSectorDeck() {
         Collections.shuffle(match.getSectorDeckDiscarded());
@@ -313,9 +329,7 @@ public class GameLogic implements Observer {
 
     /**
      * Checks if discard deck is not empty. <br>
-     * If it isn't empty shuffles cards item discarded, and replace the old deck
-     * with the new one. <br>
-     * It it is empty tells the view the item cards are finished.
+     * If it isn't empty shuffles cards item discarded, and replace the old deck with the new one. <br>
      */
     public void shuffleItemDeck() {
         if (!match.getItemDeckDiscarded().isEmpty()) {
@@ -325,8 +339,9 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * i is the index of the last position of the arraylist sector deck. <br>
-     * Player pick-up the last card of the deck and remove it from the deck.
+     * This method get the first element in the sector deck array, removing it from the top of the deck.
+     * 
+     * @return sectorCard now picked up from sector deck
      */
     public Card pickSectorCard() {
         Card sectorCard = match.getSectorDeck().get(0);
@@ -335,8 +350,9 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * i is the index of the last position of the arraylist item deck. <br>
-     * Player pick-up the last card of the deck and remove it from the deck.
+     * This method get the first element in the item deck array, removing it from the top of the deck.
+     * 
+     * @return itemCard now picked up from item deck
      */
     public Card pickItemCard() {
         Card itemCard = match.getItemDeck().get(0);
@@ -345,9 +361,13 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * If the card hasItem and the ItemDeck isn't empty, draws an item card and
-     * adds it in player hand. <br>
-     * If the item deck is empty, shuffles it, draws and add the card.
+     * After controlling if the sector card has item, the player must pick it up. <br>
+     * Before picking up, this method check if the item deck isn't empty and in this case it calls <br>
+     * pickItemCard(). Else if, instead, item deck is empty and deck item cards deck discarded itn's empty, <br>
+     * the method calls the shuffle method and now pickItemCard(). Else set itemCard as null and return it. 
+     * 
+     *
+     * @return itemCard picked up in pickItemCard() method
      */
     public Card drawItemDeck() {
         Card itemCard;
@@ -365,10 +385,9 @@ public class GameLogic implements Observer {
 
     /**
      * Adds the new card to the list of player's card. <br>
-     * If the list is now 4 elements, asks view to ask player what he want to
-     * do. <br>
-     * If he want can use one of 4 cards (calling useItemCard method) or if he
-     * want to discard one (calling discardCard method).
+     * If the list is now 4 elements, asks view to ask player what he want to do. <br>
+     * Player can chose to use one of 4 cards (calling useItemCard method) or discard one (calling discardCard method). <br>
+     * We set discard as default in the switch statement.
      * 
      * @param player
      * @param itemCard
