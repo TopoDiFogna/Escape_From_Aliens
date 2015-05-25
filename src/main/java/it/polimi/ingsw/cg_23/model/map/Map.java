@@ -23,7 +23,7 @@ public class Map {
      * Sectors of the map: rows x columns
      * 
      */
-    private Sector[][] sectors = new Sector[SIZENUMBER][SIZELETTER];
+    private Sector[][] sectors = new Sector[SIZELETTER][SIZENUMBER];
 
     /**
      * The Constructor. Not really used to create the map. we use another class for that.<br>
