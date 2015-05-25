@@ -8,7 +8,12 @@ public class MapTest {
 
     @Test
     public void testMap() {
-        //TODO fail("Not yet implemented");
+        Map map = new Map("galilei");
+        Sector[][] sectors = map.getSector();
+        for(int letter = 0; letter<23;letter++){
+            for(int number =0; number<14;number++)
+                assertNotNull(sectors[letter][number]);
+        }
     }
 
     @Test
@@ -25,7 +30,19 @@ public class MapTest {
 
     @Test
     public void testGetSector() {
-        //TODO fail("Not yet implemented");
+        Map map = new Map("galilei");
+        assertNotNull(map.getSector());
     }
 
+    @Test
+    public void testGetHumanSector(){
+        Map map = new Map("galilei");
+        assertTrue(map.getHumanSector().getType()==SectorTypeEnum.HUMAN);
+    }
+    
+    @Test
+    public void testGetAlienSector(){
+        Map map = new Map("galilei");
+        assertTrue(map.getAlienSector().getType()==SectorTypeEnum.ALIEN);
+    }
 }
