@@ -2,14 +2,11 @@ package it.polimi.ingsw.cg_23.controller;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-
 import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.cards.DeckFactory;
 import it.polimi.ingsw.cg_23.model.cards.NoiseInAnySectorCard;
-import it.polimi.ingsw.cg_23.model.cards.NoiseInYourSectorCard;
 import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
 import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
@@ -47,8 +44,7 @@ public class GameLogicTest {
 	public void testHasCardTrue() {
 		Player player = new Human("dummy");
 		Card card = new TeleportCard();
-		String mapName = "galilei";
-		Match match = new Match(mapName);
+		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		player.getCards().add(card);
 		controller.hasCard(player, card);
@@ -59,8 +55,7 @@ public class GameLogicTest {
 	public void testHasCardFalse() {
 		Player player = new Human("dummy");
 		Card card = new SedativesCard();
-		String mapName = "galilei";
-		Match match = new Match(mapName);
+		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		controller.hasCard(player, card);
 		assertFalse(controller.hasCard(player, card));
@@ -70,8 +65,7 @@ public class GameLogicTest {
 	public void testUseItemCard() {
 		Player player = new Human("dummy");
 		Card card = new TeleportCard();
-		String mapName = "galilei";
-		Match match = new Match(mapName);
+		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		controller.useItemCard(player, card);
 		assertFalse(player.getCards().contains(card));

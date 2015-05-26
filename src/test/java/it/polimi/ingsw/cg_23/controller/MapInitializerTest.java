@@ -2,7 +2,6 @@ package it.polimi.ingsw.cg_23.controller;
 
 import static org.junit.Assert.*;
 import it.polimi.ingsw.cg_23.controller.parser.XMLParser;
-
 import org.junit.Test;
 
 public class MapInitializerTest {
@@ -15,7 +14,12 @@ public class MapInitializerTest {
 
 	/*@Test
 	public void testCreateNeighbors() {
-		fail("Not yet implemented");
+		Match match = new Match("galilei");
+		Sector[][] map = match.getMap().getSector();
+		MapInitializer.createNeighbors(22, 13, map);
+		assertNotNull(map);
+		
 	}*/
-
+	
+	
 }

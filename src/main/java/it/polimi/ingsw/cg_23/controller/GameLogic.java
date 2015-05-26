@@ -405,22 +405,24 @@ public class GameLogic implements Observer {
      * @param itemCard
      */
     public void choseHowUseItemCard(Player player, Card itemCard) {
-        String choice = null;
+        String choice = "cose"; //TODO appena la view mi passa qualcosa devo inizializzare a null qua
         player.getCards().add(itemCard);
 
         if (player.getCards().size() > 3) {
+        	if(choice != null){
 
-            // TODO chiedere alla view di chiedere al giocatore cosa vuole fare
-            switch (choice) {
-            case "usa":
-                useItemCard(player, itemCard);
-                break;
-            case "butta":
-                discardCard(player, itemCard);
-                break;
-            default:
-                discardCard(player, itemCard);
-                break;
+	            // TODO chiedere alla view di chiedere al giocatore cosa vuole fare
+	            switch (choice.toLowerCase()) {
+	            case "usa":
+	                useItemCard(player, itemCard);
+	                break;
+	            case "butta":
+	                discardCard(player, itemCard);
+	                break;
+	            default:
+	                discardCard(player, itemCard);
+	                break;
+	            }
             }
         }
     }
