@@ -14,18 +14,45 @@ import org.junit.Test;
 public class AttackCardTest {
 
 	@Test
-	public void testDoAction() {
+	public void testDoActionWithoutDefenseCard() {
 		Player player1 = new Human("dummy1");		
 		Player player2 = new Alien("dummy2");
 		Card card = new AttackCard();
-		String mapName = "galilei";
-		Match match = new Match(mapName);
+		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		Sector sector = new Sector(3, 6, SectorTypeEnum.DANGEROUS, true);
+		match.addNewPlayerToList(player1);
+		match.addNewPlayerToList(player2);
 		player1.setCurrentSector(sector);
-		player2.setCurrentSector(sector);		
+		player2.setCurrentSector(sector);	
+		sector.setPlayer(player1);
+		sector.setPlayer(player2);
 		card.doAction(player1, controller);
-		assertFalse(player1.getCurrentSector().getPlayer().contains(player2));
+		assertNotEquals(player2, player1);
+		assertFalse(player2.isAlive());
+		assertTrue(player1.isAlive());
+	}
+	
+	@Test
+	public void testDoActionWithDefenseCard() {
+		Player player1 = new Human("dummy1");		
+		Player player2 = new Alien("dummy2");
+		Card cardAttack = new AttackCard();
+		Card cardDefense = new DefenseCard();
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Sector sector = new Sector(3, 6, SectorTypeEnum.DANGEROUS, true);
+		match.addNewPlayerToList(player1);
+		match.addNewPlayerToList(player2);
+		player1.setCurrentSector(sector);
+		player2.setCurrentSector(sector);	
+		sector.setPlayer(player1);
+		sector.setPlayer(player2);
+		player2.getCards().add(cardDefense);
+		cardAttack.doAction(player1, controller);
+		assertNotEquals(player2, player1);
+		assertTrue(player2.isAlive());
+		assertTrue(player1.isAlive());
 	}
 
 	@Test

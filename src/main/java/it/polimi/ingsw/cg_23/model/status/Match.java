@@ -83,6 +83,7 @@ public class Match extends Observable{
         
         this.name=mapName;
         this.map=new Map(mapName);
+        this.players=new ArrayList<Player>();
         this.sectorDeck=DeckFactory.createDeck(0);
         this.itemDeck=DeckFactory.createDeck(1);
         this.escapeHatchDeck=DeckFactory.createDeck(2);

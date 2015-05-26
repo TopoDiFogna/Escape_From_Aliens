@@ -1,6 +1,8 @@
 package it.polimi.ingsw.cg_23.controller;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -102,20 +104,29 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * For each player in the current sector check if they have defense card and <br>
-     * if they aren't the player who use the card, and set dead the other. <br>
-     * useAttack method is the same for humans and aliens.
+     * First of all the method creates an iterator containing the players in the same sector of the attacker. <br>
+     * The while statement iterates until the player list has a next element. <br>
+     * In the while statement the method check if the attacked player is different from attacker and the attacked hasn't <br>
+     * the defense card. If the condition of the if statement is verified he set as dead the attacked player, remove from <br>
+     * player list and call a method that removes the dead player from the list of player in the match. <br>
+     * If the condition in if statement is not verified, calls another if that check if the player has a defense card and uses it.
+     * 
+     * @param playerWhoAttack
      */
     public void useAttack(Player playerWhoAttack) {
-        for (Player playerAttacked : playerWhoAttack.getCurrentSector().getPlayer()) {
-            if (playerWhoAttack != playerAttacked && !playerAttacked.getCards().contains(new DefenseCard())){
+    	ArrayList<Player> playerList = (ArrayList<Player>) playerWhoAttack.getCurrentSector().getPlayer();
+    	Iterator<Player> playerIterator = playerList.iterator();
+    	while (playerIterator.hasNext()) {
+			Player playerAttacked = (Player) playerIterator.next();
+			if (playerWhoAttack != playerAttacked && !hasCard(playerAttacked, new DefenseCard())){
                 playerAttacked.setDead();
+                playerIterator.remove();
                 removeAfterDying(playerAttacked);
-            } else if(playerAttacked.getCards().contains(new DefenseCard())){
+			} else if(hasCard(playerAttacked, new DefenseCard()))
+            	//questa condizione in realtà non fa niente perchè useDefence non ha nessuna istruzione      
             	useDefense(playerAttacked);
-            }
-        }
-}
+		}
+    }
 
     /**
      * This card can not be used from human, but auto-used when human is attacked.
@@ -394,17 +405,17 @@ public class GameLogic implements Observer {
      * @param itemCard
      */
     public void choseHowUseItemCard(Player player, Card itemCard) {
-        int choice = 0;
+        String choice = null;
         player.getCards().add(itemCard);
 
         if (player.getCards().size() > 3) {
 
             // TODO chiedere alla view di chiedere al giocatore cosa vuole fare
             switch (choice) {
-            case 0:
+            case "usa":
                 useItemCard(player, itemCard);
                 break;
-            case 1:
+            case "butta":
                 discardCard(player, itemCard);
                 break;
             default:
@@ -419,20 +430,22 @@ public class GameLogic implements Observer {
      * 
      * @param player
      */
-    private void removeAfterDying(Player player) {
-    	if(!player.isAlive())
-        match.getPlayers().remove(player);
+    public void removeAfterDying(Player player) {
+    	if(!player.isAlive()){
+    		match.getPlayers().remove(player);    		
+    	}
         // TODO notifica la view e dice al player che è morto D:
     }
 
     /**
-     * The escaped player is removed from player list after his victory.
+     * The escaped player is removed from player list and from player list in current sector after his victory.
      * 
      * @param player
      */
-    private void removeAfterWinning(Player player) {
+    public void removeAfterWinning(Player player) {
     	if(!player.getCurrentSector().isCrossable()){
-        match.getPlayers().remove(player);
+    		player.getCurrentSector().getPlayer().remove(player);
+    		match.getPlayers().remove(player);    		
     	}
     	// notifica la view e dice al player che ha vinto \o/
     }
