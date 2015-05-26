@@ -23,6 +23,9 @@ public class TeleportCardTest {
 		GameLogic controller = new GameLogic(match);
 		card.doAction(player, controller);
 		assertEquals(match.getMap().getHumanSector(), player.getCurrentSector());
+		
+		
+		//TODO controllare che il giocatore non sia più nel settore di prima
 	}
 
 	@Test

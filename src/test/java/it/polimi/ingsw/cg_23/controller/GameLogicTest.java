@@ -83,7 +83,7 @@ public class GameLogicTest {
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		player.getCards().add(card);
-		controller.discardCard(player, card);
+		controller.discardItemCard(player, card);
 		assertFalse(player.getCards().contains(card));
 		assertTrue(match.getItemDeckDiscarded().contains(card));
 	}

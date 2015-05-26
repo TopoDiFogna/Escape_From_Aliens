@@ -14,6 +14,11 @@ public class Human extends Player {
     private boolean escaped = false;
     
     /**
+     * This attribute is set as true when a human uses sedatives card.
+     */
+    private boolean sedatives = false;
+    
+    /**
      * The constructor.
      */
     public Human(String name) {
@@ -36,5 +41,23 @@ public class Human extends Player {
     public void setEscaped() {
         this.escaped = true;
     }
+
+    /**
+     * This method returns true if human must not draw a sector card, also if in a dangerous sector.
+     * 
+     * @return boolean
+     */
+	public boolean isSedatives() {
+		return sedatives;
+	}
+
+	/**
+	 * Sets the value of the sedatives that indicate if the player must draw a sector card.
+	 * 
+	 * @param sedatives
+	 */
+	public void setSedatives(boolean sedatives) {
+		this.sedatives = sedatives;
+	}
 
 }

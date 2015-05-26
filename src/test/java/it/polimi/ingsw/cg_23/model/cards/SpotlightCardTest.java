@@ -16,12 +16,12 @@ public class SpotlightCardTest {
 	public void testDoAction() {
 		Player player = new Human("Dummy");
 		Card card = new SpotlightCard();
-		String mapName = "galilei";
-		Match match = new Match(mapName);
+		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		Sector sector = new Sector(17, 10, SectorTypeEnum.DANGEROUS, false);
 		card.doAction(player, controller);
-		
+		//creo la mappa, metto dei giocatori in dei settori vicini e chiamo la carta
+		//controllo che dopo aver chiamato la carta mi dica davvero che ci siano dei giocatori in quei settori
 	}
 
 	@Test

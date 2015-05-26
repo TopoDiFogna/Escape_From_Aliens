@@ -43,35 +43,21 @@ public class GameLogic implements Observer {
 
     }
 
-    public void playGame() {
-        do {
-
-        } while (true);
-    }
-
+    
     /**
      * Checks if the player can move in the chosen sector.
      * 
-     * @param player
-     *            who wants to move
-     * @param destination
-     *            where the player wants to move
+     * @param player who wants to move
+     * @param destination where the player wants to move
      * @return true if the player can move to the chosen sector, false otherwise
      */
     public boolean validMove(Player player, Sector destination) {
-
-        if (destination.getType() == SectorTypeEnum.VOID
-                || destination.getType() == SectorTypeEnum.HUMAN
-                || destination.getType() == SectorTypeEnum.ALIEN) // can't enter in
+    	// can't enter in
+        if (destination.getType() == SectorTypeEnum.VOID || destination.getType() == SectorTypeEnum.HUMAN || destination.getType() == SectorTypeEnum.ALIEN) 
             return false;
 
-        if (player.getCurrentSector().getNeighbors().contains(destination))// one
-                                                                           // step,
-                                                                           // default
-                                                                           // for
-                                                                           // the
-                                                                           // human
-            return true;
+        if (player.getCurrentSector().getNeighbors().contains(destination))// one step default for the human
+        	return true;
 
         if (player.getCanMoveFaster()) {// two step, default for the alien
             for (Sector sector : player.getCurrentSector().getNeighbors()) {
@@ -80,12 +66,7 @@ public class GameLogic implements Observer {
             }
         }
 
-        if (player instanceof Alien && ((Alien) player).getHasKilled()) {// three
-                                                                         // step,
-                                                                         // alien
-                                                                         // after
-                                                                         // killing
-                                                                         // someone
+        if (player instanceof Alien && ((Alien) player).getHasKilled()) {// three step, alien after killing someone
             for (Sector sector : player.getCurrentSector().getNeighbors()) {
                 for (Sector neighbor : sector.getNeighbors()) {
                     if (neighbor.getNeighbors().contains(destination))
@@ -129,10 +110,10 @@ public class GameLogic implements Observer {
     }
 
     /**
-     * This card can not be used from human, but auto-used when human is attacked.
+     * This card can not be used from human, but auto-used when human is attacked, to prevent him to be killed.
      */
     public void useDefense(Player player) {
-
+    	//the method can not be directly called, but auto used.
     }
 
     /**
@@ -142,7 +123,7 @@ public class GameLogic implements Observer {
         Human human = (Human) player;
         player.getCurrentSector().setEscapeHatchSectorNotCrossable();
         human.setEscaped();
-        //removeAfterWinning(player);
+        removeAfterWinning(player);
     }
 
     /**
@@ -168,15 +149,14 @@ public class GameLogic implements Observer {
      */
     public void useRed(Player player) {
         player.getCurrentSector().setEscapeHatchSectorNotCrossable();
+        //TODO bisogna notificare al player che si deve cercare una nuova scialuppa
     }
 
     /**
      * This method prevents human to pick-up card when in dangerous sector.
      */
     public void useSedatives(Player player) {
-        // TODO nel controller è come se passassi su un settore sicuro (dopo il
-        // controllo del tipo di settore di destinazione si
-        // fa un IF: per controllare se prima è stata usata questa carta
+    	((Human) player).setSedatives(true);
     }
 
     /**
@@ -195,7 +175,7 @@ public class GameLogic implements Observer {
     public void useSpotlight(Player player) {
         int lettera = 0;
         int numero = 0;
-        // TODO per prendere il settore che il giocatore vuole vedere
+        // TODO chiedere al giocatero che settore vuole vedere
         Sector[][] sector = match.getMap().getSector();
         sector[lettera][numero].getPlayer();
         // TODO notifica messaggio
@@ -211,7 +191,10 @@ public class GameLogic implements Observer {
      * The human moves to the starting human sector.
      */
     public void useTeleport(Player player) {
-        player.setCurrentSector(match.getMap().getHumanSector());
+    	Sector sector = match.getMap().getHumanSector();
+    	player.getCurrentSector().getPlayer().remove(player);
+        player.setCurrentSector(sector);
+        sector.getPlayer().add(player);
     }
 
     /**
@@ -244,7 +227,7 @@ public class GameLogic implements Observer {
     public void useItemCard(Player player, Card card) {
         if (hasCard(player, card)) {
             card.doAction(player, this);
-            discardCard(player, card);
+            discardItemCard(player, card);
         }
     }
 
@@ -272,7 +255,7 @@ public class GameLogic implements Observer {
      * @param player who uses the card
      * @param card used by player
      */
-    public void discardCard(Player player, Card card) {
+    public void discardItemCard(Player player, Card card) {
         player.getCards().remove(card);
         match.getItemDeckDiscarded().add(card);
     }
@@ -316,14 +299,14 @@ public class GameLogic implements Observer {
         if (sectorCard instanceof NoiseInAnySectorCard) {
             NoiseInAnySectorCard newSectorCard = (NoiseInAnySectorCard) sectorCard;
             if (newSectorCard.hasItem()) {
-                Card itemCard = drawItemDeck();
+                Card itemCard = drawItemCard();
                 if (itemCard != null)
                     choseHowUseItemCard(player, itemCard);
             }
         } else if (sectorCard instanceof NoiseInYourSectorCard) {
             NoiseInYourSectorCard newSectorCard = (NoiseInYourSectorCard) sectorCard;
             if (newSectorCard.hasItem()) {
-                Card itemCard = drawItemDeck();
+                Card itemCard = drawItemCard();
                 if (itemCard != null)
                     choseHowUseItemCard(player, itemCard);
             }
@@ -381,12 +364,11 @@ public class GameLogic implements Observer {
      *
      * @return itemCard picked up in pickItemCard() method
      */
-    public Card drawItemDeck() {
+    public Card drawItemCard() {
         Card itemCard;
         if (!match.getItemDeck().isEmpty()) {
             itemCard = pickItemCard();
-        } else if (match.getItemDeck().isEmpty()
-                && !match.getItemDeckDiscarded().isEmpty()) {
+        } else if (match.getItemDeck().isEmpty() && !match.getItemDeckDiscarded().isEmpty()) {
             shuffleItemDeck();
             itemCard = pickItemCard();
         } else {
@@ -405,7 +387,7 @@ public class GameLogic implements Observer {
      * @param itemCard
      */
     public void choseHowUseItemCard(Player player, Card itemCard) {
-        String choice = "cose"; //TODO appena la view mi passa qualcosa devo inizializzare a null qua
+        String choice = "cose"; //appena la view mi passa qualcosa devo inizializzare a null qua
         player.getCards().add(itemCard);
 
         if (player.getCards().size() > 3) {
@@ -417,10 +399,10 @@ public class GameLogic implements Observer {
 	                useItemCard(player, itemCard);
 	                break;
 	            case "butta":
-	                discardCard(player, itemCard);
+	                discardItemCard(player, itemCard);
 	                break;
 	            default:
-	                discardCard(player, itemCard);
+	                discardItemCard(player, itemCard);
 	                break;
 	            }
             }
@@ -449,6 +431,36 @@ public class GameLogic implements Observer {
     		player.getCurrentSector().getPlayer().remove(player);
     		match.getPlayers().remove(player);    		
     	}
-    	// notifica la view e dice al player che ha vinto \o/
+    	// TODO notifica la view e dice al player che ha vinto \o/
     }
+    
+    //TODO javadoc and implementation. anche scelta se vuole usare carta attacco o pescare carta settore
+    public void movePlayer(Player player, Sector sector){
+    	if(player instanceof Human && ((Human) player).isSedatives()){
+    		player.getCurrentSector().getPlayer().remove(player);
+    		player.setCurrentSector(sector);
+    		sector.getPlayer().add(player);
+    	} else if(sector.getType() == SectorTypeEnum.DANGEROUS){
+    		player.getCurrentSector().getPlayer().remove(player);
+    		player.setCurrentSector(sector);
+    		sector.getPlayer().add(player);
+    		drawSectorCard(player);
+    	} else if(player instanceof Human && sector.getType() == SectorTypeEnum.ESCAPEHATCH){
+    		if(sector.isCrossable()){
+    			player.getCurrentSector().getPlayer().remove(player);
+        		player.setCurrentSector(sector);
+        		sector.getPlayer().add(player);
+        		drawEscapeHatchCard(player);    			
+    		} else {
+    			player.getCurrentSector().getPlayer().remove(player);
+        		player.setCurrentSector(sector);
+        		sector.getPlayer().add(player);
+    		}
+    	}
+    }
+    
+    public void canAttack(Player player){
+    	//TODO anche attack per alieno o da sistemare il nostro useAttack per renderlo generico e fare qua i controlli se umano o alieno
+    }
+    
 }
