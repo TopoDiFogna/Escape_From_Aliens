@@ -117,7 +117,9 @@ public class Sector extends Coordinate {
     public void addNeighbors(Sector sector){
         if(sector.getType() != SectorTypeEnum.VOID && sector.getType() != SectorTypeEnum.HUMAN && sector.getType() != SectorTypeEnum.ALIEN ){
             neighbors.add(sector);
+
             System.out.println("Vicino "+sector.getLetter()+ " "+sector.getNumber());
+
         }
     }
     
