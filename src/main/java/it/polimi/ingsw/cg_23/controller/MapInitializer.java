@@ -33,7 +33,6 @@ public class MapInitializer {
     public static void createNeighbors(int sizeLetter, int sizeNumber, Sector[][] map){
         for(int letter=0;letter<sizeLetter; letter++){
             for(int number=0;number<sizeNumber;number++){
-                System.out.println("Settore "+(letter+1)+(number+1));
                 
                 if(number>0 && number<sizeNumber-1){
                     map[letter][number].addNeighbors(map[letter][number-1]);
