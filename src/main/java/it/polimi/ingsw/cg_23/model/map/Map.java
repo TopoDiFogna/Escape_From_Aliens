@@ -34,7 +34,7 @@ public class Map {
     public Map(String name) {
         
         sectors=MapInitializer.createMap(name, SIZELETTER, SIZENUMBER);
-        //MapInitializer.createNeighbors(SIZELETTER, SIZENUMBER, sectors);//TODO implementation
+        MapInitializer.createNeighbors(SIZELETTER, SIZENUMBER, sectors);
     }
     
     /**
