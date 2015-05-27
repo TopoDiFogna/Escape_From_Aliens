@@ -26,6 +26,8 @@ import it.polimi.ingsw.cg_23.model.status.Match;
  */
 
 public class GameLogic implements Observer {
+	
+	private String choice;
 
     private Match match;
 
@@ -301,14 +303,14 @@ public class GameLogic implements Observer {
             if (newSectorCard.hasItem()) {
                 Card itemCard = drawItemCard();
                 if (itemCard != null)
-                    choseHowUseItemCard(player, itemCard);
+                    choseHowUseItemCard(player, itemCard, choice);
             }
         } else if (sectorCard instanceof NoiseInYourSectorCard) {
             NoiseInYourSectorCard newSectorCard = (NoiseInYourSectorCard) sectorCard;
             if (newSectorCard.hasItem()) {
                 Card itemCard = drawItemCard();
                 if (itemCard != null)
-                    choseHowUseItemCard(player, itemCard);
+                    choseHowUseItemCard(player, itemCard, choice);
             }
         }
         useOtherCard(player, sectorCard);
@@ -368,7 +370,7 @@ public class GameLogic implements Observer {
         Card itemCard;
         if (!match.getItemDeck().isEmpty()) {
             itemCard = pickItemCard();
-        } else if (match.getItemDeck().isEmpty() && !match.getItemDeckDiscarded().isEmpty()) {
+        } else if (!match.getItemDeckDiscarded().isEmpty()) {
             shuffleItemDeck();
             itemCard = pickItemCard();
         } else {
@@ -386,15 +388,14 @@ public class GameLogic implements Observer {
      * @param player
      * @param itemCard
      */
-    public void choseHowUseItemCard(Player player, Card itemCard) {
-        String choice = "cose"; //appena la view mi passa qualcosa devo inizializzare a null qua
+    public void choseHowUseItemCard(Player player, Card itemCard, String choice) {
         player.getCards().add(itemCard);
-
         if (player.getCards().size() > 3) {
         	if(choice != null){
 
-	            // TODO chiedere alla view di chiedere al giocatore cosa vuole fare
-	            switch (choice.toLowerCase()) {
+	            // TODO chiedere alla view di chiedere al giocatore cosa vuole fare e quale carta vuole usare o buttare
+        		//quindi c'è da aggiungere la scelta della carta tra quelle che ha in mano con un for o cacchio ne so!
+	            switch (choice) {
 	            case "usa":
 	                useItemCard(player, itemCard);
 	                break;

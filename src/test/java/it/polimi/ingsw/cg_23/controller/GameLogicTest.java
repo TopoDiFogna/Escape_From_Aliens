@@ -1,13 +1,16 @@
 package it.polimi.ingsw.cg_23.controller;
 
 import static org.junit.Assert.*;
-
+import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
 import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.cards.DeckFactory;
+import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
 import it.polimi.ingsw.cg_23.model.cards.NoiseInAnySectorCard;
+import it.polimi.ingsw.cg_23.model.cards.NoiseInYourSectorCard;
 import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
+import it.polimi.ingsw.cg_23.model.cards.SilenceCard;
 import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
@@ -51,10 +54,10 @@ public class GameLogicTest {
 		assertTrue(controller.hasCard(player, card));
 	}
 	
-	@Test
+	@Test //TODO da controllare... non so se davvero controlla il false perchè in game logic resta giallo
 	public void testHasCardFalse() {
 		Player player = new Human("dummy");
-		Card card = new SedativesCard();
+		Card card = new SilenceCard(true);
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		controller.hasCard(player, card);
@@ -73,7 +76,13 @@ public class GameLogicTest {
 
 	/*@Test
 	public void testUseOtherCard() {
-		fail("Not yet implemented");
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		match.getPlayers().add(player);
+		Card card = new GreenCard();
+		controller.useOtherCard(player, card);
+		assertFalse(match.getPlayers().contains(player));
 	}*/
 
 	@Test
@@ -90,13 +99,74 @@ public class GameLogicTest {
 
 	/*@Test
 	public void testDrawEscapeHatchCard() {
-		fail("Not yet implemented");
-	}
+		Player player = new Human("Dummy");
+		Card card = new GreenCard();
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Deck<Card> escapeHatchDeck = DeckFactory.createDeck(2);
+		match.setEscapeHatchDeck(escapeHatchDeck);
+		match.getEscapeHatchDeck().add(card);
+		Deck<Card> escapeHatchDeckDiscarded = DeckFactory.createDeck(3);
+		match.setEscapeHatchDeckDiscarded(escapeHatchDeckDiscarded);
+		controller.drawEscapeHatchCard(player);
+		assertFalse(match.getPlayers().contains(player));
+	}*/
 
 	@Test
-	public void testDrawSectorCard() {
-		fail("Not yet implemented");
-	}*/
+	public void testDrawSectorCardWithEmptySectorDeck() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = new NoiseInAnySectorCard(true);
+		match.getSectorDeck().clear();
+		match.getSectorDeckDiscarded().add(0, card);
+		controller.drawSectorCard(player);
+		//TODO right assertion
+	}
+	
+	@Test
+	public void testDrawSectorCardNoiseAnySectorWithItem() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = new NoiseInAnySectorCard(true);
+		match.getSectorDeck().add(0, card);
+		controller.drawSectorCard(player);
+		assertFalse(match.getSectorDeck().contains(card));
+	}
+	
+	@Test
+	public void testDrawSectorCardNoiseAnySectorWithoutItem() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = new NoiseInAnySectorCard(false);
+		match.getSectorDeck().add(0, card);
+		controller.drawSectorCard(player);
+		assertFalse(match.getSectorDeck().contains(card));
+	}
+	
+	@Test
+	public void testDrawSectorCardYourAnySectorWithItem() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = new NoiseInYourSectorCard(true);
+		match.getSectorDeck().add(0, card);
+		controller.drawSectorCard(player);
+		assertFalse(match.getSectorDeck().contains(card));
+	}
+	
+	@Test
+	public void testDrawSectorCardNoiseYourSectorWithoutItem() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = new NoiseInYourSectorCard(false);
+		match.getSectorDeck().add(0, card);
+		controller.drawSectorCard(player);
+		assertFalse(match.getSectorDeck().contains(card));
+	}
 
 	@Test
 	public void testShuffleSectorDeck() {
@@ -120,7 +190,7 @@ public class GameLogicTest {
 	}
 
 	@Test
-	public void testShuffleItemDeck() {
+	public void testShuffleItemDeckIfConditionTrue() {
 		int count = 0;
 		Card card1 = new AttackCard();
 		Card card2 = new AttackCard();
@@ -132,6 +202,7 @@ public class GameLogicTest {
 		match.getItemDeckDiscarded().add(card1);
 		match.getItemDeckDiscarded().add(card2);
 		match.getItemDeckDiscarded().add(card3);
+		assertTrue(!match.getItemDeckDiscarded().isEmpty());
 		controller.shuffleSectorDeck();
 		for (Card card : itemDeckDiscarded) {
 			count ++;
@@ -140,25 +211,120 @@ public class GameLogicTest {
 		assertEquals(3, count);
 	}
 
-	/*@Test
+	@Test
 	public void testPickSectorCard() {
-		fail("Not yet implemented");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = controller.pickSectorCard();
+		assertFalse(match.getSectorDeck().contains(card));
 	}
 
 	@Test
 	public void testPickItemCard() {
-		fail("Not yet implemented");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = controller.pickItemCard();
+		assertFalse(match.getItemDeck().contains(card));
 	}
 
 	@Test
-	public void testDrawItemDeck() {
-		fail("Not yet implemented");
+	public void testDrawItemCardWithItemDeckNotEmpty() {
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = new AttackCard();
+		match.getItemDeck().add(card);
+		Card itemCard = controller.drawItemCard();
+		assertNotNull(itemCard);
+	}
+	
+	@Test
+	public void testDrawItemCardWithItemDeckEmpty() {
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card = new AttackCard();
+		match.getItemDeck().clear();
+		match.getItemDeckDiscarded().add(card);
+		Card itemCard = controller.drawItemCard();
+		assertNotNull(itemCard);
+	}
+	
+	@Test
+	public void testDrawItemCardWithItemDeckAndItemDeckDiscardedEmpty() {
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		match.getItemDeck().clear();
+		match.getItemDeckDiscarded().clear();;
+		Card itemCard = controller.drawItemCard();
+		assertNull(itemCard);
 	}
 
 	@Test
-	public void testChoseHowUseItemCard() {
-		fail("Not yet implemented");
-	}*/
+	public void testChoseHowUseItemCardForUseChoice() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card1 = new AttackCard();
+		Card card2 = new AdrenalineCard();
+		Card card3 = new SedativesCard();
+		Card card4 = new DefenseCard();
+		player.getCards().add(card1);
+		player.getCards().add(card2);
+		player.getCards().add(card3);
+		controller.choseHowUseItemCard(player, card4, "usa");
+		assertTrue(player.getCards().size()<4);
+		assertTrue(match.getItemDeckDiscarded().contains(card4));
+	}
+	
+	@Test
+	public void testChoseHowUseItemCardForDiscardChoice() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card1 = new AttackCard();
+		Card card2 = new AdrenalineCard();
+		Card card3 = new SedativesCard();
+		Card card4 = new DefenseCard();
+		player.getCards().add(card1);
+		player.getCards().add(card2);
+		player.getCards().add(card3);
+		controller.choseHowUseItemCard(player, card4, "butta");
+		assertTrue(player.getCards().size()<4);
+		assertTrue(match.getItemDeckDiscarded().contains(card4));
+	}
+	
+	@Test
+	public void testChoseHowUseItemCardForNullChoice() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card1 = new AttackCard();
+		Card card2 = new AdrenalineCard();
+		Card card3 = new SedativesCard();
+		Card card4 = new DefenseCard();
+		player.getCards().add(card1);
+		player.getCards().add(card2);
+		player.getCards().add(card3);
+		controller.choseHowUseItemCard(player, card4, null);
+		assertTrue(player.getCards().size()>3);
+	}
+	
+	@Test
+	public void testChoseHowUseItemCardForNotValidChoice() {
+		Player player = new Human("Dummy");
+		Match match = new Match("galilei");
+		GameLogic controller = new GameLogic(match);
+		Card card1 = new AttackCard();
+		Card card2 = new AdrenalineCard();
+		Card card3 = new SedativesCard();
+		Card card4 = new DefenseCard();
+		player.getCards().add(card1);
+		player.getCards().add(card2);
+		player.getCards().add(card3);
+		controller.choseHowUseItemCard(player, card4, "altro");
+		assertTrue(player.getCards().size()<4);
+		assertTrue(match.getItemDeckDiscarded().contains(card4));
+	}
+
 
 	@Test
 	public void testRemoveAfterDyingTrue() {
@@ -213,4 +379,14 @@ public class GameLogicTest {
 		controller.removeAfterWinning(player);
 		assertTrue(sector.isCrossable());
 	}
+	
+	/*@Test
+	public void testMovePlayer(){
+		
+	}
+	
+	@Test
+	public void testCanAttack(){
+		
+	}*/
 }
