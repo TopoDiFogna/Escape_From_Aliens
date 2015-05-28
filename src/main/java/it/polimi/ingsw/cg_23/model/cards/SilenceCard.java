@@ -10,31 +10,31 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  */
 public class SilenceCard extends Card {
 
-	/**
-	 * The boolean hasItem indicates if the card has the item symbol. <br>
-	 * This boolean here is always false, because silence hasn't item symbol, <br>
-	 * but we added it here to simplify the SectorDeck creation.
-	 */
-	private final boolean hasItem;
+    /**
+     * The boolean hasItem indicates if the card has the item symbol. <br>
+     * This boolean here is always false, because silence hasn't item symbol, <br>
+     * but we added it here to simplify the SectorDeck creation.
+     */
+    private final boolean hasItem;
 
-	/**
-	 * constructor
-	 */
-	public SilenceCard(boolean hasItem) {
-		this.hasItem = hasItem;
-	}
+    /**
+     * constructor
+     */
+    public SilenceCard(boolean hasItem) {
+        this.hasItem = hasItem;
+    }
 
-	public boolean hasItem() {
-		return hasItem;
-	}
+    public boolean hasItem() {
+        return hasItem;
+    }
 
-	/**
-	 * This method is auto-called when player pick-up this card. <br>
-	 * The action simply notify the view to tells other "silence".
-	 */
-	@Override
-	public void doAction(Player player, GameLogic controller) {
-		controller.useSilence(player);
-	}
+    /**
+     * This method is auto-called when player pick-up this card. <br>
+     * The action simply notify the view to tells other "silence".
+     */
+    @Override
+    public void doAction(Player player, GameLogic controller) {
+        controller.useSilence(player);
+    }
 
 }
