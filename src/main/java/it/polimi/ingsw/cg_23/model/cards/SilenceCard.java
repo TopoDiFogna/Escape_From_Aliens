@@ -5,24 +5,26 @@ import it.polimi.ingsw.cg_23.model.players.Player;
 
 /**
  * if a player picks-up this card, he can not tells other where noise is.
+ * 
  * @author Arianna
  */
-public class SilenceCard extends Card{
-	
+public class SilenceCard extends Card {
+
 	/**
 	 * The boolean hasItem indicates if the card has the item symbol. <br>
-	 * This boolean here is always false, because silence hasn't item symbol, but we added it here to semplify the SectorDeck creation.
+	 * This boolean here is always false, because silence hasn't item symbol, <br>
+	 * but we added it here to simplify the SectorDeck creation.
 	 */
 	private final boolean hasItem;
-	
+
 	/**
 	 * constructor
 	 */
-	public SilenceCard(boolean hasItem){
-		this.hasItem=hasItem;
+	public SilenceCard(boolean hasItem) {
+		this.hasItem = hasItem;
 	}
-	
-	public boolean HasItem() {
+
+	public boolean hasItem() {
 		return hasItem;
 	}
 

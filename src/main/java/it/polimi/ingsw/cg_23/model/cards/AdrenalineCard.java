@@ -9,19 +9,19 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * @author Arianna
  */
 public class AdrenalineCard extends Card {
-	
-	/**
-	 * constructor
-	 */
-	public AdrenalineCard() {
-	}
-	
-	/**
-	 * Calls the specific method in GameLogic class.
-	 */
-	@Override
-	public void doAction(Player player, GameLogic controller) {
-		controller.useAdrenaline(player);
-	}
+
+    /**
+     * constructor
+     */
+    public AdrenalineCard() {
+    }
+
+    /**
+     * Calls the specific method in GameLogic class.
+     */
+    @Override
+    public void doAction(Player player, GameLogic controller) {
+        controller.useAdrenaline(player);
+    }
 
 }

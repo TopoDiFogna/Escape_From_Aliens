@@ -9,18 +9,19 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * @author Arianna
  */
 public abstract class Card {
-    
+
     /**
      * Constructor.
      */
-    protected Card(){
-        
+    protected Card() {
+
     }
-    
+
     /**
-	 * This method is implemented in every card classes with different actions. 
-	 * @param player who uses the card
-	 */	
+     * This method is implemented in every card classes with different actions.
+     * 
+     * @param player who uses the card
+     */
     public abstract void doAction(Player player, GameLogic controller);
 
 }

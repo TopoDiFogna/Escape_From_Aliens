@@ -29,7 +29,7 @@ public class SilenceCardTest {
 	@Test
 	public void testHasItem() {
 		SilenceCard card = new SilenceCard(false);
-		assertFalse(card.HasItem());
+		assertFalse(card.hasItem());
 	}
 
 }

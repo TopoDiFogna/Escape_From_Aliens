@@ -12,22 +12,22 @@ import it.polimi.ingsw.cg_23.model.players.Player;
  * @author Paolo
  */
 public class Sector extends Coordinate {
-    
+
     /**
      * The List of players who are in the sector is saved here
      */
     private List<Player> players = new ArrayList<Player>();
-    
+
     /**
      * Tells us if the sector is crossable by the players.
      */
     private boolean crossable;
-    
+
     /**
      * The type of sector taken from SectorTypeEnum enumeration.
      */
     private final SectorTypeEnum type;
-    
+
     /**
      * List of sectors near this sector
      */
@@ -38,39 +38,44 @@ public class Sector extends Coordinate {
      */
     public Sector(int letter, int number, SectorTypeEnum type, boolean crossable) {
         super(letter, number);
-        this.type=type;
-        this.crossable=crossable;
+        this.type = type;
+        this.crossable = crossable;
     }
-    
+
     /**
      * Controls if a sector is near this sector using a mathematical algorithm.
      * 
      * @param neighbor the sector to test nearness
      * @return true if se specified sector is near this sector, false otherwise
      */
-    public boolean isNearby(Sector neighbor){
-        
-        //if we are moving vertically
-        if(neighbor.getLetter() == this.getLetter() && Math.abs(neighbor.getNumber()-this.getNumber()) == 1) 
+    public boolean isNearby(Sector neighbor) {
+
+        // if we are moving vertically
+        if (neighbor.getLetter() == this.getLetter()
+                && Math.abs(neighbor.getNumber() - this.getNumber()) == 1)
             return true;
-        
-        //if moving horizontally from even column
-        if(this.getLetter()%2 == 0 && Math.abs(neighbor.getLetter() - this.getLetter()) == 1){
-            if(neighbor.getNumber()-this.getNumber() == 1 || neighbor.getNumber() == this.getNumber()) 
+
+        // if moving horizontally from even column
+        if (this.getLetter() % 2 == 0
+                && Math.abs(neighbor.getLetter() - this.getLetter()) == 1) {
+            if (neighbor.getNumber() - this.getNumber() == 1
+                    || neighbor.getNumber() == this.getNumber())
                 return true;
         }
-        
-        //if moving horizontally from odd column
-        if(this.getLetter()%2 == 1 && Math.abs(neighbor.getLetter() - this.getLetter()) == 1){
-            if(neighbor.getNumber() == this.getNumber() || neighbor.getNumber()-this.getNumber() == -1) 
+
+        // if moving horizontally from odd column
+        if (this.getLetter() % 2 == 1
+                && Math.abs(neighbor.getLetter() - this.getLetter()) == 1) {
+            if (neighbor.getNumber() == this.getNumber()
+                    || neighbor.getNumber() - this.getNumber() == -1)
                 return true;
         }
-        
+
         return false;
     }
 
     /**
-     * This method  gives the players who are in this sector as a list.
+     * This method gives the players who are in this sector as a list.
      * 
      * @return the players in the sector as a list
      */
@@ -106,21 +111,23 @@ public class Sector extends Coordinate {
      * 
      */
     public void setEscapeHatchSectorNotCrossable() {
-        this.crossable=false;
+        this.crossable = false;
     }
-    
+
     /**
      * Adds a sector to the nearSetors List only if not void
      * 
      * @param sector the sector to be added as a neighbor
      */
-    public void addNeighbors(Sector sector){
-        if(sector.getType() != SectorTypeEnum.VOID && sector.getType() != SectorTypeEnum.HUMAN && sector.getType() != SectorTypeEnum.ALIEN ){
+    public void addNeighbors(Sector sector) {
+        if (sector.getType() != SectorTypeEnum.VOID
+                && sector.getType() != SectorTypeEnum.HUMAN
+                && sector.getType() != SectorTypeEnum.ALIEN) {
             neighbors.add(sector);
         }
     }
-    
-    public List<Sector> getNeighbors(){
+
+    public List<Sector> getNeighbors() {
         return this.neighbors;
     }
 }

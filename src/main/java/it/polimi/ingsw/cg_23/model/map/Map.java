@@ -3,9 +3,9 @@ package it.polimi.ingsw.cg_23.model.map;
 import it.polimi.ingsw.cg_23.controller.MapInitializer;
 
 /**
- * The map is where the game is played.
- * It's divided in sectors and has a maximum fixed size defined by SIZENUMBER and SIZELETTER.
- *  
+ * The map is where the game is played. It's divided in sectors and has a <br>
+ * maximum fixed size defined by SIZENUMBER and SIZELETTER.
+ * 
  * @author Paolo
  */
 public class Map {
@@ -30,13 +30,13 @@ public class Map {
      * It calls a parser to pars the XML file that contain the map scheme which returns the map.
      * 
      */
-    
+
     public Map(String name) {
-        
-        sectors=MapInitializer.createMap(name, SIZELETTER, SIZENUMBER);
+
+        sectors = MapInitializer.createMap(name, SIZELETTER, SIZENUMBER);
         MapInitializer.createNeighbors(SIZELETTER, SIZENUMBER, sectors);
     }
-    
+
     /**
      * Returns max rows of the map.
      * 
@@ -45,7 +45,7 @@ public class Map {
     public int getSIZENUMBER() {
         return SIZENUMBER;
     }
-    
+
     /**
      * Returns max colums of the map.
      * 
@@ -54,7 +54,7 @@ public class Map {
     public int getSIZELETTER() {
         return SIZELETTER;
     }
-    
+
     /**
      * Returns the map as a array[SIZENUMBER]x[SIZELETTER].
      * 
@@ -63,42 +63,42 @@ public class Map {
     public Sector[][] getSector() {
         return this.sectors;
     }
-    
+
     /**
      * @return the human sector of the current map
      */
-    public Sector getHumanSector(){
-    	int i=0, j=0;
-    	boolean flag=false;
-    	for(i=0; i < SIZELETTER; i++){
-    		for(j=0; j < SIZENUMBER; j++){
-    			if(sectors[i][j].getType()==SectorTypeEnum.HUMAN){
-    				flag=true;
-    				break;
-    			}
-    		}
-    		if(flag)
-    			break;
-    	}
-    	return sectors[i][j];
+    public Sector getHumanSector() {
+        int i = 0, j = 0;
+        boolean flag = false;
+        for (i = 0; i < SIZELETTER; i++) {
+            for (j = 0; j < SIZENUMBER; j++) {
+                if (sectors[i][j].getType() == SectorTypeEnum.HUMAN) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag)
+                break;
+        }
+        return sectors[i][j];
     }
-    
+
     /**
      * @return the alien sector of the current map
      */
-    public Sector getAlienSector(){
-    	int i=0, j=0;
-    	boolean flag=false;
-    	for(i=0; i < SIZELETTER; i++){
-    		for(j=0; j < SIZENUMBER; j++){
-    			if(sectors[i][j].getType()==SectorTypeEnum.ALIEN){
-    				flag=true;
-    				break;
-    			}
-    		}
-    		if(flag)
-    			break;
-    	}
-    	return sectors[i][j];
+    public Sector getAlienSector() {
+        int i = 0, j = 0;
+        boolean flag = false;
+        for (i = 0; i < SIZELETTER; i++) {
+            for (j = 0; j < SIZENUMBER; j++) {
+                if (sectors[i][j].getType() == SectorTypeEnum.ALIEN) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag)
+                break;
+        }
+        return sectors[i][j];
     }
 }

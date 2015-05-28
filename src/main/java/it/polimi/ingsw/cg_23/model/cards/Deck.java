@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @author Arianna
  */
 public class Deck<T extends Card> extends ArrayList<T> {
-    
+
     /**
      * Serial ID.
      */
@@ -17,8 +17,8 @@ public class Deck<T extends Card> extends ArrayList<T> {
     /**
      * Constructor.
      */
-    protected Deck(){
-        
+    protected Deck() {
+
     }
-   
+
 }
