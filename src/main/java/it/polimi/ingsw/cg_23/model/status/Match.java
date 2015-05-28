@@ -54,7 +54,7 @@ public class Match extends Observable{
     /**
      * The deck containing discarded item cards.
      */    
-    private Deck<Card> escapeHatchDeckDiscarded;
+    private Deck<Card> escapeHatchDeckDiscarded = DeckFactory.createDeck(3);
     
     /**
      * List of players in this match

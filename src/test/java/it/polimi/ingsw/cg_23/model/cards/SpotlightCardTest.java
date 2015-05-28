@@ -2,9 +2,6 @@ package it.polimi.ingsw.cg_23.model.cards;
 
 import static org.junit.Assert.*;
 import it.polimi.ingsw.cg_23.controller.GameLogic;
-import it.polimi.ingsw.cg_23.model.map.Sector;
-import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
-import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.Match;

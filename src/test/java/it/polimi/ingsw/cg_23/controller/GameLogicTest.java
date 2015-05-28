@@ -7,8 +7,10 @@ import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.cards.DeckFactory;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
+import it.polimi.ingsw.cg_23.model.cards.GreenCard;
 import it.polimi.ingsw.cg_23.model.cards.NoiseInAnySectorCard;
 import it.polimi.ingsw.cg_23.model.cards.NoiseInYourSectorCard;
+import it.polimi.ingsw.cg_23.model.cards.RedCard;
 import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
 import it.polimi.ingsw.cg_23.model.cards.SilenceCard;
 import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
@@ -23,20 +25,13 @@ import org.junit.Test;
 
 public class GameLogicTest {
 
-	/*@Test
-	public void testGameLogic() {
-		fail("Not yet implemented");
-	}
+	
 
-	@Test
+	/*@Test
 	public void testUpdate() {
 		fail("Not yet implemented");
 	}
 
-	@Test
-	public void testPlayGame() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testValidMove() {
@@ -74,17 +69,6 @@ public class GameLogicTest {
 		assertFalse(player.getCards().contains(card));
 	}
 
-	/*@Test
-	public void testUseOtherCard() {
-		Player player = new Human("Dummy");
-		Match match = new Match("galilei");
-		GameLogic controller = new GameLogic(match);
-		match.getPlayers().add(player);
-		Card card = new GreenCard();
-		controller.useOtherCard(player, card);
-		assertFalse(match.getPlayers().contains(player));
-	}*/
-
 	@Test
 	public void testDiscardCard() {
 		Player player = new Human("dummy");
@@ -97,32 +81,53 @@ public class GameLogicTest {
 		assertTrue(match.getItemDeckDiscarded().contains(card));
 	}
 
-	/*@Test
-	public void testDrawEscapeHatchCard() {
-		Player player = new Human("Dummy");
-		Card card = new GreenCard();
-		Match match = new Match("galilei");
-		GameLogic controller = new GameLogic(match);
-		Deck<Card> escapeHatchDeck = DeckFactory.createDeck(2);
-		match.setEscapeHatchDeck(escapeHatchDeck);
-		match.getEscapeHatchDeck().add(card);
-		Deck<Card> escapeHatchDeckDiscarded = DeckFactory.createDeck(3);
-		match.setEscapeHatchDeckDiscarded(escapeHatchDeckDiscarded);
-		controller.drawEscapeHatchCard(player);
-		assertFalse(match.getPlayers().contains(player));
-	}*/
+	@Test
+	public void testDrawEscapeHatchCardWithGreenCard() {
+	    Player player = new Human("Dummy");
+	    Match match = new Match("galilei");
+	    match.getPlayers().add(player);
+	    GameLogic controller = new GameLogic(match);
+	    Card card = new GreenCard();
+	    Deck<Card> deckEscapeHatch = DeckFactory.createDeck(2);
+	    deckEscapeHatch.add(card);
+	    Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
+	    player.setCurrentSector(sector);
+	    controller.drawEscapeHatchCard(player);
+	    assertNotNull(match.getEscapeHatchDeckDiscarded());
+	    assertFalse(player.getCurrentSector().isCrossable());
+	}
+	
+	@Test
+    public void testDrawEscapeHatchCardWithRedCard() {
+        Player player = new Human("Dummy");
+        Match match = new Match("galilei");
+        match.getPlayers().add(player);
+        GameLogic controller = new GameLogic(match);
+        Card card = new RedCard();
+        Deck<Card> deckEscapeHatch = DeckFactory.createDeck(2);
+        deckEscapeHatch.add(card);
+        Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
+        player.setCurrentSector(sector);
+        controller.drawEscapeHatchCard(player);
+        assertNotNull(match.getEscapeHatchDeckDiscarded());
+        assertFalse(player.getCurrentSector().isCrossable());
+    }
 
 	@Test
 	public void testDrawSectorCardWithEmptySectorDeck() {
 		Player player = new Human("Dummy");
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
-		Card card = new NoiseInAnySectorCard(true);
+		Card card1 = new NoiseInAnySectorCard(true);
+		Card card2 = new NoiseInAnySectorCard(false);
 		match.getSectorDeck().clear();
-		match.getSectorDeckDiscarded().add(0, card);
+		match.getSectorDeckDiscarded().add(0, card1);
+		match.getSectorDeckDiscarded().add(card2);
 		controller.drawSectorCard(player);
-		//TODO right assertion
+        assertTrue(match.getSectorDeck().contains(card2));
+        assertTrue(match.getSectorDeckDiscarded().contains(card1));
 	}
+
 	
 	@Test
 	public void testDrawSectorCardNoiseAnySectorWithItem() {
@@ -190,7 +195,7 @@ public class GameLogicTest {
 	}
 
 	@Test
-	public void testShuffleItemDeckIfConditionTrue() {
+	public void testShuffleItemDeck() {
 		int count = 0;
 		Card card1 = new AttackCard();
 		Card card2 = new AttackCard();

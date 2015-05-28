@@ -18,6 +18,7 @@ public class SedativesCardTest {
 		Match match = new Match(mapName);
 		GameLogic controller = new GameLogic(match);
 		card.doAction(player, controller);
+		assertTrue(((Human) player).isSedatives());
 		
 	}
 
