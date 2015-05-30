@@ -34,7 +34,7 @@ public class ServerStatus {
         idLogicMap.put(name, match);
     }
     
-    public void addBrokerToMatch(Broker broker, Match match){
+    public void addBrokerToMatch(Match match, Broker broker){
         logicBrokerMap.put(match, broker);
     }
 

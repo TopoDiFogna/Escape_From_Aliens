@@ -16,6 +16,7 @@ import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.Broker;
 
 /**
  * Description of GameLogic.
@@ -28,6 +29,9 @@ public class GameLogic{
     private String choice;
 
     private Match match;
+    
+    @SuppressWarnings("unused")
+    private Broker broker;
 
     /**
      * The constructor.
@@ -35,14 +39,22 @@ public class GameLogic{
     public GameLogic(Match match) {
         this.match = match;
     }
-    
+
+    /**
+     * Allows to set the broker before starting the game.
+     * Done as this to not rewrite tons of code.
+     * 
+     * @param broker the broker to be added
+     */
+    public void setBroker(Broker broker) {
+        this.broker = broker;
+    }
+
     /**
      * Checks if the player can move in the chosen sector.
      * 
-     * @param player
-     *            who wants to move
-     * @param destination
-     *            where the player wants to move
+     * @param player who wants to move
+     * @param destination where the player wants to move
      * @return true if the player can move to the chosen sector, false otherwise
      */
     public boolean validMove(Player player, Sector destination) {
@@ -93,13 +105,11 @@ public class GameLogic{
      * @param playerWhoAttack
      */
     public void useAttack(Player playerWhoAttack) {
-        ArrayList<Player> playerList = (ArrayList<Player>) playerWhoAttack
-                .getCurrentSector().getPlayer();
+        ArrayList<Player> playerList = (ArrayList<Player>) playerWhoAttack.getCurrentSector().getPlayer();
         Iterator<Player> playerIterator = playerList.iterator();
         while (playerIterator.hasNext()) {
             Player playerAttacked = playerIterator.next();
-            if (playerWhoAttack != playerAttacked
-                    && !hasCard(playerAttacked, new DefenseCard())) {
+            if (playerWhoAttack != playerAttacked && !hasCard(playerAttacked, new DefenseCard())) {
                 playerAttacked.setDead();
                 playerIterator.remove();
                 removeAfterDying(playerAttacked);
@@ -177,7 +187,7 @@ public class GameLogic{
     public void useSpotlight(Player player) {
         int lettera = 0;
         int numero = 0;
-        // TODO chiedere al giocatero che settore vuole vedere
+        // TODO chiedere al giocatore che settore vuole vedere
         Sector[][] sector = match.getMap().getSector();
         sector[lettera][numero].getPlayer();
         // TODO notifica messaggio
@@ -436,27 +446,24 @@ public class GameLogic{
     // attacco o pescare carta settore
     public void movePlayer(Player player, Sector sector) {
         if (player instanceof Human && ((Human) player).isSedatives()) {
-            player.getCurrentSector().getPlayer().remove(player);
-            player.setCurrentSector(sector);
-            sector.getPlayer().add(player);
+            moveActions(player, sector);
         } else if (sector.getType() == SectorTypeEnum.DANGEROUS) {
-            player.getCurrentSector().getPlayer().remove(player);
-            player.setCurrentSector(sector);
-            sector.getPlayer().add(player);
+            moveActions(player, sector);
             drawSectorCard(player);
-        } else if (player instanceof Human
-                && sector.getType() == SectorTypeEnum.ESCAPEHATCH) {
+        } else if (player instanceof Human && sector.getType() == SectorTypeEnum.ESCAPEHATCH) {
             if (sector.isCrossable()) {
-                player.getCurrentSector().getPlayer().remove(player);
-                player.setCurrentSector(sector);
-                sector.getPlayer().add(player);
+                moveActions(player, sector);
                 drawEscapeHatchCard(player);
             } else {
-                player.getCurrentSector().getPlayer().remove(player);
-                player.setCurrentSector(sector);
-                sector.getPlayer().add(player);
+                moveActions(player, sector);
             }
         }
+    }
+    
+    private void moveActions(Player player, Sector sector){
+        player.getCurrentSector().getPlayer().remove(player);
+        player.setCurrentSector(sector);
+        sector.getPlayer().add(player);
     }
 
     public void canAttack(Player player) {

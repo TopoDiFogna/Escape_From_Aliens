@@ -13,6 +13,13 @@ import java.net.Socket;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
+/**
+ * This class receive commands from the client and executes them.
+ * 
+ * 
+ * @author Paolo
+ *
+ */
 public class ClientHandler implements Runnable{
     
     /**
@@ -124,8 +131,10 @@ public class ClientHandler implements Runnable{
             case "use":
                 if(!tokenizer.hasMoreTokens()){
                     response="Use sintax: use cardname. Avaible card names are Adrenaline, Attack, Sedatives, Spotlight, Teleport.";
-                    break;
+                    
                 }
+                //response useCard();
+                break;
                 
             case "noise":
                 if(!tokenizer.hasMoreTokens()){
@@ -181,8 +190,13 @@ public class ClientHandler implements Runnable{
         
         if(mapName.equals("galilei") || mapName.equals("fermi") || mapName.equals("galvani")){
             
+            if(serverStatus.getMatchBrokerMap().isEmpty()){
+                joinNewGame(mapName);
+                response = "You were added to a new game with map "+mapName;
+            }
+            
             for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
-                if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING){
+                if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING && match.getPlayers().size()<8){
                     joinGame(match, serverStatus.getMatchBrokerMap().get(match));
                     response = "You were added to a game with map "+mapName;
                 }
@@ -190,11 +204,7 @@ public class ClientHandler implements Runnable{
                     joinNewGame(mapName);
                     response = "You were added to a new game with map "+mapName;
                 }
-            }
-            if(serverStatus.getMatchBrokerMap().isEmpty()){
-                joinNewGame(mapName);
-                response = "You were added to a new game with map "+mapName;
-            }
+            }  
         }
         else
             return "Map "+mapName+" not implemented!";
@@ -243,7 +253,9 @@ public class ClientHandler implements Runnable{
         
         match.addNewPlayerToList(new Alien(id));
         
-        serverStatus.addBrokerToMatch(broker, match);
+        match.getGameLogic().setBroker(broker);
+        
+        serverStatus.addBrokerToMatch(match, broker);
         
         serverStatus.addPlayerToMatch(id, match);
     }
@@ -254,9 +266,17 @@ public class ClientHandler implements Runnable{
     }
     
     private String movePlayer(){
-
+        
         if(!serverStatus.getIdMatchMap().containsKey(id))
-            return "You are not in a game! join one first!";
+            return "You are not in a game! Join one first!";
+        
+        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+            return "Game has not started yet!";
+        }
+        
+        
+        //TODO check if it's the player's turn
+        //if()
             
         int letter;
         int number;
@@ -282,10 +302,23 @@ public class ClientHandler implements Runnable{
         
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
-                match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
-                break;
+                if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
+                    match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
+                    break;
+                }
+                else 
+                    return "You can't move there!";
             }
         }     
         return "You moved in sector "+letter+" "+number;
     }    
+    
+    private String useCard(){
+        String response = null;
+        if(!tokenizer.hasMoreTokens()){
+            return "Use sintax: use cardname. Avaible card names are Adrenaline, Attack, Sedatives, Spotlight, Teleport.";
+    
+        }
+        return response;
+    }
 }

@@ -2,9 +2,8 @@ package it.polimi.ingsw.cg_23.network;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class Broker implements Runnable{
+public class Broker{
     
     private String topic;
 
@@ -31,16 +30,4 @@ public class Broker implements Runnable{
     public void addSubscriber(BrokerThread brokerThread){
         subscribers.add(brokerThread);
     }
-
-    @Override
-    public void run() {
-        
-        Scanner in = new Scanner(System.in);
-
-        while(true){
-            String msg = in.nextLine();
-            publish(msg);
-        }        
-    }
-
 }
