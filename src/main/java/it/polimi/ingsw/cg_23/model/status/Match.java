@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.model.status;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.cards.DeckFactory;
@@ -65,12 +66,11 @@ public class Match extends Observable{
      * Description of the property turnNumber.
      */
     private int turnNumber;
-
-    private HashMap<Player, Socket> socketMap = new HashMap<Player, Socket>();
     
     private GameState matchState;
     
     private final String name;
+    
 
 
     
@@ -157,6 +157,7 @@ public class Match extends Observable{
         this.escapeHatchDeckDiscarded = escapeHatchDeckDiscarded;
     }
 
+    
     public void setSectorDeckDiscarded(Deck<Card> sectorDeckDiscarded) {
         this.sectorDeckDiscarded = sectorDeckDiscarded;
     }
@@ -198,10 +199,6 @@ public class Match extends Observable{
      */
     public void nextTurn() {
         turnNumber++;
-    }
-    
-    public void addNewPlayerToMap(Player player, Socket socket){
-        socketMap.put(player, socket);
     }
 
     public String getName() {

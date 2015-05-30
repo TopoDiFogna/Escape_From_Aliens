@@ -1,14 +1,12 @@
 package it.polimi.ingsw.cg_23.network.entrypoint;
 
+import it.polimi.ingsw.cg_23.network.ClientHandler;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import it.polimi.ingsw.cg_23.controller.GameLogic;
-import it.polimi.ingsw.cg_23.view.ClientHandler;
 
 /**
  * From here we start the server.<br>
@@ -33,11 +31,7 @@ public class Server {
     /**
      * Error to handle client connection
      */
-    private boolean error;
-    
-    
-    private HashMap<String, GameLogic> playermap = new HashMap<>();
-    
+    private boolean error;    
 
     /**
      * Constructor: spawns the server and launches it
@@ -99,29 +93,7 @@ public class Server {
         
         return running;
     }
-    
-    public HashMap<String, GameLogic> getPlayermap() {
-        return playermap;
-    }
 
-    public void addPlayerToGame(String id, GameLogic gamelogic) {
-        this.playermap.put(id, gamelogic);
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /**
      * Entry point for the server.
      * 
@@ -132,5 +104,4 @@ public class Server {
         //create the server and starts it
         new Server();
     }
-
 }

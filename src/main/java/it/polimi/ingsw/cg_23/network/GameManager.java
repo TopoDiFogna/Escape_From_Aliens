@@ -6,7 +6,6 @@ import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
-import it.polimi.ingsw.cg_23.view.ClientHandler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -200,47 +199,18 @@ public class GameManager implements Communicator, Runnable{
             if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING){
                 
                 joinGame(match, matches.get(match));
-                sockets.remove(socket);
             }
             else{
 
                 joinNewGame(mapName);
-                sockets.remove(socket);
             }
         }
     }
-
-
-    /**
-     * Sends Strings to the client
-     * 
-     * @param msg the string to sent to the client
-     */
-    @Override
-    public void send(String msg) {
-        
-        socketOut.println(msg);
-        socketOut.flush();
-    }
-
-
-    /**
-     * Receives strings from the clients and returns them
-     * 
-     * @return the line received
-     */
-    @Override
-    public String receive() {
-        
-        return socketIn.nextLine();
-    }
-
 
     /**
      * Closes the connection with a client
      * 
      */
-    @Override
     public void close() {
         try {
             socket.close();
@@ -248,7 +218,6 @@ public class GameManager implements Communicator, Runnable{
             System.err.println("ERROR: Cannot close the connection of client with socket number "+sockets.indexOf(socket));
         } finally {
             socket = null;
-            sockets.remove(socket);
         }
     }
 }

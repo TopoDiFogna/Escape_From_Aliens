@@ -1,18 +1,14 @@
 package it.polimi.ingsw.cg_23.network;
 
-import it.polimi.ingsw.cg_23.view.ClientHandler;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-
 
 public class Broker implements Runnable{
     
     private String topic;
 
-    private List<ClientHandler> subscribers;
+    private List<BrokerThread> subscribers;
     
     public Broker(String topic) {
         this.topic = topic;
@@ -22,8 +18,8 @@ public class Broker implements Runnable{
     public void publish(String msg){
         if(!subscribers.isEmpty()){
             System.out.println("Publishing message");
-            for(ClientHandler subscriber : subscribers){
-                //subscriber.dispatchMessage(msg);
+            for(BrokerThread subscriber : subscribers){
+                subscriber.dispatchMessage(msg);
             }
         }
     }
@@ -32,8 +28,8 @@ public class Broker implements Runnable{
         return topic;
     }
     
-    public void addSubscriber(ClientHandler clientHandler){
-        subscribers.add(clientHandler);
+    public void addSubscriber(BrokerThread brokerThread){
+        subscribers.add(brokerThread);
     }
 
     @Override
