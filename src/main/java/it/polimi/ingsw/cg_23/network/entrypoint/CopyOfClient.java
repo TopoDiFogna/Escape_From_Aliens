@@ -22,7 +22,7 @@ public class CopyOfClient extends Thread{
 
     @Override
     public void run() {
-        while(true){
+        //while(true){
             String msg = null;
             try {
                 msg=socketIn.readLine();
@@ -33,6 +33,6 @@ public class CopyOfClient extends Thread{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }
+        //}
     }
 }

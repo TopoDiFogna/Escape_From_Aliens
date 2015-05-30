@@ -1,6 +1,5 @@
 package it.polimi.ingsw.cg_23.network;
 
-import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
@@ -74,11 +73,13 @@ public class ClientHandler implements Runnable{
         
         id=tokenizer.nextToken();
         
-        if(checkId()){
-        
-            send(parseCommand(tokenizer.nextToken()));
-        }
-        else send("Name already in use! Enter a new name."); 
+        //if(checkId()){//TODO check this control here
+            if(tokenizer.hasMoreTokens()){
+                send(parseCommand(tokenizer.nextToken()));
+            }
+            else send("Hi "+id+"! Nothing to do here! Thanks for coming! Bye!");
+        //}
+        //else send("Name already in use! Enter a new name."); 
         
         close();
     }
@@ -86,7 +87,7 @@ public class ClientHandler implements Runnable{
     /**
      * Checks if the name is already in the list
      * 
-     * @return true if name is avaible, false otherwise
+     * @return true if name is available, false otherwise
      */
     private boolean checkId(){
         if(!serverStatus.getIdMatchMap().containsKey(id))
@@ -106,6 +107,7 @@ public class ClientHandler implements Runnable{
         switch(msg.toLowerCase()){
             default:
                 response="Command not found!";
+                break;
                 
             case "gamelist":
                 response="This maps are playable: Galilei, Galvani, Fermi";
@@ -113,9 +115,11 @@ public class ClientHandler implements Runnable{
                 
             case "join":
                 response=checkGames();
+                break;
                 
             case "move":
                 response = movePlayer();
+                break;
                 
             case "use":
                 if(!tokenizer.hasMoreTokens()){
@@ -153,7 +157,7 @@ public class ClientHandler implements Runnable{
      * Closes the connection with a client
      * 
      */
-    public void close() {
+    private void close() {
         try {
             socket.close();
         } catch (IOException e) {
@@ -165,24 +169,36 @@ public class ClientHandler implements Runnable{
     
     private String checkGames(){
         
+        if(!tokenizer.hasMoreTokens())
+            return "Join sintax: join mapname";
+        
         String mapName = tokenizer.nextToken().toLowerCase();
         
         String response = null;
         
-        if(mapName != "galilei" || mapName != "fermi" || mapName != "galvani"){
-            return "Map "+mapName+" not implemented!";
-        }
+        if(serverStatus.getIdMatchMap().containsKey(id))
+            return "You are already in a game!";
         
-        for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
-            if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING){
-                joinGame(match, serverStatus.getMatchBrokerMap().get(match));
-                response = "You were added to a game with map "+mapName;
+        if(mapName.equals("galilei") || mapName.equals("fermi") || mapName.equals("galvani")){
+            
+            for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
+                if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING){
+                    joinGame(match, serverStatus.getMatchBrokerMap().get(match));
+                    response = "You were added to a game with map "+mapName;
+                }
+                else{
+                    joinNewGame(mapName);
+                    response = "You were added to a new game with map "+mapName;
+                }
             }
-            else{
+            if(serverStatus.getMatchBrokerMap().isEmpty()){
                 joinNewGame(mapName);
                 response = "You were added to a new game with map "+mapName;
             }
         }
+        else
+            return "Map "+mapName+" not implemented!";
+        
         return response;
     }
     
@@ -239,11 +255,14 @@ public class ClientHandler implements Runnable{
     
     private String movePlayer(){
 
+        if(!serverStatus.getIdMatchMap().containsKey(id))
+            return "You are not in a game! join one first!";
+            
         int letter;
         int number;
         
         if(tokenizer.hasMoreTokens())
-            letter=Integer.parseInt(tokenizer.nextToken().toLowerCase())-Integer.parseInt("a");
+            letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
         
         else
             return moveError();
@@ -262,7 +281,7 @@ public class ClientHandler implements Runnable{
         Sector[][] sector = match.getMap().getSector();
         
         for (Player playerInList : match.getPlayers()) {
-            if(playerInList.getName()==id){
+            if(playerInList.getName().equals(id)){
                 match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
                 break;
             }

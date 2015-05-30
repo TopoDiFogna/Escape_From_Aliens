@@ -7,10 +7,8 @@ import it.polimi.ingsw.cg_23.model.cards.DeckFactory;
 import it.polimi.ingsw.cg_23.model.map.Map;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 
@@ -91,7 +89,7 @@ public class Match extends Observable{
         Collections.shuffle(sectorDeck);
         Collections.shuffle(itemDeck);
         Collections.shuffle(escapeHatchDeck);
-        setMatchState(GameState.WAITING);
+        matchState=GameState.WAITING;
         turnNumber=0;
     }
     
