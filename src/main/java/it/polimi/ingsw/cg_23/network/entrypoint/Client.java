@@ -1,4 +1,4 @@
-package it.polimi.ingsw.cg_23.entrypoint;
+package it.polimi.ingsw.cg_23.network.entrypoint;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -11,6 +11,8 @@ public class Client {
     private final int port;
     private final String ip;
     
+    private CopyOfClient receiver;
+    
     public Client() {
         System.out.println("inserisci indirizzo ip");
         Scanner stdin = new Scanner(System.in);
@@ -20,7 +22,7 @@ public class Client {
         
     }
     
-    public void startClient(){
+    public void startClient() throws IOException{
                 
         Socket socket = null;
         Scanner SocketIn = null;
@@ -53,19 +55,20 @@ public class Client {
         
         Scanner stdin = new Scanner(System.in);
         
-        /*while(true){
+        receiver= new CopyOfClient(socket);
+        
+        receiver.start();
+        
+        while(true){
             
             String inputLine = stdin.nextLine();
             
             socketOut.println(inputLine);
             socketOut.flush();
-            
-            String serverMessage = SocketIn.nextLine();
-            System.out.println(serverMessage);
-        }*/
+        }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Client client = new Client();
         client.startClient();
 
