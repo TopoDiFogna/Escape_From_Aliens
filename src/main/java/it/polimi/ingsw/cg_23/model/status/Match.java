@@ -71,7 +71,7 @@ public class Match extends Observable{
     
     private final String name;
     
-
+    private final GameLogic gameLogic;
 
     
 
@@ -83,6 +83,7 @@ public class Match extends Observable{
         
         this.name=mapName;
         this.map=new Map(mapName);
+        this.gameLogic= new GameLogic(this);
         this.players=new ArrayList<Player>();
         this.sectorDeck=DeckFactory.createDeck(0);
         this.itemDeck=DeckFactory.createDeck(1);
@@ -101,6 +102,15 @@ public class Match extends Observable{
      */
     public Map getMap() {
         return this.map;
+    }
+
+    /**
+     * Returns the game logic binded to this match.
+     * 
+     * @return the game logic binded to this match
+     */
+    public GameLogic getGameLogic() {
+        return gameLogic;
     }
 
     /**

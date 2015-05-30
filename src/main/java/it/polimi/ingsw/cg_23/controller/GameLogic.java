@@ -3,8 +3,6 @@ package it.polimi.ingsw.cg_23.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
@@ -25,7 +23,7 @@ import it.polimi.ingsw.cg_23.model.status.Match;
  * @author Paolo, Arianna
  */
 
-public class GameLogic implements Observer {
+public class GameLogic{
 
     private String choice;
 
@@ -37,13 +35,7 @@ public class GameLogic implements Observer {
     public GameLogic(Match match) {
         this.match = match;
     }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        // TODO Auto-generated method stub take player action and processes it
-
-    }
-
+    
     /**
      * Checks if the player can move in the chosen sector.
      * 

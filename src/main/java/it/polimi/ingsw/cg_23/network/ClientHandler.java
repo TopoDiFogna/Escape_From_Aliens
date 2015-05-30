@@ -1,6 +1,7 @@
 package it.polimi.ingsw.cg_23.network;
 
 import it.polimi.ingsw.cg_23.controller.GameLogic;
+import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
@@ -218,8 +219,6 @@ public class ClientHandler implements Runnable{
         
         Match match = new Match(mapName);
         
-        GameLogic gameLogic = new GameLogic(match);
-        
         Broker broker = new Broker(""+mapName+serverStatus.getBrokerNumber());
         
         BrokerThread brokerThread = new BrokerThread(socket);
@@ -238,8 +237,8 @@ public class ClientHandler implements Runnable{
         return "Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.";
     }
     
-    private String movePlayer(){//TODO call move method
-        String result=null;
+    private String movePlayer(){
+
         int letter;
         int number;
         
@@ -258,8 +257,16 @@ public class ClientHandler implements Runnable{
         if(letter<0 || letter>=23 || number <0 || number >=14)
             return moveError();
         
+        Match match = serverStatus.getIdMatchMap().get(id);
         
+        Sector[][] sector = match.getMap().getSector();
         
-        return result;
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName()==id){
+                match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
+                break;
+            }
+        }     
+        return "You moved in sector "+letter+" "+number;
     }    
 }
