@@ -26,7 +26,7 @@ public class AlienTest {
     @Test
     public void testHumanId(){
         Alien alien = new Alien("dummy");
-        assertEquals(alien.getCounter()-1, alien.getPlayerId());
+        assertEquals(Alien.getCounter()-1, alien.getPlayerId());
     }
 
     @Test
@@ -91,5 +91,11 @@ public class AlienTest {
     public void testGetCanMoveFasterFalseAsDefault() {
         Alien alien = new Alien("dummy");
         assertFalse(alien.getCanMoveFaster());
+    }
+    
+    @Test
+    public void testToString() {
+      Alien alien= new Alien("Dummy");
+       assertTrue(alien.toString().equals("Alien"));
     }
 }

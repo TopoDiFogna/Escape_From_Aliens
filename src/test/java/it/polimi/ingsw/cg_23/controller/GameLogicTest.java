@@ -281,14 +281,14 @@ public class GameLogicTest {
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		Card card1 = new AttackCard();
-		Card card2 = new AdrenalineCard();
-		Card card3 = new SedativesCard();
-		Card card4 = new DefenseCard();
+        Card card2 = new AdrenalineCard();
+        Card card3 = new DefenseCard();
+        Card card4 = new SedativesCard();
 		player.getCards().add(card1);
 		player.getCards().add(card2);
 		player.getCards().add(card3);
-		controller.choseHowUseItemCard(player, card4, "usa");
-		assertTrue(player.getCards().size()<4);
+		controller.choseHowUseItemCard(player, card4, "use");
+		assertTrue(player.getCards().size()>3);
 		assertTrue(match.getItemDeckDiscarded().contains(card4));
 	}
 	
@@ -298,14 +298,14 @@ public class GameLogicTest {
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		Card card1 = new AttackCard();
-		Card card2 = new AdrenalineCard();
-		Card card3 = new SedativesCard();
-		Card card4 = new DefenseCard();
+        Card card2 = new AdrenalineCard();
+        Card card3 = new DefenseCard();
+        Card card4 = new SedativesCard();
 		player.getCards().add(card1);
 		player.getCards().add(card2);
 		player.getCards().add(card3);
-		controller.choseHowUseItemCard(player, card4, "butta");
-		assertTrue(player.getCards().size()<4);
+		controller.choseHowUseItemCard(player, card4, "discard");
+		assertTrue(player.getCards().size()>3);
 		assertTrue(match.getItemDeckDiscarded().contains(card4));
 	}
 	
@@ -316,8 +316,8 @@ public class GameLogicTest {
 		GameLogic controller = new GameLogic(match);
 		Card card1 = new AttackCard();
 		Card card2 = new AdrenalineCard();
-		Card card3 = new SedativesCard();
-		Card card4 = new DefenseCard();
+        Card card3 = new DefenseCard();
+		Card card4 = new SedativesCard();
 		player.getCards().add(card1);
 		player.getCards().add(card2);
 		player.getCards().add(card3);
@@ -331,14 +331,14 @@ public class GameLogicTest {
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		Card card1 = new AttackCard();
-		Card card2 = new AdrenalineCard();
-		Card card3 = new SedativesCard();
-		Card card4 = new DefenseCard();
+        Card card2 = new AdrenalineCard();
+        Card card3 = new DefenseCard();
+        Card card4 = new SedativesCard();
 		player.getCards().add(card1);
 		player.getCards().add(card2);
 		player.getCards().add(card3);
-		controller.choseHowUseItemCard(player, card4, "altro");
-		assertTrue(player.getCards().size()<4);
+		controller.choseHowUseItemCard(player, card4, "other");
+		assertTrue(player.getCards().size()>3);
 		assertTrue(match.getItemDeckDiscarded().contains(card4));
 	}
 
@@ -404,6 +404,11 @@ public class GameLogicTest {
 	/*@Test
 	public void testMovePlayer(){
 		
+	}
+	
+	@Test
+	public void testMoveAction(){
+	
 	}
 	
 	@Test

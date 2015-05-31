@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
-import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
+import it.polimi.ingsw.cg_23.model.players.Player;
 
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class HumanTest {
     @Test
     public void testHumanId(){
         Human human = new Human("dummy");
-        assertEquals(human.getCounter()-1, human.getPlayerId());
+        assertEquals(Human.getCounter()-1, human.getPlayerId());
     }
 
     @Test
@@ -120,4 +120,18 @@ public class HumanTest {
         human.setCanMoveFaster(false);
         assertFalse(human.getCanMoveFaster());
     }
+    
+    @Test
+    public void testToString() {
+       Human human= new Human("Dummy");
+       assertTrue(human.toString().equals("Human"));
+    }
+    
+    @Test
+    public void testHasMoved() {
+       Player player= new Human("Dummy");
+       player.setHasMoved(true);
+       assertTrue(player.hasMoved());
+    }
+
 }

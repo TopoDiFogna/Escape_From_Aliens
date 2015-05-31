@@ -1,7 +1,6 @@
 package it.polimi.ingsw.cg_23.network;
 
 import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
-import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
 import it.polimi.ingsw.cg_23.model.cards.SpotlightCard;
@@ -127,12 +126,12 @@ public class ClientHandler implements Runnable{
             case "move":
                 response = movePlayer();
                 break;
+               
+            case "moveattack":
+                response = moveAndAttack();
+                break;
                 
             case "use":
-                if(!tokenizer.hasMoreTokens()){
-                    response="Use sintax: use cardname. Avaible card names are Adrenaline, Attack, Sedatives, Spotlight, Teleport.";
-                    
-                }
                 response = useCard();
                 break;
                 
@@ -140,7 +139,7 @@ public class ClientHandler implements Runnable{
                 if(!tokenizer.hasMoreTokens()){
                     response="Use sintax: use cardname. Avaible card names are Adrenaline, Attack, Sedatives, Spotlight, Teleport.";
                     break;
-                }
+                }                
                 
             default:
                 response="Command not found!";
@@ -315,6 +314,53 @@ public class ClientHandler implements Runnable{
         return "You moved in sector "+letter+" "+number;
     }    
     
+    private String moveAndAttack(){
+        if(checkIdIfPresent())
+            return "You are not in a game! Join one first!";
+        
+        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+            return "Game has not started yet!";
+        }
+        
+        
+        //TODO check if it's the player's turn
+        //if()
+            
+        int letter;
+        int number;
+        
+        if(tokenizer.hasMoreTokens())
+            letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
+        
+        else
+            return moveError();
+        
+        if(tokenizer.hasMoreTokens())
+            number=Integer.parseInt(tokenizer.nextToken())-1;
+
+        else
+            return moveError();
+        
+        if(letter<0 || letter>=23 || number <0 || number >=14)
+            return moveError();
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        Sector[][] sector = match.getMap().getSector();
+        
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName().equals(id)){
+                if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
+                    match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
+                    break;
+                }
+                else 
+                    return "You can't move there!";
+            }
+        }     
+        return "You moved in sector "+letter+" "+number;
+    }
+    
     private String useCard(){
         String response = null;
         
@@ -348,19 +394,7 @@ public class ClientHandler implements Runnable{
             }
             response="You used the Adrenaline card!";
             break;
-
-        case "attack":
-            for (Player playerInList : match.getPlayers()) {
-                if(playerInList.getName().equals(id)){
-                    Card card = new AttackCard();
-                    if(match.getGameLogic().hasCard(playerInList, card) && match.getGameLogic().canAttack(playerInList)){
-                        match.getGameLogic().useItemCard(playerInList, card);
-                    }
-                }
-            }
-            response="You used the Attack card!";
-            break;
-            
+       
         case "sedatives":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
@@ -374,6 +408,24 @@ public class ClientHandler implements Runnable{
             break;
             
         case "spotlight":
+            int letter;
+            int number;
+            
+            if(tokenizer.hasMoreTokens())
+                letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
+            
+            else
+                return "Spotlight syntax: use spotlight letter number";
+            
+            if(tokenizer.hasMoreTokens())
+                number=Integer.parseInt(tokenizer.nextToken())-1;
+
+            else
+                return "Spotlight syntax: use spotlight letter number";
+            
+            if(letter<0 || letter>=23 || number <0 || number >=14)
+                return "Spotlight syntax: use spotlight letter number";
+            
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
                     Card card = new SpotlightCard();

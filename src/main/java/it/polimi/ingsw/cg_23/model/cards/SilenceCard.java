@@ -34,7 +34,7 @@ public class SilenceCard extends Card {
      */
     @Override
     public void doAction(Player player, GameLogic controller) {
-        controller.useSilence(player);
+        controller.useSilence();
     }
 
 }

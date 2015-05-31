@@ -163,7 +163,7 @@ public abstract class Player {
         return name;
     }
 
-    public boolean HasMoved() {
+    public boolean hasMoved() {
         return hasMoved;
     }
 

@@ -176,7 +176,7 @@ public class GameLogic{
      * This method is auto-called when player pick-up this card. <br>
      * The action simply notify the view to tells other players "silence".
      */
-    public void useSilence(Player player) {
+    public void useSilence() {
         broker.publish("Silence!");
     }
 
@@ -184,11 +184,44 @@ public class GameLogic{
      * This method asks view to ask human player the sector. <br>
      * After that the controller check if in the selected sector and in the nearby there are someone. <br>
      * If this sector aren't empty the model notify the view that communicate the position of this players.
+     * 
+     * @param letter letter of sector chosen by player 
+     * @param number number of sector chosen by player 
      */
-    public void useSpotlight(Player player) {
+    public void useSpotlight(int letter, int number) {
+        Sector[][] sector = match.getMap().getSector();
+        char letterAsChar = (char) (letter+97);
+        
+        for (Player players : sector[letter][number].getPlayer()) {
+            String name = players.getName();
+            String type = players.toString();
+            broker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
+        }
+        
+        for (Sector sectors : sector[letter][number].getNeighbors()) {
+            
+            char neighborLetter=(char) (sectors.getLetter()+97);
+            int neighborNumber=sectors.getNumber();
+
+            for (Player players : sectors.getPlayer()) {
+                String name = players.getName();
+                String type = players.toString();
+                broker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
+            }
+        }
+    }
+    
+    /**
+     * This method asks view to ask human player the sector. <br>
+     * After that the controller check if in the selected sector and in the nearby there are someone. <br>
+     * If this sector aren't empty the model notify the view that communicate the position of this players.
+     * 
+     * @deprecated useSgnergn
+     */
+    @Deprecated
+    public void useSpotlight() {
         int letter = 0;
         int number = 0;
-        // TODO chiedere al giocatore che settore vuole vedere
         Sector[][] sector = match.getMap().getSector();
         char letterAsChar = (char) (letter+97);
         
@@ -279,8 +312,8 @@ public class GameLogic{
     public void discardItemCard(Player player, Card card) {
         for (Card playerCard : player.getCards()) {
             if(playerCard.getClass()==card.getClass())
-                player.getCards().remove(playerCard);
-                match.getItemDeckDiscarded().add(playerCard);
+                player.getCards().remove(card);
+                match.getItemDeckDiscarded().add(card);
                 break;
         }
     }
@@ -416,6 +449,8 @@ public class GameLogic{
 
                 // TODO chiedere alla view di chiedere al giocatore cosa vuole fare e quale carta vuole usare o buttare
                 // quindi c'è da aggiungere la scelta della carta tra quelle che ha in mano con un for o cacchio ne so!
+                //TODO una volta chiesta la carta al giocatore, mettere quella nei casi di switch al posto di quella 
+                //che abbiungo alla sua mano
                 switch (choice) {
                 case "use":
                     useItemCard(player, itemCard);
@@ -440,7 +475,7 @@ public class GameLogic{
         if (!player.isAlive()) {
             match.getPlayers().remove(player);
         }
-        // TODO notifica la view e dice al player che è morto D:
+        broker.publish("Player "+player.getName()+" has died!");
     }
 
     /**
@@ -456,8 +491,7 @@ public class GameLogic{
         broker.publish("Player "+player.getName()+" has escaped!");
     }
 
-    // TODO javadoc and implementation. anche scelta se vuole usare carta
-    // attacco o pescare carta settore
+    // TODO javadoc
     public void movePlayer(Player player, Sector sector) {
         if (player instanceof Human && ((Human) player).isSedatives()) {
             moveActions(player, sector);
@@ -474,16 +508,17 @@ public class GameLogic{
         }
     }
     
+    //TODO javadoc
+    public void movePlayerAndAttack(Player player, Sector sector){
+        moveActions(player, sector);
+        useAttack(player);
+    }
+    
+    //TODO javadoc
     private void moveActions(Player player, Sector sector){
         player.getCurrentSector().getPlayer().remove(player);
         player.setCurrentSector(sector);
         sector.getPlayer().add(player);
-    }
-
-    public boolean canAttack(Player player) {
-        // TODO anche attack per alieno o da sistemare il nostro useAttack per
-        // renderlo generico e fare qua i controlli se umano o alieno
-        return false;
     }
 
 }
