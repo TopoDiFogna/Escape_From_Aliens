@@ -349,6 +349,8 @@ public class GameLogicTest {
 		Match match = new Match("galilei");
 		Sector[][] map = match.getMap().getSector();
 		GameLogic controller = new GameLogic(match);
+		Broker broker = new Broker("broker");
+        controller.setBroker(broker);
 		player.setCurrentSector(map[1][1]);
 		match.addNewPlayerToList(player);
 		player.setDead();
@@ -364,6 +366,8 @@ public class GameLogicTest {
 		Match match = new Match("galilei");
 		Sector[][] map = match.getMap().getSector();
 		GameLogic controller = new GameLogic(match);
+		Broker broker = new Broker("broker");
+        controller.setBroker(broker);
 		player.setCurrentSector(map[1][1]);
 		match.addNewPlayerToList(player);
 		controller.removeAfterDying(player);
