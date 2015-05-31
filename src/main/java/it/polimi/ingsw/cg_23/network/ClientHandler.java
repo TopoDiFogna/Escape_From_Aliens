@@ -315,7 +315,7 @@ public class ClientHandler implements Runnable{
         return "You moved in sector "+letter+" "+number;
     }    
     
-    private String useCard(){//TODO finish this
+    private String useCard(){
         String response = null;
         
         if(checkIdIfPresent())
@@ -346,6 +346,7 @@ public class ClientHandler implements Runnable{
                     }
                 }
             }
+            response="You used the Adrenaline card!";
             break;
 
         case "attack":
@@ -357,6 +358,7 @@ public class ClientHandler implements Runnable{
                     }
                 }
             }
+            response="You used the Attack card!";
             break;
             
         case "sedatives":
@@ -368,6 +370,7 @@ public class ClientHandler implements Runnable{
                     }
                 }
             }
+            response="You used the Sedatives card!";
             break;
             
         case "spotlight":
@@ -379,6 +382,7 @@ public class ClientHandler implements Runnable{
                     }
                 }
             }
+            response="You used the Spotlight card!";
             break;
             
         case "teleport":
@@ -390,6 +394,7 @@ public class ClientHandler implements Runnable{
                     }
                 }
             }
+            response="You used the Teleport card!";
             break;
 
         default:
