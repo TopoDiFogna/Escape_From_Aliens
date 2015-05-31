@@ -18,7 +18,7 @@ import java.util.Observable;
  * @author Paolo
  */
 public class Match extends Observable{
-       
+     
     /**
      * Description of the property map.
      */
@@ -71,6 +71,7 @@ public class Match extends Observable{
     
     private final GameLogic gameLogic;
 
+    private Player currentPlayer;
     
 
     /**
@@ -219,5 +220,13 @@ public class Match extends Observable{
 
     public void setMatchState(GameState matchState) {
         this.matchState = matchState;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 }

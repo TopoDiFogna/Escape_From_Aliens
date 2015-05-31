@@ -17,6 +17,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * This class receive commands from the client and executes them.
@@ -107,7 +109,6 @@ public class ClientHandler implements Runnable{
     private String parseCommand(String msg){//TODO finish this
         
         String response = null;
-        Match match = serverStatus.getIdMatchMap().get(id);
         if(msg == null){
             response="Command not found!";
             return response;
@@ -144,7 +145,7 @@ public class ClientHandler implements Runnable{
                 break;
                      
             case "endturn":
-                
+                response = endTurn();
                 break;
                 
             default:
@@ -160,6 +161,7 @@ public class ClientHandler implements Runnable{
     }
     
     
+
 
     /**
      * Sends Strings to the client
@@ -267,6 +269,20 @@ public class ClientHandler implements Runnable{
         serverStatus.addBrokerToMatch(match, broker);
         
         serverStatus.addPlayerToMatch(id, match);
+        
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask(){
+
+            @Override
+            public void run() {
+                Match match = serverStatus.getIdMatchMap().get(id);
+                if(match.getPlayers().size() > 1){
+                    match.getGameLogic().startGame();
+                }
+                
+            }
+            
+        }, 20000);
     }
     
     
@@ -625,5 +641,12 @@ public class ClientHandler implements Runnable{
             break;
         }
         return response;
+    }
+    
+
+    private String endTurn() {
+        Match match = serverStatus.getIdMatchMap().get(id);
+        match.getGameLogic().endTurn();
+        return "Your turn has ended";
     }
 }

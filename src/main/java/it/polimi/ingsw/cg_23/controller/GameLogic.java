@@ -15,6 +15,7 @@ import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
+import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
 import it.polimi.ingsw.cg_23.network.Broker;
 
@@ -26,6 +27,8 @@ import it.polimi.ingsw.cg_23.network.Broker;
 
 public class GameLogic{
 
+    private int numberOfPlayer;
+    
     private String choice;
 
     private Match match;
@@ -540,6 +543,37 @@ public class GameLogic{
         char noiseLetter = (char) (letter+97);
         broker.publish("Noise in sector "+noiseLetter+" "+number);
         
+    }
+    
+    public void startGame(){
+        Collections.shuffle(match.getPlayers());
+        
+        for (Player player : match.getPlayers()) {
+            if(player instanceof Alien){
+                player.setCurrentSector(match.getMap().getAlienSector());
+            } else {
+                player.setCurrentSector(match.getMap().getHumanSector());
+            }
+        }        
+        match.setCurrentPlayer(match.getPlayers().get(0));
+        match.setMatchState(GameState.RUNNING);
+        broker.publish("Game started. The first player is: "+match.getCurrentPlayer().getName());
+    }
+    
+    public void endTurn(){
+        int currentPlayerIndex = 0;
+        for (Player player : match.getPlayers()) {
+            if(match.getCurrentPlayer().getName().equals(player.getName())){
+                currentPlayerIndex = match.getPlayers().indexOf(player);
+                break;
+            }
+        }
+        if(match.getPlayers().size() < currentPlayerIndex+1){
+            match.setCurrentPlayer(match.getPlayers().get(currentPlayerIndex+1));
+        } else {
+            match.setCurrentPlayer(match.getPlayers().get(0));
+        }
+        broker.publish("Next player is: "+match.getCurrentPlayer().getName());
     }
 
 }
