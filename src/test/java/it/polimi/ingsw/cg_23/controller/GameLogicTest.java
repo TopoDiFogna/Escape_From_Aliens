@@ -20,6 +20,7 @@ import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.Broker;
 
 import org.junit.Test;
 
@@ -87,6 +88,8 @@ public class GameLogicTest {
 	    Match match = new Match("galilei");
 	    match.getPlayers().add(player);
 	    GameLogic controller = new GameLogic(match);
+	    Broker broker = new Broker("broker");
+        controller.setBroker(broker);
 	    Card card = new GreenCard();
 	    Deck<Card> deckEscapeHatch = DeckFactory.createDeck(2);
 	    deckEscapeHatch.add(card);
@@ -103,6 +106,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         match.getPlayers().add(player);
         GameLogic controller = new GameLogic(match);
+        Broker broker = new Broker("broker");
+        controller.setBroker(broker);
         Card card = new RedCard();
         Deck<Card> deckEscapeHatch = DeckFactory.createDeck(2);
         deckEscapeHatch.add(card);
@@ -156,7 +161,10 @@ public class GameLogicTest {
 		Player player = new Human("Dummy");
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
+		Broker broker = new Broker("broker");
+        controller.setBroker(broker);
 		Card card = new NoiseInYourSectorCard(true);
+		player.setCurrentSector(match.getMap().getSector()[0][0]);
 		match.getSectorDeck().add(0, card);
 		controller.drawSectorCard(player);
 		assertFalse(match.getSectorDeck().contains(card));
@@ -167,7 +175,10 @@ public class GameLogicTest {
 		Player player = new Human("Dummy");
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
+		Broker broker = new Broker("broker");
+        controller.setBroker(broker);
 		Card card = new NoiseInYourSectorCard(false);
+		player.setCurrentSector(match.getMap().getSector()[0][0]);
 		match.getSectorDeck().add(0, card);
 		controller.drawSectorCard(player);
 		assertFalse(match.getSectorDeck().contains(card));
@@ -364,6 +375,8 @@ public class GameLogicTest {
 		Match match = new Match("galilei");
 		Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
 		GameLogic controller = new GameLogic(match);
+		Broker broker = new Broker("broker");
+		controller.setBroker(broker);
 		player.setCurrentSector(sector);
 		match.addNewPlayerToList(player);
 		player.getCurrentSector().setEscapeHatchSectorNotCrossable();
@@ -379,6 +392,8 @@ public class GameLogicTest {
 		Match match = new Match("galilei");
 		Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
 		GameLogic controller = new GameLogic(match);
+		Broker broker = new Broker("broker");
+        controller.setBroker(broker);
 		player.setCurrentSector(sector);
 		match.addNewPlayerToList(player);
 		controller.removeAfterWinning(player);
