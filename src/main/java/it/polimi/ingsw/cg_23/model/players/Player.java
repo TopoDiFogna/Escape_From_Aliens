@@ -15,6 +15,16 @@ import java.util.List;
 
 public abstract class Player {
     /**
+     * It's true if player has fours cards in his hand, false if not.
+     */
+    protected boolean hasFourCard = false;
+   
+    /**
+     * 
+     */
+    protected boolean needSectorNoise = false;
+
+    /**
      * Description of the property hasMoved.
      * maybe not necessary, no purpose
      */
@@ -170,6 +180,24 @@ public abstract class Player {
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
     }
+    
+    
+    public boolean hasFourCard() {
+        return hasFourCard;
+    }
+
+    public void setHasFourCard(boolean hasFourCard) {
+        this.hasFourCard = hasFourCard;
+    }
+
+    public boolean needSectorNoise() {
+        return needSectorNoise;
+    }
+
+    public void setNeedSectorNoise(boolean needSectorNoise) {
+        this.needSectorNoise = needSectorNoise;
+    }
+    
     
      
 }

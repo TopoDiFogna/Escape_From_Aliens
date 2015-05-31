@@ -107,7 +107,7 @@ public class ClientHandler implements Runnable{
     private String parseCommand(String msg){//TODO finish this
         
         String response = null;
-        
+        Match match = serverStatus.getIdMatchMap().get(id);
         if(msg == null){
             response="Command not found!";
             return response;
@@ -136,10 +136,16 @@ public class ClientHandler implements Runnable{
                 break;
                 
             case "noise":
-                if(!tokenizer.hasMoreTokens()){
-                    response="Use sintax: use cardname. Avaible card names are Adrenaline, Attack, Sedatives, Spotlight, Teleport.";
-                    break;
-                }                
+                response = makeNoise();
+                break;
+                
+            case "discard":
+                response = discardCard();
+                break;
+                     
+            case "endturn":
+                
+                break;
                 
             default:
                 response="Command not found!";
@@ -153,6 +159,8 @@ public class ClientHandler implements Runnable{
         return response;
     }
     
+    
+
     /**
      * Sends Strings to the client
      * 
@@ -301,17 +309,27 @@ public class ClientHandler implements Runnable{
         
         Sector[][] sector = match.getMap().getSector();
         
+        String response = null;
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
-                if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
-                    match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
-                    break;
+                if(!(playerInList.needSectorNoise() || playerInList.hasFourCard())){
+                    if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
+                        response = match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
+                        break;
+                    }
+                    else 
+                        return "You can't move there!";
+                } else {
+                    if(playerInList.needSectorNoise())
+                        response = "You need to specify a sector where make a noise";
+                    if(playerInList.hasFourCard())
+                        response = "You need to specify what you want to di with the card in excess";
                 }
-                else 
-                    return "You can't move there!";
             }
-        }     
-        return "You moved in sector "+letter+" "+number;
+        } 
+        response = "" +response+ "You moved in sector "+letter+" "+number;
+        return response;
+        
     }    
     
     private String moveAndAttack(){
@@ -348,17 +366,26 @@ public class ClientHandler implements Runnable{
         
         Sector[][] sector = match.getMap().getSector();
         
+        String response = null;
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
-                if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
-                    match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
-                    break;
+                if(!(playerInList.needSectorNoise() || playerInList.hasFourCard())){
+                    if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
+                        match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
+                        response = "You moved in sector "+letter+" "+number;
+                        break;
+                    }
+                    else 
+                        return "You can't move there!";
+                } else {
+                    if(playerInList.needSectorNoise())
+                        response = "You need to specify a sector where make a noise";
+                    if(playerInList.hasFourCard())
+                        response = response + "You need to specify what you want to di with the card in excess";
                 }
-                else 
-                    return "You can't move there!";
             }
-        }     
-        return "You moved in sector "+letter+" "+number;
+        } 
+        return response;
     }
     
     private String useCard(){
@@ -378,6 +405,8 @@ public class ClientHandler implements Runnable{
                 if(!(playerList instanceof Human)){
                     return "You are an alien! You can't use Item Cards!";
                 }
+                if(playerList.needSectorNoise())
+                    return "You need to specify a sector where make a noise";
             }
         }
         
@@ -395,6 +424,14 @@ public class ClientHandler implements Runnable{
             response="You used the Adrenaline card!";
             break;
        
+        case "attack":            
+            response="You can not the Attack card!";
+            break;
+        
+        case "defense":
+            response="You can not the Defense card!";
+            break;
+            
         case "sedatives":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
@@ -430,7 +467,7 @@ public class ClientHandler implements Runnable{
                 if(playerInList.getName().equals(id)){
                     Card card = new SpotlightCard();
                     if(match.getGameLogic().hasCard(playerInList, card)) {
-                        match.getGameLogic().useItemCard(playerInList, card);
+                        match.getGameLogic().useSpotlight(letter, number);
                     }
                 }
             }
@@ -454,6 +491,139 @@ public class ClientHandler implements Runnable{
             break;
         }
         
+        return response;
+    }
+    
+    private String makeNoise(){
+        int letter;
+        int number;
+       
+        Match match = serverStatus.getIdMatchMap().get(id);
+        if(tokenizer.hasMoreTokens())
+            letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
+        
+        else
+            return "Noise syntax: noise letter number";
+        
+        if(tokenizer.hasMoreTokens())
+            number=Integer.parseInt(tokenizer.nextToken())-1;
+
+        else
+            return "Noise syntax: noise letter number";
+        
+        if(letter<0 || letter>=23 || number <0 || number >=14)
+            return "Noise syntax: noise letter number";
+        
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName().equals(id))
+                if(playerInList.needSectorNoise()){
+                    match.getGameLogic().makeANoise(letter, number);
+                    playerInList.setNeedSectorNoise(false);
+                } else
+                    return "No need to make a noise";
+        }
+        
+        return "Noise done";
+    }
+    
+    private String discardCard() {
+        String response = null;
+        
+        if(checkIdIfPresent())
+            return "You are not in a game! Join one first!";
+        
+        if(!tokenizer.hasMoreTokens()){
+            return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+        }
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        switch (tokenizer.nextToken().toLowerCase()) {
+        
+        case "adrenaline":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AdrenalineCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().discardItemCard(playerInList, card);
+                    }
+                }
+            }
+            response="You discarded the Adrenaline card!";
+            break;
+            
+        case "attack":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AdrenalineCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().discardItemCard(playerInList, card);
+                    }
+                }
+            }
+            response="You discarded the Attack card!";
+            break;
+        
+        case "defense":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AdrenalineCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().discardItemCard(playerInList, card);
+                    }
+                }
+            }
+            response="You discarded the Defense card!";
+            break;
+            
+        case "sedatives":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AdrenalineCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().discardItemCard(playerInList, card);
+                    }
+                }
+            }
+            response="You discarded the Sedatives card!";
+            break;
+            
+        case "silence":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AdrenalineCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().discardItemCard(playerInList, card);
+                    }
+                }
+            }
+            response="You discarded the Silence card!";
+            break;
+        
+        case "spotlight":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AdrenalineCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().discardItemCard(playerInList, card);
+                    }
+                }
+            }
+            response="You discarded the Spotlight card!";
+            break;
+            
+        case "teleport":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AdrenalineCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().discardItemCard(playerInList, card);
+                    }
+                }
+            }
+            response="You discarded the Teleport card!";
+            break;
+        }
         return response;
     }
 }

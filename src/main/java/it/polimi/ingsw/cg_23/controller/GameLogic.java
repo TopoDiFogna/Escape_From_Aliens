@@ -314,6 +314,7 @@ public class GameLogic{
             if(playerCard.getClass()==card.getClass())
                 player.getCards().remove(card);
                 match.getItemDeckDiscarded().add(card);
+                player.setHasFourCard(false);
                 break;
         }
     }
@@ -344,7 +345,7 @@ public class GameLogic{
      * 
      * @param player
      */
-    public void drawSectorCard(Player player) {
+    public String drawSectorCard(Player player) {
         // Check if the sector deck is empty, and if yes calls the shuffle
         // method for shuffle discard deck
         // and replacing the empty deck with the shuffled one.
@@ -358,22 +359,35 @@ public class GameLogic{
             NoiseInAnySectorCard newSectorCard = (NoiseInAnySectorCard) sectorCard;
             if (newSectorCard.hasItem()) {
                 Card itemCard = drawItemCard();
-                if (itemCard != null)
-                    choseHowUseItemCard(player, itemCard, choice);
+                if (itemCard != null){
+                    player.getCards().add(itemCard);
+                    if(player.getCards().size()>3){
+                        player.setHasFourCard(true);
+                    }
+                }    
             }
         } else if (sectorCard instanceof NoiseInYourSectorCard) {
             NoiseInYourSectorCard newSectorCard = (NoiseInYourSectorCard) sectorCard;
             if (newSectorCard.hasItem()) {
                 Card itemCard = drawItemCard();
-                if (itemCard != null)
-                    choseHowUseItemCard(player, itemCard, choice);
+                if (itemCard != null){
+                    player.getCards().add(itemCard);
+                    if(player.getCards().size()>3){
+                        player.setHasFourCard(true);
+                    }
+                }
             }
         }
         useOtherCard(player, sectorCard);
+        if(sectorCard instanceof NoiseInAnySectorCard){
+            player.setNeedSectorNoise(true);
+            return "In which sector do you want a noise?";
+        }
+        return null;
     }
 
     /**
-     * This method shuffles cards sector discarded, and replace the old dec with the new one.
+     * This method shuffles cards sector discarded, and replace the old deck with the new one.
      */
     public void shuffleSectorDeck() {
         Collections.shuffle(match.getSectorDeckDiscarded());
@@ -447,10 +461,7 @@ public class GameLogic{
         if (player.getCards().size() > 3) {
             if (choice != null) {
 
-                // TODO chiedere alla view di chiedere al giocatore cosa vuole fare e quale carta vuole usare o buttare
-                // quindi c'è da aggiungere la scelta della carta tra quelle che ha in mano con un for o cacchio ne so!
-                //TODO una volta chiesta la carta al giocatore, mettere quella nei casi di switch al posto di quella 
-                //che abbiungo alla sua mano
+                
                 switch (choice) {
                 case "use":
                     useItemCard(player, itemCard);
@@ -492,12 +503,13 @@ public class GameLogic{
     }
 
     // TODO javadoc
-    public void movePlayer(Player player, Sector sector) {
+    public String movePlayer(Player player, Sector sector) {
+        String response = null; 
         if (player instanceof Human && ((Human) player).isSedatives()) {
             moveActions(player, sector);
         } else if (sector.getType() == SectorTypeEnum.DANGEROUS) {
             moveActions(player, sector);
-            drawSectorCard(player);
+            response = drawSectorCard(player);
         } else if (player instanceof Human && sector.getType() == SectorTypeEnum.ESCAPEHATCH) {
             if (sector.isCrossable()) {
                 moveActions(player, sector);
@@ -506,12 +518,15 @@ public class GameLogic{
                 moveActions(player, sector);
             }
         }
+        player.setHasMoved(true);
+        return response;
     }
     
     //TODO javadoc
     public void movePlayerAndAttack(Player player, Sector sector){
         moveActions(player, sector);
         useAttack(player);
+        player.setHasMoved(true);
     }
     
     //TODO javadoc
@@ -519,6 +534,12 @@ public class GameLogic{
         player.getCurrentSector().getPlayer().remove(player);
         player.setCurrentSector(sector);
         sector.getPlayer().add(player);
+    }
+
+    public void makeANoise(int letter, int number) {
+        char noiseLetter = (char) (letter+97);
+        broker.publish("Noise in sector "+noiseLetter+" "+number);
+        
     }
 
 }
