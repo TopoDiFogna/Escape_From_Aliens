@@ -80,13 +80,10 @@ public class ClientHandler implements Runnable{
         
         id=tokenizer.nextToken();
         
-        //if(checkId()){//TODO check this control here
-            if(tokenizer.hasMoreTokens()){
-                send(parseCommand(tokenizer.nextToken()));
-            }
-            else send("Hi "+id+"! Nothing to do here! Thanks for coming! Bye!");
-        //}
-        //else send("Name already in use! Enter a new name."); 
+        if(tokenizer.hasMoreTokens()){
+            send(parseCommand(tokenizer.nextToken()));
+        }
+        else send("Hi "+id+"! Nothing to do here! Thanks for coming! Bye!");
         
         close();
     }
@@ -185,15 +182,10 @@ public class ClientHandler implements Runnable{
         
         String response = null;
         
-        if(serverStatus.getIdMatchMap().containsKey(id))
+        if(!checkId())
             return "You are already in a game!";
         
         if(mapName.equals("galilei") || mapName.equals("fermi") || mapName.equals("galvani")){
-            
-            if(serverStatus.getMatchBrokerMap().isEmpty()){
-                joinNewGame(mapName);
-                response = "You were added to a new game with map "+mapName;
-            }
             
             for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
                 if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING && match.getPlayers().size()<8){
@@ -204,7 +196,12 @@ public class ClientHandler implements Runnable{
                     joinNewGame(mapName);
                     response = "You were added to a new game with map "+mapName;
                 }
-            }  
+            }
+            
+            if(serverStatus.getMatchBrokerMap().isEmpty()){
+                joinNewGame(mapName);
+                response = "You were added to a new game with map "+mapName;
+            }
         }
         else
             return "Map "+mapName+" not implemented!";

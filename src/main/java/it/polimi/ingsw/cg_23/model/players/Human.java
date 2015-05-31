@@ -59,4 +59,9 @@ public class Human extends Player {
     public void setSedatives(boolean sedatives) {
         this.sedatives = sedatives;
     }
+
+    @Override
+    public String toString() {
+        return "Human";
+    }
 }

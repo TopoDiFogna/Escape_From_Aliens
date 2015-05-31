@@ -30,7 +30,6 @@ public class GameLogic{
 
     private Match match;
     
-    @SuppressWarnings("unused")
     private Broker broker;
 
     /**
@@ -150,8 +149,9 @@ public class GameLogic{
      * It get the current sector and check if the card has the item.
      */
     public void useNoiseInYourSector(Player player) {
-        player.getCurrentSector();
-        // TODO notifica view col settore
+        char letter=(char) (player.getCurrentSector().getLetter()+97);
+        int number=player.getCurrentSector().getNumber();
+        broker.publish("Noise in sector "+letter+number);
 
     }
 
@@ -160,8 +160,9 @@ public class GameLogic{
      */
     public void useRed(Player player) {
         player.getCurrentSector().setEscapeHatchSectorNotCrossable();
-        // TODO bisogna notificare al player che si deve cercare una nuova
-        // scialuppa
+        char letter=(char) (player.getCurrentSector().getLetter()+97);
+        int number=player.getCurrentSector().getNumber();
+        broker.publish("The Escape Hatch "+letter+" "+number+" is broken!");
     }
 
     /**
@@ -176,7 +177,7 @@ public class GameLogic{
      * The action simply notify the view to tells other players "silence".
      */
     public void useSilence(Player player) {
-        // TODO notifica la view che ha pescato la carta silenzio
+        broker.publish("Silence!");
     }
 
     /**
@@ -185,17 +186,28 @@ public class GameLogic{
      * If this sector aren't empty the model notify the view that communicate the position of this players.
      */
     public void useSpotlight(Player player) {
-        int lettera = 0;
-        int numero = 0;
+        int letter = 0;
+        int number = 0;
         // TODO chiedere al giocatore che settore vuole vedere
         Sector[][] sector = match.getMap().getSector();
-        sector[lettera][numero].getPlayer();
-        // TODO notifica messaggio
-        for (Sector sectors : sector[lettera][numero].getNeighbors()) {
-            sectors.getLetter();
-            sectors.getNumber();
-            sectors.getPlayer();
-            // TODO messaggio socket per dire chi è dove
+        char letterAsChar = (char) (letter+97);
+        
+        for (Player players : sector[letter][number].getPlayer()) {
+            String name = players.getName();
+            String type = players.toString();
+            broker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
+        }
+        
+        for (Sector sectors : sector[letter][number].getNeighbors()) {
+            
+            char neighborLetter=(char) (sectors.getLetter()+97);
+            int neighborNumber=sectors.getNumber();
+
+            for (Player players : sectors.getPlayer()) {
+                String name = players.getName();
+                String type = players.toString();
+                broker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
+            }
         }
     }
 
@@ -403,10 +415,10 @@ public class GameLogic{
                 // TODO chiedere alla view di chiedere al giocatore cosa vuole fare e quale carta vuole usare o buttare
                 // quindi c'è da aggiungere la scelta della carta tra quelle che ha in mano con un for o cacchio ne so!
                 switch (choice) {
-                case "usa":
+                case "use":
                     useItemCard(player, itemCard);
                     break;
-                case "butta":
+                case "discard":
                     discardItemCard(player, itemCard);
                     break;
                 default:
@@ -439,7 +451,7 @@ public class GameLogic{
             player.getCurrentSector().getPlayer().remove(player);
             match.getPlayers().remove(player);
         }
-        // TODO notifica la view e dice al player che ha vinto \o/
+        broker.publish("Player "+player.getName()+" has escaped!");
     }
 
     // TODO javadoc and implementation. anche scelta se vuole usare carta

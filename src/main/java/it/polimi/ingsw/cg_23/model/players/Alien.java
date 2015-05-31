@@ -37,4 +37,9 @@ public class Alien extends Player {
         this.hasKilled = true;
     }
 
+    @Override
+    public String toString() {
+        return "Alien";
+    }
+
 }
