@@ -23,7 +23,7 @@ public abstract class Player {
     /**
      *  Tells if the player can move 1 sector faster,
      *  in case of human it becomes true for the turn when the players uses the card adrenaline,
-     *  in case of alien become definetly true after the player has killed a human  
+     *  in case of alien become definitely true after the player has killed a human  
      */
     protected boolean canMoveFaster = false;
     
@@ -161,6 +161,14 @@ public abstract class Player {
      */
     public String getName() {
         return name;
+    }
+
+    public boolean HasMoved() {
+        return hasMoved;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
     }
     
      

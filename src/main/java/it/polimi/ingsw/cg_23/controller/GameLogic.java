@@ -3,8 +3,6 @@ package it.polimi.ingsw.cg_23.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
@@ -18,6 +16,7 @@ import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.Broker;
 
 /**
  * Description of GameLogic.
@@ -25,11 +24,13 @@ import it.polimi.ingsw.cg_23.model.status.Match;
  * @author Paolo, Arianna
  */
 
-public class GameLogic implements Observer {
+public class GameLogic{
 
     private String choice;
 
     private Match match;
+    
+    private Broker broker;
 
     /**
      * The constructor.
@@ -38,19 +39,21 @@ public class GameLogic implements Observer {
         this.match = match;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        // TODO Auto-generated method stub take player action and processes it
-
+    /**
+     * Allows to set the broker before starting the game.
+     * Done as this to not rewrite tons of code.
+     * 
+     * @param broker the broker to be added
+     */
+    public void setBroker(Broker broker) {
+        this.broker = broker;
     }
 
     /**
      * Checks if the player can move in the chosen sector.
      * 
-     * @param player
-     *            who wants to move
-     * @param destination
-     *            where the player wants to move
+     * @param player who wants to move
+     * @param destination where the player wants to move
      * @return true if the player can move to the chosen sector, false otherwise
      */
     public boolean validMove(Player player, Sector destination) {
@@ -101,13 +104,11 @@ public class GameLogic implements Observer {
      * @param playerWhoAttack
      */
     public void useAttack(Player playerWhoAttack) {
-        ArrayList<Player> playerList = (ArrayList<Player>) playerWhoAttack
-                .getCurrentSector().getPlayer();
+        ArrayList<Player> playerList = (ArrayList<Player>) playerWhoAttack.getCurrentSector().getPlayer();
         Iterator<Player> playerIterator = playerList.iterator();
         while (playerIterator.hasNext()) {
             Player playerAttacked = playerIterator.next();
-            if (playerWhoAttack != playerAttacked
-                    && !hasCard(playerAttacked, new DefenseCard())) {
+            if (playerWhoAttack != playerAttacked && !hasCard(playerAttacked, new DefenseCard())) {
                 playerAttacked.setDead();
                 playerIterator.remove();
                 removeAfterDying(playerAttacked);
@@ -148,8 +149,9 @@ public class GameLogic implements Observer {
      * It get the current sector and check if the card has the item.
      */
     public void useNoiseInYourSector(Player player) {
-        player.getCurrentSector();
-        // TODO notifica view col settore
+        char letter=(char) ((player.getCurrentSector().getLetter())+97);
+        int number=player.getCurrentSector().getNumber();
+        broker.publish("Noise in sector "+letter+number);
 
     }
 
@@ -158,8 +160,9 @@ public class GameLogic implements Observer {
      */
     public void useRed(Player player) {
         player.getCurrentSector().setEscapeHatchSectorNotCrossable();
-        // TODO bisogna notificare al player che si deve cercare una nuova
-        // scialuppa
+        char letter=(char) (player.getCurrentSector().getLetter()+97);
+        int number=player.getCurrentSector().getNumber();
+        broker.publish("The Escape Hatch "+letter+" "+number+" is broken!");
     }
 
     /**
@@ -174,7 +177,7 @@ public class GameLogic implements Observer {
      * The action simply notify the view to tells other players "silence".
      */
     public void useSilence(Player player) {
-        // TODO notifica la view che ha pescato la carta silenzio
+        broker.publish("Silence!");
     }
 
     /**
@@ -183,17 +186,28 @@ public class GameLogic implements Observer {
      * If this sector aren't empty the model notify the view that communicate the position of this players.
      */
     public void useSpotlight(Player player) {
-        int lettera = 0;
-        int numero = 0;
-        // TODO chiedere al giocatero che settore vuole vedere
+        int letter = 0;
+        int number = 0;
+        // TODO chiedere al giocatore che settore vuole vedere
         Sector[][] sector = match.getMap().getSector();
-        sector[lettera][numero].getPlayer();
-        // TODO notifica messaggio
-        for (Sector sectors : sector[lettera][numero].getNeighbors()) {
-            sectors.getLetter();
-            sectors.getNumber();
-            sectors.getPlayer();
-            // TODO messaggio socket per dire chi è dove
+        char letterAsChar = (char) (letter+97);
+        
+        for (Player players : sector[letter][number].getPlayer()) {
+            String name = players.getName();
+            String type = players.toString();
+            broker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
+        }
+        
+        for (Sector sectors : sector[letter][number].getNeighbors()) {
+            
+            char neighborLetter=(char) (sectors.getLetter()+97);
+            int neighborNumber=sectors.getNumber();
+
+            for (Player players : sectors.getPlayer()) {
+                String name = players.getName();
+                String type = players.toString();
+                broker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
+            }
         }
     }
 
@@ -235,10 +249,8 @@ public class GameLogic implements Observer {
      * @param card used
      */
     public void useItemCard(Player player, Card card) {
-        if (hasCard(player, card)) {
-            card.doAction(player, this);
-            discardItemCard(player, card);
-        }
+        card.doAction(player, this);
+        discardItemCard(player, card);
     }
 
     /**
@@ -265,8 +277,12 @@ public class GameLogic implements Observer {
      * @param card used by player
      */
     public void discardItemCard(Player player, Card card) {
-        player.getCards().remove(card);
-        match.getItemDeckDiscarded().add(card);
+        for (Card playerCard : player.getCards()) {
+            if(playerCard.getClass()==card.getClass())
+                player.getCards().remove(playerCard);
+                match.getItemDeckDiscarded().add(playerCard);
+                break;
+        }
     }
 
     /**
@@ -401,10 +417,10 @@ public class GameLogic implements Observer {
                 // TODO chiedere alla view di chiedere al giocatore cosa vuole fare e quale carta vuole usare o buttare
                 // quindi c'è da aggiungere la scelta della carta tra quelle che ha in mano con un for o cacchio ne so!
                 switch (choice) {
-                case "usa":
+                case "use":
                     useItemCard(player, itemCard);
                     break;
-                case "butta":
+                case "discard":
                     discardItemCard(player, itemCard);
                     break;
                 default:
@@ -437,39 +453,37 @@ public class GameLogic implements Observer {
             player.getCurrentSector().getPlayer().remove(player);
             match.getPlayers().remove(player);
         }
-        // TODO notifica la view e dice al player che ha vinto \o/
+        broker.publish("Player "+player.getName()+" has escaped!");
     }
 
     // TODO javadoc and implementation. anche scelta se vuole usare carta
     // attacco o pescare carta settore
     public void movePlayer(Player player, Sector sector) {
         if (player instanceof Human && ((Human) player).isSedatives()) {
-            player.getCurrentSector().getPlayer().remove(player);
-            player.setCurrentSector(sector);
-            sector.getPlayer().add(player);
+            moveActions(player, sector);
         } else if (sector.getType() == SectorTypeEnum.DANGEROUS) {
-            player.getCurrentSector().getPlayer().remove(player);
-            player.setCurrentSector(sector);
-            sector.getPlayer().add(player);
+            moveActions(player, sector);
             drawSectorCard(player);
-        } else if (player instanceof Human
-                && sector.getType() == SectorTypeEnum.ESCAPEHATCH) {
+        } else if (player instanceof Human && sector.getType() == SectorTypeEnum.ESCAPEHATCH) {
             if (sector.isCrossable()) {
-                player.getCurrentSector().getPlayer().remove(player);
-                player.setCurrentSector(sector);
-                sector.getPlayer().add(player);
+                moveActions(player, sector);
                 drawEscapeHatchCard(player);
             } else {
-                player.getCurrentSector().getPlayer().remove(player);
-                player.setCurrentSector(sector);
-                sector.getPlayer().add(player);
+                moveActions(player, sector);
             }
         }
     }
+    
+    private void moveActions(Player player, Sector sector){
+        player.getCurrentSector().getPlayer().remove(player);
+        player.setCurrentSector(sector);
+        sector.getPlayer().add(player);
+    }
 
-    public void canAttack(Player player) {
+    public boolean canAttack(Player player) {
         // TODO anche attack per alieno o da sistemare il nostro useAttack per
         // renderlo generico e fare qua i controlli se umano o alieno
+        return false;
     }
 
 }

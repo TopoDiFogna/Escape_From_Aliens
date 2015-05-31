@@ -1,4 +1,6 @@
-package it.polimi.ingsw.cg_23.entrypoint;
+package it.polimi.ingsw.cg_23.network.entrypoint;
+
+import it.polimi.ingsw.cg_23.network.ClientHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,11 +8,9 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import it.polimi.ingsw.cg_23.network.GameManager;
-
 /**
  * From here we start the server.<br>
- * It accepts connection and passes them to the game manager
+ * It accepts connection and passes them to the client handler
  * 
  * @author Paolo
  *
@@ -22,16 +22,16 @@ public class Server {
      * The port the server listen on
      */
     private final static int SOCKET_PORT=10412;
-    
+        
     /**
-     * The game manager will handle connection to give them a game
+     * The client handler will manage every connection to the game.
      */
-    private GameManager gameManager;
+    private ClientHandler clientHandler;
     
     /**
      * Error to handle client connection
      */
-    private boolean error;
+    private boolean error;    
 
     /**
      * Constructor: spawns the server and launches it
@@ -77,9 +77,9 @@ public class Server {
             }
             
             if(!error){
-                gameManager = new GameManager(socket);//creates a new game manager for this socket
+                clientHandler = new ClientHandler(socket);//creates a new client handler for this socket
             
-                executor.submit(gameManager);//runs the game manager
+                executor.submit(clientHandler);//runs the client handler for this connection
             }
         }
     }
@@ -93,7 +93,7 @@ public class Server {
         
         return running;
     }
-    
+
     /**
      * Entry point for the server.
      * 
@@ -104,5 +104,4 @@ public class Server {
         //create the server and starts it
         new Server();
     }
-
 }

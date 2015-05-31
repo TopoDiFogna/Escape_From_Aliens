@@ -7,6 +7,7 @@ import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.Broker;
 
 import org.junit.Test;
 
@@ -19,6 +20,8 @@ public class RedCardTest {
 		String mapName = "galilei";
 		Match match = new Match(mapName);
 		GameLogic controller = new GameLogic(match);
+		Broker broker = new Broker("broker");
+        controller.setBroker(broker);
 		Sector sector = new Sector(2, 2, SectorTypeEnum.ESCAPEHATCH, true);
 		player.setCurrentSector(sector);
 		card.doAction(player, controller);

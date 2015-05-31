@@ -1,15 +1,14 @@
 package it.polimi.ingsw.cg_23.model.status;
 
+import it.polimi.ingsw.cg_23.controller.GameLogic;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.cards.DeckFactory;
 import it.polimi.ingsw.cg_23.model.map.Map;
 import it.polimi.ingsw.cg_23.model.players.Player;
 
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 
@@ -65,13 +64,12 @@ public class Match extends Observable{
      * Description of the property turnNumber.
      */
     private int turnNumber;
-
-    private HashMap<Player, Socket> socketMap = new HashMap<Player, Socket>();
     
     private GameState matchState;
     
     private final String name;
-
+    
+    private final GameLogic gameLogic;
 
     
 
@@ -83,6 +81,7 @@ public class Match extends Observable{
         
         this.name=mapName;
         this.map=new Map(mapName);
+        this.gameLogic= new GameLogic(this);
         this.players=new ArrayList<Player>();
         this.sectorDeck=DeckFactory.createDeck(0);
         this.itemDeck=DeckFactory.createDeck(1);
@@ -90,7 +89,7 @@ public class Match extends Observable{
         Collections.shuffle(sectorDeck);
         Collections.shuffle(itemDeck);
         Collections.shuffle(escapeHatchDeck);
-        setMatchState(GameState.WAITING);
+        matchState=GameState.WAITING;
         turnNumber=0;
     }
     
@@ -101,6 +100,15 @@ public class Match extends Observable{
      */
     public Map getMap() {
         return this.map;
+    }
+
+    /**
+     * Returns the game logic binded to this match.
+     * 
+     * @return the game logic binded to this match
+     */
+    public GameLogic getGameLogic() {
+        return gameLogic;
     }
 
     /**
@@ -157,6 +165,7 @@ public class Match extends Observable{
         this.escapeHatchDeckDiscarded = escapeHatchDeckDiscarded;
     }
 
+    
     public void setSectorDeckDiscarded(Deck<Card> sectorDeckDiscarded) {
         this.sectorDeckDiscarded = sectorDeckDiscarded;
     }
@@ -198,10 +207,6 @@ public class Match extends Observable{
      */
     public void nextTurn() {
         turnNumber++;
-    }
-    
-    public void addNewPlayerToMap(Player player, Socket socket){
-        socketMap.put(player, socket);
     }
 
     public String getName() {
