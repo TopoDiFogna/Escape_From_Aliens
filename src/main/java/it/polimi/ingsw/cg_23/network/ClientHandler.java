@@ -1,5 +1,11 @@
 package it.polimi.ingsw.cg_23.network;
 
+import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
+import it.polimi.ingsw.cg_23.model.cards.AttackCard;
+import it.polimi.ingsw.cg_23.model.cards.Card;
+import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
+import it.polimi.ingsw.cg_23.model.cards.SpotlightCard;
+import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
@@ -91,9 +97,9 @@ public class ClientHandler implements Runnable{
     /**
      * Checks if the name is already in the list
      * 
-     * @return true if name is available, false otherwise
+     * @return true if name is not in the list, false otherwise
      */
-    private boolean checkId(){
+    private boolean checkIdIfPresent(){
         if(!serverStatus.getIdMatchMap().containsKey(id))
             return true;
         return false;
@@ -109,10 +115,7 @@ public class ClientHandler implements Runnable{
         }
                 
         switch(msg.toLowerCase()){
-            default:
-                response="Command not found!";
-                break;
-                
+                           
             case "gamelist":
                 response="This maps are playable: Galilei, Galvani, Fermi";
                 break;
@@ -130,7 +133,7 @@ public class ClientHandler implements Runnable{
                     response="Use sintax: use cardname. Avaible card names are Adrenaline, Attack, Sedatives, Spotlight, Teleport.";
                     
                 }
-                //response useCard();
+                response = useCard();
                 break;
                 
             case "noise":
@@ -139,7 +142,9 @@ public class ClientHandler implements Runnable{
                     break;
                 }
                 
-            
+            default:
+                response="Command not found!";
+                break;
                 
                 
         
@@ -182,7 +187,7 @@ public class ClientHandler implements Runnable{
         
         String response = null;
         
-        if(!checkId())
+        if(!checkIdIfPresent())
             return "You are already in a game!";
         
         if(mapName.equals("galilei") || mapName.equals("fermi") || mapName.equals("galvani")){
@@ -264,7 +269,7 @@ public class ClientHandler implements Runnable{
     
     private String movePlayer(){
         
-        if(!serverStatus.getIdMatchMap().containsKey(id))
+        if(checkIdIfPresent())
             return "You are not in a game! Join one first!";
         
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
@@ -310,12 +315,88 @@ public class ClientHandler implements Runnable{
         return "You moved in sector "+letter+" "+number;
     }    
     
-    private String useCard(){
+    private String useCard(){//TODO finish this
         String response = null;
+        
+        if(checkIdIfPresent())
+            return "You are not in a game! Join one first!";
+        
         if(!tokenizer.hasMoreTokens()){
-            return "Use sintax: use cardname. Avaible card names are Adrenaline, Attack, Sedatives, Spotlight, Teleport.";
-    
+            return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        for (Player playerList : match.getPlayers()) {
+            if(playerList.getName().equals(id)){
+                if(!(playerList instanceof Human)){
+                    return "You are an alien! You can't use Item Cards!";
+                }
+            }
+        }
+        
+        switch (tokenizer.nextToken().toLowerCase()) {
+        
+        case "adrenaline":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AdrenalineCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().useItemCard(playerInList, card);
+                    }
+                }
+            }
+            break;
+
+        case "attack":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new AttackCard();
+                    if(match.getGameLogic().hasCard(playerInList, card) && match.getGameLogic().canAttack(playerInList)){
+                        match.getGameLogic().useItemCard(playerInList, card);
+                    }
+                }
+            }
+            break;
+            
+        case "sedatives":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new SedativesCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)) {
+                        match.getGameLogic().useItemCard(playerInList, card);
+                    }
+                }
+            }
+            break;
+            
+        case "spotlight":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new SpotlightCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)) {
+                        match.getGameLogic().useItemCard(playerInList, card);
+                    }
+                }
+            }
+            break;
+            
+        case "teleport":
+            for (Player playerInList : match.getPlayers()) {
+                if(playerInList.getName().equals(id)){
+                    Card card = new TeleportCard();
+                    if(match.getGameLogic().hasCard(playerInList, card)) {
+                        match.getGameLogic().useItemCard(playerInList, card);
+                    }
+                }
+            }
+            break;
+
+        default:
+            response= "Use sintax: use cardname. Available card names are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+            break;
+        }
+        
         return response;
     }
 }

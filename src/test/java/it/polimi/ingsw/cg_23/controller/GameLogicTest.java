@@ -65,6 +65,7 @@ public class GameLogicTest {
 		Player player = new Human("dummy");
 		Card card = new TeleportCard();
 		Match match = new Match("galilei");
+		player.setCurrentSector(match.getMap().getSector()[0][0]);
 		GameLogic controller = new GameLogic(match);
 		controller.useItemCard(player, card);
 		assertFalse(player.getCards().contains(card));

@@ -249,10 +249,8 @@ public class GameLogic{
      * @param card used
      */
     public void useItemCard(Player player, Card card) {
-        if (hasCard(player, card)) {
-            card.doAction(player, this);
-            discardItemCard(player, card);
-        }
+        card.doAction(player, this);
+        discardItemCard(player, card);
     }
 
     /**
@@ -279,8 +277,12 @@ public class GameLogic{
      * @param card used by player
      */
     public void discardItemCard(Player player, Card card) {
-        player.getCards().remove(card);
-        match.getItemDeckDiscarded().add(card);
+        for (Card playerCard : player.getCards()) {
+            if(playerCard.getClass()==card.getClass())
+                player.getCards().remove(playerCard);
+                match.getItemDeckDiscarded().add(playerCard);
+                break;
+        }
     }
 
     /**
@@ -478,9 +480,10 @@ public class GameLogic{
         sector.getPlayer().add(player);
     }
 
-    public void canAttack(Player player) {
+    public boolean canAttack(Player player) {
         // TODO anche attack per alieno o da sistemare il nostro useAttack per
         // renderlo generico e fare qua i controlli se umano o alieno
+        return false;
     }
 
 }
