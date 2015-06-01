@@ -114,8 +114,7 @@ public class GameLogic{
                 playerIterator.remove();
                 removeAfterDying(playerAttacked);
             } else if (hasCard(playerAttacked, new DefenseCard()))
-                // questa condizione in realtà non fa niente perchè useDefence
-                // non ha nessuna istruzione
+                //this condition do nothing because useDefence hasn't instruction
                 useDefense(playerAttacked);
         }
     }
@@ -212,11 +211,12 @@ public class GameLogic{
     }
     
     /**
+     * This method is deprecated because it's used another method that use two parameters. <br>
      * This method asks view to ask human player the sector. <br>
      * After that the controller check if in the selected sector and in the nearby there are someone. <br>
      * If this sector aren't empty the model notify the view that communicate the position of this players.
      * 
-     * @deprecated useSgnergn
+     * @deprecated useSpotlight 
      */
     @Deprecated
     public void useSpotlight() {
@@ -273,9 +273,8 @@ public class GameLogic{
 
     /**
      * This method is only for Item card, that the player must have to use them.<br>
-     * First of all we check if player has the card he want to use (calling hasCard() method), <br>
-     * if he has it calls the method doAction in the card.<br>
-     * When the card has finished to do its action, the method calls discardCard to put the card in the right discard <br>
+     * Before calling this method, is already done the control if the player has the card he want to use. <br>
+     * When the card has finished to do its action, the method calls discardCard to put the card in the discard <br>
      * deck and remove it from player hand.
      * 
      * @param player who use the card
@@ -288,9 +287,8 @@ public class GameLogic{
 
     /**
      * This method allow player to use sector or escape hatch card, calling doAction() method in the right card. <br>
-     * After that check if is an escape hatch card, putting it in the escape hatch discarded deck, else put it in <br>
-     * sector discarded deck. This method, unlike the useItemCard() method, don't check if player has the card in his hand,<br>
-     * because these cards are immediately use.
+     * After that check if is an escape hatch card, put it in the escape hatch discarded deck, else put it in <br>
+     * sector discarded deck. 
      * 
      * @param player
      * @param card
@@ -304,7 +302,9 @@ public class GameLogic{
     }
 
     /**
-     * Removes card used by useItemCard() from the player hand and put it in the item discarded deck.
+     * Removes card used by useItemCard() from the player hand and put it in the item discarded deck. <br>
+     * It's also set false setHasFourCard (because this method can be called when the player chose what he <br>
+     * want to do with the exceed card.
      * 
      * @param player who uses the card
      * @param card used by player
@@ -502,7 +502,17 @@ public class GameLogic{
         broker.publish("Player "+player.getName()+" has escaped!");
     }
 
-    // TODO javadoc
+    /**
+     * This method calls moveAction method that moves in a different sector the player. <br>
+     * If who move is a human and has used sedatives, move player then set as false isSedatives. <br>
+     * If the player is moving on a dangerous sector, he moves and draws the sector card. <br>
+     * If the player is moving is a human and is moving on an escape hatch sector he moves and draws escape hatch card. <br>
+     * If the destination sector is a secure sector, only move. <br>
+     *  
+     * @param player player who wants to move
+     * @param sector sector of destination
+     * @return response in base of he does.
+     */
     public String movePlayer(Player player, Sector sector) {
         String response = ""; 
         if (player instanceof Human && ((Human) player).isSedatives()) {
@@ -521,17 +531,30 @@ public class GameLogic{
         }
         else if(sector.getType()== SectorTypeEnum.SECURE)
             moveActions(player, sector);
-        player.setHasMoved(true);
         return response;
     }
     
-    //TODO javadoc
+    /**
+     * When a player chose he wants to attack, he must not draw a sector card if he arrives in a <br>
+     * dangerous sector, but only calling the attack method (the same for alien and human).
+     * 
+     * @param player player wants to attack
+     * @param sector sector of destination of move and of attack
+     */
     public void movePlayerAndAttack(Player player, Sector sector){
         moveActions(player, sector);
         useAttack(player);
     }
     
-    //TODO javadoc
+    /**
+     * This is the method that really move the player in a destination. <br>
+     * Remove the player from the start sector player list, set the current player sector <br>
+     * with the coordinates of the destination. Adds the player to the list of players of the destination sector. <br> 
+     * After the move set as true the boolean setHasMove.
+     * 
+     * @param player player who wants to move
+     * @param sector sector of destination
+     */
     private void moveActions(Player player, Sector sector){
         player.getCurrentSector().getPlayer().remove(player);
         player.setCurrentSector(sector);
@@ -539,6 +562,14 @@ public class GameLogic{
         player.setHasMoved(true);
     }
 
+    /**
+     * This method is called in ClientHandler class. <br>
+     * It converts into a letter the first coordinate and adds 1 to number. <br>
+     * After calls the broker to publish the message of noise.
+     * 
+     * @param letter
+     * @param number
+     */
     public void makeANoise(int letter, int number) {
         char noiseLetter = (char) (letter+97);
         number=number+1;
@@ -546,6 +577,13 @@ public class GameLogic{
         
     }
     
+    /**
+     * This method gives the possibility to start the game. <br>
+     * First of all it shuffles the players list (for create a turn sequence). <br>
+     * Sets the starting sector as human sector if player is a human, and alien sector if <br>
+     * player is an alien. Sets the current player reading the first player of the list. <br>
+     * Sets the game state as running and notify who is the first player.
+     */
     public void startGame(){
         Collections.shuffle(match.getPlayers());
         
@@ -561,6 +599,7 @@ public class GameLogic{
         broker.publish("Game started. The first player is: "+match.getCurrentPlayer().getName());
     }
     
+    //TODO javadoc l'implementazione è giusta?
     public void endTurn(){
         match.getCurrentPlayer().setHasMoved(false);
         int currentPlayerIndex = 0;

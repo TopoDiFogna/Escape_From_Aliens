@@ -1,6 +1,7 @@
 package it.polimi.ingsw.cg_23.controller;
 
 import static org.junit.Assert.*;
+
 import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
 import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
@@ -91,7 +92,7 @@ public class GameLogicTest {
    }
     
     @Test
-    public void testValidMoveAlien() {
+    public void testValidMoveAlien2step() {
         Player player = new Alien("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
@@ -109,6 +110,28 @@ public class GameLogicTest {
         }
         assertTrue(player.getCanMoveFaster());
     }
+    
+    /*@Test TODO
+    public void testValidMoveAlien3step() {
+        Player player = new Alien("Dummy");
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        Broker broker = new Broker("broker");
+        controller.setBroker(broker);
+        Sector sector = match.getMap().getSector()[1][7];
+        Sector destination = match.getMap().getSector()[3][7];
+        player.setCurrentSector(sector);        
+        assertTrue(controller.validMove(player, destination));
+        for (Sector sectorNeighbors : player.getCurrentSector().getNeighbors()) {
+            for (Sector sectorTwoStepDistance : sectorNeighbors.getNeighbors()){
+                for (Sector sectorThreeStepDistance : sectorTwoStepDistance.getNeighbors()){
+                    if(sectorThreeStepDistance.equals(destination))
+                        assertTrue(sectorThreeStepDistance.equals(destination));
+                }
+            }
+        }
+        assertTrue(player.get);
+    }*/
 
     @Test
     public void testUseSpotlight() {
