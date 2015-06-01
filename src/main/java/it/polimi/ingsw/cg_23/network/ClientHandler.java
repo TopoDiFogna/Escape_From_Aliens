@@ -348,7 +348,6 @@ public class ClientHandler implements Runnable{
                 }
             }
         } 
-        //response = "" +response+ "You moved in sector "+letter+" "+number;
         return response;
         
     }    
