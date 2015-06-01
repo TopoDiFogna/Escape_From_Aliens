@@ -77,6 +77,7 @@ public class Client {
             socketOut.println(name+" "+inputLine);
             socketOut.flush();
         }
+        
     }
 
     public static void main(String[] args) throws IOException {

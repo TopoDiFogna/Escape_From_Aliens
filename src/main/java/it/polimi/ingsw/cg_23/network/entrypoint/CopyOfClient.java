@@ -22,17 +22,27 @@ public class CopyOfClient extends Thread{
 
     @Override
     public void run() {
-        //while(true){
-            String msg = null;
+        while(true){
+            receive();
             try {
-                msg=socketIn.readLine();
-                if(msg!=null){
-                    System.out.println(msg);
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        //}
+        }
+    }
+    
+    private void receive() {
+        String msg = null;
+        try {
+            msg=socketIn.readLine();
+            if(msg!=null){
+                System.out.println(msg);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
     }
 }

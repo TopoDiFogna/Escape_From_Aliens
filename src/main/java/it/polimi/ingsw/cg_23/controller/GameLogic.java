@@ -61,9 +61,7 @@ public class GameLogic{
      */
     public boolean validMove(Player player, Sector destination) {
         // can't enter in
-        if (destination.getType() == SectorTypeEnum.VOID
-                || destination.getType() == SectorTypeEnum.HUMAN
-                || destination.getType() == SectorTypeEnum.ALIEN)
+        if (destination.getType() == SectorTypeEnum.VOID || destination.getType() == SectorTypeEnum.HUMAN  || destination.getType() == SectorTypeEnum.ALIEN)
             return false;
 
         if (player.getCurrentSector().getNeighbors().contains(destination))
@@ -153,7 +151,7 @@ public class GameLogic{
      */
     public void useNoiseInYourSector(Player player) {
         char letter=(char) ((player.getCurrentSector().getLetter())+97);
-        int number=player.getCurrentSector().getNumber();
+        int number=player.getCurrentSector().getNumber()+1;
         broker.publish("Noise in sector "+letter+number);
 
     }
@@ -386,7 +384,7 @@ public class GameLogic{
             player.setNeedSectorNoise(true);
             return "In which sector do you want a noise?";
         }
-        return null;
+        return "";
     }
 
     /**
@@ -507,7 +505,7 @@ public class GameLogic{
 
     // TODO javadoc
     public String movePlayer(Player player, Sector sector) {
-        String response = null; 
+        String response = ""; 
         if (player instanceof Human && ((Human) player).isSedatives()) {
             moveActions(player, sector);
         } else if (sector.getType() == SectorTypeEnum.DANGEROUS) {
@@ -521,6 +519,8 @@ public class GameLogic{
                 moveActions(player, sector);
             }
         }
+        else if(sector.getType()== SectorTypeEnum.SECURE)
+            moveActions(player, sector);
         player.setHasMoved(true);
         return response;
     }
@@ -541,6 +541,7 @@ public class GameLogic{
 
     public void makeANoise(int letter, int number) {
         char noiseLetter = (char) (letter+97);
+        number=number+1;
         broker.publish("Noise in sector "+noiseLetter+" "+number);
         
     }
@@ -561,6 +562,7 @@ public class GameLogic{
     }
     
     public void endTurn(){
+        match.getCurrentPlayer().setHasMoved(false);
         int currentPlayerIndex = 0;
         for (Player player : match.getPlayers()) {
             if(match.getCurrentPlayer().getName().equals(player.getName())){
