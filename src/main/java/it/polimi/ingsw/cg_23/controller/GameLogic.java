@@ -141,8 +141,7 @@ public class GameLogic{
      * Asks view to ask user in what sector there is noise.
      */
     public void useNoiseInAnySector(Player player) {
-        // TODO bisogna chiedere alla view di chiedere all'utente di passargli
-        // il settore di cui vuole comunicare il rumore
+        // TODO Qua non fa niente
     }
 
     /**
