@@ -571,7 +571,7 @@ public class GameLogic{
             }
         }
         System.out.println(match.getPlayers().size());
-        if(match.getPlayers().size() < currentPlayerIndex+1){
+        if(match.getPlayers().size() > currentPlayerIndex+1){
             match.setCurrentPlayer(match.getPlayers().get(currentPlayerIndex+1));
         } else {
             match.setCurrentPlayer(match.getPlayers().get(0));
