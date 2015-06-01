@@ -510,6 +510,7 @@ public class GameLogic{
         String response = null; 
         if (player instanceof Human && ((Human) player).isSedatives()) {
             moveActions(player, sector);
+            ((Human) player).setSedatives(false);
         } else if (sector.getType() == SectorTypeEnum.DANGEROUS) {
             moveActions(player, sector);
             response = drawSectorCard(player);
@@ -521,7 +522,6 @@ public class GameLogic{
                 moveActions(player, sector);
             }
         }
-        player.setHasMoved(true);
         return response;
     }
     
@@ -529,7 +529,6 @@ public class GameLogic{
     public void movePlayerAndAttack(Player player, Sector sector){
         moveActions(player, sector);
         useAttack(player);
-        player.setHasMoved(true);
     }
     
     //TODO javadoc
@@ -537,6 +536,7 @@ public class GameLogic{
         player.getCurrentSector().getPlayer().remove(player);
         player.setCurrentSector(sector);
         sector.getPlayer().add(player);
+        player.setHasMoved(true);
     }
 
     public void makeANoise(int letter, int number) {

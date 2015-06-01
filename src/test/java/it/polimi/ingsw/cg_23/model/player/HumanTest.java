@@ -133,5 +133,12 @@ public class HumanTest {
        player.setHasMoved(true);
        assertTrue(player.hasMoved());
     }
+    
+    @Test
+    public void testNeedSectorNoise() {
+       Player player= new Human("Dummy");
+       player.setNeedSectorNoise(true);
+       assertTrue(player.needSectorNoise());
+    }
 
 }

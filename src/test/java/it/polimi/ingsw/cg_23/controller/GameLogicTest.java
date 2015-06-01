@@ -26,19 +26,26 @@ import org.junit.Test;
 
 public class GameLogicTest {
 
-	
-
 	/*@Test
-	public void testUpdate() {
-		fail("Not yet implemented");
-	}
-
-
-	@Test
 	public void testValidMove() {
 		fail("Not yet implemented");
 	}*/
 
+    @Test
+    public void testUseSpotlight(){
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        Player player1 = new Human("Dummy1");
+        Player player2 = new Alien("Dummy2");
+        Sector sector1 = new Sector(16, 8, SectorTypeEnum.DANGEROUS, true);
+        Sector sector2 = new Sector(15, 9, SectorTypeEnum.SECURE, true);
+        player1.setCurrentSector(sector1);
+        player2.setCurrentSector(sector2);        
+        controller.useSpotlight(16, 8);
+        assertTrue(player1.getName().equals("Dummy1"));
+        assertTrue(player2.getName().equals("Dummy2"));
+    }
+    
 	@Test
 	public void testHasCardTrue() {
 		Player player = new Human("dummy");
@@ -50,7 +57,7 @@ public class GameLogicTest {
 		assertTrue(controller.hasCard(player, card));
 	}
 	
-	@Test //TODO da controllare... non so se davvero controlla il false perchè in game logic resta giallo
+	@Test 
 	public void testHasCardFalse() {
 		Player player = new Human("dummy");
 		Card card = new SilenceCard(true);
@@ -144,6 +151,7 @@ public class GameLogicTest {
 		match.getSectorDeck().add(0, card);
 		controller.drawSectorCard(player);
 		assertFalse(match.getSectorDeck().contains(card));
+        assertTrue(player.needSectorNoise());
 	}
 	
 	@Test
@@ -155,15 +163,16 @@ public class GameLogicTest {
 		match.getSectorDeck().add(0, card);
 		controller.drawSectorCard(player);
 		assertFalse(match.getSectorDeck().contains(card));
+		assertTrue(player.needSectorNoise());
 	}
 	
 	@Test
-	public void testDrawSectorCardYourAnySectorWithItem() {
+	public void testDrawSectorCardNoiseYourSectorWithItem() {
 		Player player = new Human("Dummy");
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        controller.setBroker(broker);      
 		Card card = new NoiseInYourSectorCard(true);
 		player.setCurrentSector(match.getMap().getSector()[0][0]);
 		match.getSectorDeck().add(0, card);
@@ -405,18 +414,80 @@ public class GameLogicTest {
 		assertTrue(sector.isCrossable());
 	}
 	
+	@Test
+	public void testMovePlayerSedatives(){
+	    Player player = new Human("Dummy");
+        Sector sector = new Sector(16, 8, SectorTypeEnum.DANGEROUS, true);
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        player.setCurrentSector(sector);
+        player.getCurrentSector().getPlayer().add(player);
+        ((Human) player).setSedatives(true);
+        controller.movePlayer(player, sector);
+        assertTrue(player.getCurrentSector().getPlayer().contains(player));
+        assertFalse(((Human) player).isSedatives());
+	}
+	
+	@Test
+    public void testMovePlayerInDangerousSector(){
+        Player player = new Human("Dummy");
+        Sector sector = new Sector(16, 8, SectorTypeEnum.DANGEROUS, true);
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        Card card = new SilenceCard(false);
+        match.getSectorDeck().add(card);
+        player.setCurrentSector(sector);
+        player.getCurrentSector().getPlayer().add(player);
+        controller.movePlayer(player, sector);
+        assertTrue(player.getCurrentSector().getPlayer().contains(player));
+        assertNotNull(match.getSectorDeckDiscarded());
+    }
+	
 	/*@Test
-	public void testMovePlayer(){
-		
+    public void testMovePlayerInEscapeHatch(){
+        Player player = new Human("Dummy");
+        Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        Card card = new RedCard();
+        match.getEscapeHatchDeck().add(card);
+        player.setCurrentSector(sector);
+        player.getCurrentSector().getPlayer().add(player);
+        controller.movePlayer(player, sector);
+        assertTrue(player.getCurrentSector().getPlayer().contains(player));
+    }*/
+	
+	
+	@Test 
+	public void testMovePlayerAndAttack(){
+	    Player player = new Human("Dummy");
+        Sector sector = new Sector(16, 8, SectorTypeEnum.DANGEROUS, true);
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        player.setCurrentSector(sector);
+        player.getCurrentSector().getPlayer().add(player);
+        Card card = new SilenceCard(true);
+        match.getSectorDeck().clear();
+        match.getSectorDeck().add(card);        
+        controller.movePlayerAndAttack(player, sector);
+        assertTrue(player.getCurrentSector().getPlayer().contains(player));
+        assertTrue(player.hasMoved());
+        assertNotNull(match.getSectorDeckDiscarded());
+	}
+
+	
+	/*@Test
+	public void testMakeANoise(){
+	
 	}
 	
 	@Test
-	public void testMoveAction(){
+	public void testStartGame(){
 	
 	}
 	
 	@Test
-	public void testCanAttack(){
+	public void testEndTurn(){
 		
 	}*/
 }

@@ -29,9 +29,6 @@ public class SpotlightCardTest {
 		
 		card.doAction(player1, controller);
 		
-		//TODO è da ritestare meglio quando prenderò in input il settore dal giocatore
-		//creo la mappa, metto dei giocatori in dei settori vicini e chiamo la carta
-		//controllo che dopo aver chiamato la carta mi dica davvero che ci siano dei giocatori in quei settori
 	}
 
 	@Test

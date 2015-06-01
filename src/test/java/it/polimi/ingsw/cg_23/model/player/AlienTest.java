@@ -98,4 +98,11 @@ public class AlienTest {
       Alien alien= new Alien("Dummy");
        assertTrue(alien.toString().equals("Alien"));
     }
+    
+    @Test
+    public void testHasFourCard(){
+       Alien alien= new Alien("Dummy");
+       alien.setHasFourCard(true);
+       assertTrue(alien.hasFourCard());
+    }
 }
