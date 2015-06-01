@@ -18,6 +18,7 @@ public class Alien extends Player {
      */
     public Alien(String name) {
         super(name);
+        canMoveFaster=true;
     }
     
     /**

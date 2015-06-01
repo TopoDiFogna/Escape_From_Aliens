@@ -202,7 +202,7 @@ public class ClientHandler implements Runnable{
         if(mapName.equals("galilei") || mapName.equals("fermi") || mapName.equals("galvani")){
             
             for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
-                if(match.getName() == mapName && match.getMatchState() != GameState.RUNNING && match.getPlayers().size()<8){
+                if(match.getName().equals(mapName) && match.getMatchState() != GameState.RUNNING && match.getPlayers().size()<8){
                     joinGame(match, serverStatus.getMatchBrokerMap().get(match));
                     response = "You were added to a game with map "+mapName;
                 }
@@ -249,6 +249,8 @@ public class ClientHandler implements Runnable{
             newPlayer = new Alien(id);
             
         match.addNewPlayerToList(newPlayer);
+        
+        serverStatus.addPlayerToMatch(id, match);
         
     }
     
@@ -325,25 +327,27 @@ public class ClientHandler implements Runnable{
         
         Sector[][] sector = match.getMap().getSector();
         
-        String response = null;
+        String response = "";
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
-                if(!(playerInList.needSectorNoise() || playerInList.hasFourCard())){
+                if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                         response = match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
+                        response = response + " You moved in sector "+letter+" "+number;
                         break;
                     }
                     else 
                         return "You can't move there!";
                 } else {
                     if(playerInList.needSectorNoise())
-                        response = "You need to specify a sector where make a noise";
+                        response = response + "You need to specify a sector where make a noise ";
                     if(playerInList.hasFourCard())
-                        response = "You need to specify what you want to di with the card in excess";
+                        response =  response + "You need to specify what you want to di with the card in excess ";
+                    if(playerInList.hasMoved())
+                        response =  response + "You have already moved! ";
                 }
             }
         } 
-        response = "" +response+ "You moved in sector "+letter+" "+number;
         return response;
         
     }    
@@ -388,16 +392,18 @@ public class ClientHandler implements Runnable{
                 if(!(playerInList.needSectorNoise() || playerInList.hasFourCard())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                         match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
-                        response = "You moved in sector "+letter+" "+number;
+                        response = "You moved and attacked in sector "+letter+" "+number;
                         break;
                     }
                     else 
                         return "You can't move there!";
                 } else {
                     if(playerInList.needSectorNoise())
-                        response = "You need to specify a sector where make a noise";
+                        response = response + "You need to specify a sector where make a noise ";
                     if(playerInList.hasFourCard())
-                        response = response + "You need to specify what you want to di with the card in excess";
+                        response = response + "You need to specify what you want to di with the card in excess ";
+                    if(playerInList.hasMoved())
+                        response =  response + "You have already moved! ";
                 }
             }
         } 
@@ -434,10 +440,13 @@ public class ClientHandler implements Runnable{
                     Card card = new AdrenalineCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().useItemCard(playerInList, card);
+                        response="You used the Adrenaline card!";
                     }
-                }
+                    else 
+                        response="You can't use that card!";
+                }  
             }
-            response="You used the Adrenaline card!";
+            
             break;
        
         case "attack":            
@@ -454,10 +463,12 @@ public class ClientHandler implements Runnable{
                     Card card = new SedativesCard();
                     if(match.getGameLogic().hasCard(playerInList, card)) {
                         match.getGameLogic().useItemCard(playerInList, card);
+                        response="You used the Sedatives card!";
                     }
+                    else 
+                        response="You can't use that card!";
                 }
             }
-            response="You used the Sedatives card!";
             break;
             
         case "spotlight":
@@ -484,10 +495,13 @@ public class ClientHandler implements Runnable{
                     Card card = new SpotlightCard();
                     if(match.getGameLogic().hasCard(playerInList, card)) {
                         match.getGameLogic().useSpotlight(letter, number);
+                        response="You used the Spotlight card!";
                     }
+                    else
+                        response = "You can't use that card!";
                 }
             }
-            response="You used the Spotlight card!";
+            
             break;
             
         case "teleport":
@@ -496,10 +510,12 @@ public class ClientHandler implements Runnable{
                     Card card = new TeleportCard();
                     if(match.getGameLogic().hasCard(playerInList, card)) {
                         match.getGameLogic().useItemCard(playerInList, card);
+                        response="You used the Teleport card!";
                     }
+                    else
+                        response = "You can't use that card!";
                 }
             }
-            response="You used the Teleport card!";
             break;
 
         default:
@@ -645,8 +661,18 @@ public class ClientHandler implements Runnable{
     
 
     private String endTurn() {
+        String response = "";
         Match match = serverStatus.getIdMatchMap().get(id);
-        match.getGameLogic().endTurn();
-        return "Your turn has ended";
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName().equals(id)){
+                if(playerInList.hasMoved()){
+                    match.getGameLogic().endTurn();
+                    response = "Your turn has ended";
+                }
+                else
+                    response = "You need to move before ending your turn!";
+            }
+        }
+        return response;
     }
 }

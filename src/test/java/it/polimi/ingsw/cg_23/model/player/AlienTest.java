@@ -83,14 +83,7 @@ public class AlienTest {
     @Test
     public void testGetCanMoveFasterTrue() {
         Alien alien = new Alien("dummy");
-        alien.setCanMoveFaster(true);
         assertTrue(alien.getCanMoveFaster());
-    }
-    
-    @Test
-    public void testGetCanMoveFasterFalseAsDefault() {
-        Alien alien = new Alien("dummy");
-        assertFalse(alien.getCanMoveFaster());
     }
     
     @Test

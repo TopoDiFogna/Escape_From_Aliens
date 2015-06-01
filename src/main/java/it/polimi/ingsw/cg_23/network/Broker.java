@@ -11,12 +11,12 @@ public class Broker{
     
     public Broker(String topic) {
         this.topic = topic;
-        subscribers = new ArrayList<>();
+        subscribers = new ArrayList<BrokerThread>();
     }
     
     public void publish(String msg){
         if(!subscribers.isEmpty()){
-            System.out.println("Publishing message");
+            System.out.println("Publishing message: "+msg);
             for(BrokerThread subscriber : subscribers){
                 subscriber.dispatchMessage(msg);
             }
