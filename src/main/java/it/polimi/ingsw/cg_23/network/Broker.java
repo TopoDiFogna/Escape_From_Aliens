@@ -21,7 +21,11 @@ public class Broker{
                 subscriber.dispatchMessage(msg);
             }
         }
+        else{
+            System.err.println("No subscribers!!");
+        }
     }
+
 
     public String getTopic() {
         return topic;

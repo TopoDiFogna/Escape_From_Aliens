@@ -40,7 +40,7 @@ public class Server {
         this.startSocket();
     }
     
-    private boolean running=false;
+    private boolean running=true;
     
     /**
      * Connection handling.<br>
@@ -55,14 +55,12 @@ public class Server {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(SOCKET_PORT);
+            System.out.println("SERVER: Ready");
         } catch (IOException e1) {
             System.err.println("ERROR: Cannot run server on port: "+SOCKET_PORT+"!");
+            running=false;
         }
-        
-        running = true;
-        
-        System.out.println("SERVER: Ready");
-        
+
         while(isRunning()){
             
             error = false; //resets the error flag

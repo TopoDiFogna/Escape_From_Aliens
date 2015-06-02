@@ -8,16 +8,14 @@ import java.net.Socket;
 
 public class CopyOfClient extends Thread{
     
-    private String serverMessage;
-    
     private BufferedReader socketIn;
     
     private Socket socket;
     
     
     public CopyOfClient(Socket socket) throws IOException{
-        socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.socket=socket;
+        socketIn = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); 
     }
 
     @Override
@@ -37,6 +35,7 @@ public class CopyOfClient extends Thread{
         try {
             msg=socketIn.readLine();
             if(msg!=null){
+                System.out.println("Received Message");
                 System.out.println(msg);
             }
         } catch (IOException e) {

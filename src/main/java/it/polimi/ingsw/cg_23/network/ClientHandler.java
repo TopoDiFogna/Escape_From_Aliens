@@ -228,7 +228,7 @@ public class ClientHandler implements Runnable{
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
-        broker.addSubscriber(brokerThread);
+        serverStatus.getMatchBrokerMap().get(match).addSubscriber(brokerThread);
         
         Player newPlayer;
         
