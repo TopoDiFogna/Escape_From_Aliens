@@ -80,7 +80,7 @@ public class Match extends Observable{
      * The constructor.
      */
 
-    public Match(String mapName){//TODO assign players to right sector
+    public Match(String mapName){
         
         this.name=mapName;
         this.map=new Map(mapName);
