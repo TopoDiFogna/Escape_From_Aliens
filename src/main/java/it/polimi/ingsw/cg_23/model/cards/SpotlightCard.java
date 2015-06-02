@@ -22,10 +22,8 @@ public class SpotlightCard extends Card {
      * After that the controller check if in the selected sector and in the nearby there are someone. <br>
      * If this sector aren't empty the model notify the view that communicate the position of this players.
      */
-    @SuppressWarnings("deprecation")
     @Override
     public void doAction(Player player, GameLogic controller) {
-        controller.useSpotlight();
     }
 
 }

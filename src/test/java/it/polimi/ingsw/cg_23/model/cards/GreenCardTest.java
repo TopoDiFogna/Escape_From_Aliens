@@ -17,8 +17,7 @@ public class GreenCardTest {
 	public void testDoAction() {
 		Player player = new Human("Dummy");
 		Card card = new GreenCard();
-		String mapName = "galilei";
-		Match match = new Match(mapName);
+		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		Broker broker = new Broker("broker");
 		controller.setBroker(broker);
@@ -28,7 +27,7 @@ public class GreenCardTest {
 		assertFalse(player.getCurrentSector().isCrossable());
 		assertFalse(player.getCurrentSector().getPlayer().contains(player));
 	}
-
+	
 	@Test
 	public void testGreenCard() {
 		Card card = new GreenCard();

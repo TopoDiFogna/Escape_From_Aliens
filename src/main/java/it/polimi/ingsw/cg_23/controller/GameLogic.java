@@ -214,40 +214,6 @@ public class GameLogic{
             }
         }
     }
-    
-    /**
-     * This method is deprecated because it's used another method that use two parameters. <br>
-     * This method asks view to ask human player the sector. <br>
-     * After that the controller check if in the selected sector and in the nearby there are someone. <br>
-     * If this sector aren't empty the model notify the view that communicate the position of this players.
-     * 
-     * @deprecated useSpotlight 
-     */
-    @Deprecated
-    public void useSpotlight() {
-        int letter = 0;
-        int number = 0;
-        Sector[][] sector = match.getMap().getSector();
-        char letterAsChar = (char) (letter+97);
-        
-        for (Player players : sector[letter][number].getPlayer()) {
-            String name = players.getName();
-            String type = players.toString();
-            broker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
-        }
-        
-        for (Sector sectors : sector[letter][number].getNeighbors()) {
-            
-            char neighborLetter=(char) (sectors.getLetter()+97);
-            int neighborNumber=sectors.getNumber();
-
-            for (Player players : sectors.getPlayer()) {
-                String name = players.getName();
-                String type = players.toString();
-                broker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
-            }
-        }
-    }
 
     /**
      * The human moves to the starting human sector.
@@ -453,36 +419,6 @@ public class GameLogic{
     }
 
     /**
-     * Adds the new card to the list of player's card. <br>
-     * If the list is now 4 elements, asks view to ask player what he want t do. <br>
-     * Player can chose to use one of 4 cards (calling useItemCard method) or discard one (calling discardCard method). <br>
-     * We set discard as default in the switch statement.
-     * 
-     * @param player
-     * @param itemCard
-     */
-    public void choseHowUseItemCard(Player player, Card itemCard, String choice) {
-        player.getCards().add(itemCard);
-        if (player.getCards().size() > 3) {
-            if (choice != null) {
-
-                
-                switch (choice) {
-                case "use":
-                    useItemCard(player, itemCard);
-                    break;
-                case "discard":
-                    discardItemCard(player, itemCard);
-                    break;
-                default:
-                    discardItemCard(player, itemCard);
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
      * The dead player is removed from players list after his death.
      * 
      * @param player
@@ -606,8 +542,10 @@ public class GameLogic{
         for (Player player : match.getPlayers()) {
             if(player instanceof Alien){
                 player.setCurrentSector(match.getMap().getAlienSector());
+                player.getCurrentSector().getPlayer().add(player);
             } else {
                 player.setCurrentSector(match.getMap().getHumanSector());
+                player.getCurrentSector().getPlayer().add(player);
             }
         }        
         match.setCurrentPlayer(match.getPlayers().get(0));
@@ -626,13 +564,12 @@ public class GameLogic{
                 break;
             }
         }
-        System.out.println(match.getPlayers().size());
         if(match.getPlayers().size() > currentPlayerIndex+1){
             match.setCurrentPlayer(match.getPlayers().get(currentPlayerIndex+1));
         } else {
             match.setCurrentPlayer(match.getPlayers().get(0));
+            match.nextTurn();
         }
-        match.nextTurn();
         broker.publish("Next player is: "+match.getCurrentPlayer().getName());
         if(match.getTurnNumber()==40){
             broker.publish("Turn 39 has ended! Too late! Remaining humans are killed by aliens!");
@@ -640,6 +577,9 @@ public class GameLogic{
         }
     }
     
+    /**
+     * This method set the game state to ended and send a message.
+     */
     private void endGame(){
         match.setMatchState(GameState.ENDED);
         broker.publish("The game has ended!");

@@ -1,13 +1,10 @@
 package it.polimi.ingsw.cg_23.controller;
 
 import static org.junit.Assert.*;
-
-import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
 import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.Deck;
 import it.polimi.ingsw.cg_23.model.cards.DeckFactory;
-import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
 import it.polimi.ingsw.cg_23.model.cards.GreenCard;
 import it.polimi.ingsw.cg_23.model.cards.NoiseInAnySectorCard;
 import it.polimi.ingsw.cg_23.model.cards.NoiseInYourSectorCard;
@@ -20,6 +17,7 @@ import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
+import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
 import it.polimi.ingsw.cg_23.network.Broker;
 
@@ -111,7 +109,7 @@ public class GameLogicTest {
         assertTrue(player.getCanMoveFaster());
     }
     
-    /*@Test TODO
+    @Test 
     public void testValidMoveAlien3step() {
         Player player = new Alien("Dummy");
         Match match = new Match("galilei");
@@ -119,8 +117,9 @@ public class GameLogicTest {
         Broker broker = new Broker("broker");
         controller.setBroker(broker);
         Sector sector = match.getMap().getSector()[1][7];
-        Sector destination = match.getMap().getSector()[3][7];
-        player.setCurrentSector(sector);        
+        Sector destination = match.getMap().getSector()[4][7];
+        player.setCurrentSector(sector);   
+        ((Alien)player).setHasKilled();
         assertTrue(controller.validMove(player, destination));
         for (Sector sectorNeighbors : player.getCurrentSector().getNeighbors()) {
             for (Sector sectorTwoStepDistance : sectorNeighbors.getNeighbors()){
@@ -130,8 +129,9 @@ public class GameLogicTest {
                 }
             }
         }
-        assertTrue(player.get);
-    }*/
+        assertTrue(player.getCanMoveFaster());
+        assertTrue(((Alien) player).getHasKilled());
+    }
 
     @Test
     public void testUseSpotlight() {
@@ -449,73 +449,6 @@ public class GameLogicTest {
     }
 
     @Test
-    public void testChoseHowUseItemCardForUseChoice() {
-        Player player = new Human("Dummy");
-        Match match = new Match("galilei");
-        GameLogic controller = new GameLogic(match);
-        Card card1 = new AttackCard();
-        Card card2 = new AdrenalineCard();
-        Card card3 = new DefenseCard();
-        Card card4 = new SedativesCard();
-        player.getCards().add(card1);
-        player.getCards().add(card2);
-        player.getCards().add(card3);
-        controller.choseHowUseItemCard(player, card4, "use");
-        assertTrue(player.getCards().size() > 3);
-        assertTrue(match.getItemDeckDiscarded().contains(card4));
-    }
-
-    @Test
-    public void testChoseHowUseItemCardForDiscardChoice() {
-        Player player = new Human("Dummy");
-        Match match = new Match("galilei");
-        GameLogic controller = new GameLogic(match);
-        Card card1 = new AttackCard();
-        Card card2 = new AdrenalineCard();
-        Card card3 = new DefenseCard();
-        Card card4 = new SedativesCard();
-        player.getCards().add(card1);
-        player.getCards().add(card2);
-        player.getCards().add(card3);
-        controller.choseHowUseItemCard(player, card4, "discard");
-        assertTrue(player.getCards().size() > 3);
-        assertTrue(match.getItemDeckDiscarded().contains(card4));
-    }
-
-    @Test
-    public void testChoseHowUseItemCardForNullChoice() {
-        Player player = new Human("Dummy");
-        Match match = new Match("galilei");
-        GameLogic controller = new GameLogic(match);
-        Card card1 = new AttackCard();
-        Card card2 = new AdrenalineCard();
-        Card card3 = new DefenseCard();
-        Card card4 = new SedativesCard();
-        player.getCards().add(card1);
-        player.getCards().add(card2);
-        player.getCards().add(card3);
-        controller.choseHowUseItemCard(player, card4, null);
-        assertTrue(player.getCards().size() > 3);
-    }
-
-    @Test
-    public void testChoseHowUseItemCardForNotValidChoice() {
-        Player player = new Human("Dummy");
-        Match match = new Match("galilei");
-        GameLogic controller = new GameLogic(match);
-        Card card1 = new AttackCard();
-        Card card2 = new AdrenalineCard();
-        Card card3 = new DefenseCard();
-        Card card4 = new SedativesCard();
-        player.getCards().add(card1);
-        player.getCards().add(card2);
-        player.getCards().add(card3);
-        controller.choseHowUseItemCard(player, card4, "other");
-        assertTrue(player.getCards().size() > 3);
-        assertTrue(match.getItemDeckDiscarded().contains(card4));
-    }
-
-    @Test
     public void testRemoveAfterDyingTrue() {
         Player player = new Alien("dummy");
         Match match = new Match("galilei");
@@ -685,20 +618,141 @@ public class GameLogicTest {
         assertTrue(player.hasMoved());
         assertNotNull(match.getSectorDeckDiscarded());
     }
+    
+    @Test
+    public void testMovePlayerAndAttackWithMoreThanZeroHuman() {
+        Player player1 = new Human("Dummy1");
+        Player player2 = new Human("Dummy2");
+        Sector sector1 = new Sector(16, 8, SectorTypeEnum.DANGEROUS, true);
+        Sector sector2 = new Sector(21, 2, SectorTypeEnum.DANGEROUS, true);
+        Match match = new Match("galilei");
+        match.getPlayers().add(player2);
+        match.getPlayers().add(player1);
+        GameLogic controller = new GameLogic(match);
+        Broker broker = new Broker("broker");
+        controller.setBroker(broker);
+        player1.setCurrentSector(sector1);
+        player1.getCurrentSector().getPlayer().add(player1);
+        player2.setCurrentSector(sector2);
+        player2.getCurrentSector().getPlayer().add(player2);
+        Card card = new SilenceCard(true);
+        match.getSectorDeck().clear();
+        match.getSectorDeck().add(card);
+        controller.movePlayerAndAttack(player1, sector1);
+        assertTrue(player1.getCurrentSector().getPlayer().contains(player1));
+        assertTrue(player1.hasMoved());
+        assertNotNull(match.getSectorDeckDiscarded());
+    }
 
-    /*
-     * @Test public void testMakeANoise(){
-     * 
-     * }
-     */
-
-    /*
-     * @Test public void testStartGame(){
-     * 
-     * }
-     * 
-     * @Test public void testEndTurn(){
-     * 
-     * }
-     */
+    @Test 
+    public void testStartGame(){
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        Broker broker = new Broker("broker");
+        controller.setBroker(broker);
+        Player player1 = new Alien("Dummy1");
+        Player player2 = new Alien("Dummy2");
+        Player player3 = new Human("Dummy3");
+        Player player4 = new Human("Dummy4");
+        match.getPlayers().add(player1);
+        match.getPlayers().add(player2);
+        match.getPlayers().add(player3);
+        match.getPlayers().add(player4);
+        controller.startGame();
+        assertTrue(match.getMap().getAlienSector().getPlayer().size()==2);
+        assertTrue(match.getMap().getHumanSector().getPlayer().size()==2);
+        assertTrue(match.getMatchState().equals(GameState.RUNNING));
+    }
+    
+    @Test
+    public void testEndTurnWithFirstPlayerPlaying(){
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        Broker broker = new Broker("broker");
+        controller.setBroker(broker);
+        Player player1 = new Alien("Dummy1");
+        Player player2 = new Human("Dummy2");
+        match.getPlayers().add(player1);
+        match.getPlayers().add(player2);
+        match.setCurrentPlayer(player1);
+        player1.setHasMoved(true);
+        controller.endTurn();
+        assertFalse(player1.hasMoved());
+        assertTrue(match.getCurrentPlayer().equals(player2));
+    }
+    
+    @Test
+    public void testEndTurnWithSecondPlayerPlaying(){
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        Broker broker = new Broker("broker");
+        controller.setBroker(broker);
+        Player player1 = new Alien("Dummy1");
+        Player player2 = new Human("Dummy2");
+        match.getPlayers().add(player1);
+        match.getPlayers().add(player2);
+        match.setCurrentPlayer(player2);
+        player1.setHasMoved(true);
+        controller.endTurn();
+        assertFalse(player2.hasMoved());
+        assertTrue(match.getCurrentPlayer().equals(player1));
+    }
+    
+    @Test
+    public void testEndTurnAt39thTurn(){
+        Match match = new Match("galilei");
+        GameLogic controller = new GameLogic(match);
+        Broker broker = new Broker("broker");
+        controller.setBroker(broker);
+        Player player1 = new Alien("Dummy1");
+        Player player2 = new Human("Dummy2");
+        match.getPlayers().add(player1);
+        match.getPlayers().add(player2);
+        match.setCurrentPlayer(player2);
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        match.nextTurn();
+        player2.setHasMoved(true);
+        controller.endTurn();
+        assertFalse(player1.hasMoved());
+        assertTrue(match.getCurrentPlayer().equals(player1));
+        assertTrue(match.getTurnNumber()==40);
+    }
+   
 }
