@@ -27,10 +27,6 @@ import it.polimi.ingsw.cg_23.network.Broker;
 
 public class GameLogic{
 
-    private int numberOfPlayer;
-    
-    private String choice;
-
     private Match match;
     
     private Broker broker;
@@ -133,14 +129,19 @@ public class GameLogic{
         Human human = (Human) player;
         player.getCurrentSector().setEscapeHatchSectorNotCrossable();
         human.setEscaped();
+        match.removeEcapeHatch();
         removeAfterWinning(player);
+        if(match.getnUsableEscapeHatch()==0){
+            broker.publish("All escape hatches have been used or are unusable!");
+            endGame();
+        }
     }
 
     /**
      * Asks view to ask user in what sector there is noise.
      */
     public void useNoiseInAnySector(Player player) {
-        // TODO Qua non fa niente
+        //Qua non fa niente
     }
 
     /**
@@ -162,6 +163,10 @@ public class GameLogic{
         char letter=(char) (player.getCurrentSector().getLetter()+97);
         int number=player.getCurrentSector().getNumber();
         broker.publish("The Escape Hatch "+letter+" "+number+" is broken!");
+        if(match.getnUsableEscapeHatch()==0){
+            broker.publish("All escape hatches have been used or are unusable!");
+            endGame();
+        }
     }
 
     /**
@@ -542,8 +547,19 @@ public class GameLogic{
      * @param sector sector of destination of move and of attack
      */
     public void movePlayerAndAttack(Player player, Sector sector){
+        int nHuman = 0;
+        
         moveActions(player, sector);
         useAttack(player);
+        
+        for (Player playerInGame : match.getPlayers()) {
+            if(playerInGame instanceof Human)
+                nHuman++; 
+        }
+        if(nHuman==0){
+            broker.publish("All remaining humans are dead!");
+            endGame();
+        }
     }
     
     /**
@@ -595,6 +611,7 @@ public class GameLogic{
             }
         }        
         match.setCurrentPlayer(match.getPlayers().get(0));
+        match.nextTurn();
         match.setMatchState(GameState.RUNNING);
         broker.publish("Game started. The first player is: "+match.getCurrentPlayer().getName());
     }
@@ -615,7 +632,17 @@ public class GameLogic{
         } else {
             match.setCurrentPlayer(match.getPlayers().get(0));
         }
+        match.nextTurn();
         broker.publish("Next player is: "+match.getCurrentPlayer().getName());
+        if(match.getTurnNumber()==40){
+            broker.publish("Turn 39 has ended! Too late! Remaining humans are killed by aliens!");
+            endGame();
+        }
+    }
+    
+    private void endGame(){
+        match.setMatchState(GameState.ENDED);
+        broker.publish("The game has ended!");
     }
 
 }

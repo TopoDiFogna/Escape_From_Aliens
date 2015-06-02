@@ -73,6 +73,8 @@ public class Match extends Observable{
 
     private Player currentPlayer;
     
+    private int nUsableEscapeHatch = 4;
+    
 
     /**
      * The constructor.
@@ -204,7 +206,7 @@ public class Match extends Observable{
     }
 
     /**
-     * Adds 1 to turnNumber and returns the value.
+     * Adds 1 to turnNumber.
      */
     public void nextTurn() {
         turnNumber++;
@@ -228,5 +230,13 @@ public class Match extends Observable{
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public int getnUsableEscapeHatch() {
+        return nUsableEscapeHatch;
+    }
+
+    public void removeEcapeHatch() {
+        this.nUsableEscapeHatch--;
     }
 }

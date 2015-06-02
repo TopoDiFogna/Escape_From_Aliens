@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable{
             
         String line = socketIn.nextLine();
         
-        System.out.println("SERVER: getting the command "+line);
+        System.out.println("SERVER: getting the command: "+line);
         
         tokenizer = new StringTokenizer(line);
         
@@ -169,6 +169,7 @@ public class ClientHandler implements Runnable{
      * @param msg the string to sent to the client
      */
     private void send(String msg){
+        System.out.println("SERVER: Sending: "+msg);
         socketOut.println(msg);
         socketOut.flush();
     }
@@ -227,7 +228,7 @@ public class ClientHandler implements Runnable{
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
-        broker.addSubscriber(new BrokerThread(socket));
+        broker.addSubscriber(brokerThread);
         
         Player newPlayer;
         
@@ -262,7 +263,7 @@ public class ClientHandler implements Runnable{
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
-        broker.addSubscriber(new BrokerThread(socket));
+        broker.addSubscriber(brokerThread);
         
         match.addNewPlayerToList(new Alien(id));
         
@@ -281,10 +282,12 @@ public class ClientHandler implements Runnable{
                 if(match.getPlayers().size() > 1){
                     match.getGameLogic().startGame();
                 }
-                
+                else{
+                    System.out.println("SERVER: Cannot start the game");
+                    serverStatus.getIdMatchMap().remove(id);
+                }
             }
-            
-        }, 20000);
+        }, 20000);//20 seconds
     }
     
     
@@ -300,10 +303,10 @@ public class ClientHandler implements Runnable{
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
             return "Game has not started yet!";
         }
-        
-        
-        //TODO check if it's the player's turn
-        //if()
+            
+        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+            return "It's not your turn!";
+        }
             
         int letter;
         int number;
@@ -353,6 +356,7 @@ public class ClientHandler implements Runnable{
     }    
     
     private String moveAndAttack(){
+        
         if(checkIdIfPresent())
             return "You are not in a game! Join one first!";
         
@@ -360,9 +364,9 @@ public class ClientHandler implements Runnable{
             return "Game has not started yet!";
         }
         
-        
-        //TODO check if it's the player's turn
-        //if()
+        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+            return "It's not your turn!";
+        }
             
         int letter;
         int number;
@@ -415,6 +419,14 @@ public class ClientHandler implements Runnable{
         
         if(checkIdIfPresent())
             return "You are not in a game! Join one first!";
+        
+        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+            return "Game has not started yet!";
+        }
+        
+        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+            return "It's not your turn!";
+        }
         
         if(!tokenizer.hasMoreTokens()){
             return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
@@ -531,6 +543,18 @@ public class ClientHandler implements Runnable{
         int number;
        
         Match match = serverStatus.getIdMatchMap().get(id);
+        
+        if(checkIdIfPresent())
+            return "You are not in a game! Join one first!";
+        
+        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+            return "Game has not started yet!";
+        }
+        
+        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+            return "It's not your turn!";
+        }     
+        
         if(tokenizer.hasMoreTokens())
             letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
         
@@ -561,14 +585,22 @@ public class ClientHandler implements Runnable{
     private String discardCard() {
         String response = null;
         
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
         if(checkIdIfPresent())
             return "You are not in a game! Join one first!";
+        
+        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+            return "Game has not started yet!";
+        }
+        
+        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+            return "It's not your turn!";
+        }
         
         if(!tokenizer.hasMoreTokens()){
             return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
-        
-        Match match = serverStatus.getIdMatchMap().get(id);
         
         switch (tokenizer.nextToken().toLowerCase()) {
         
@@ -661,8 +693,22 @@ public class ClientHandler implements Runnable{
     
 
     private String endTurn() {
-        String response = "";
+        
         Match match = serverStatus.getIdMatchMap().get(id);
+        
+        if(checkIdIfPresent())
+            return "You are not in a game! Join one first!";
+        
+        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+            return "Game has not started yet!";
+        }
+        
+        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+            return "It's not your turn!";
+        }
+        
+        String response = "";
+
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
                 if(playerInList.hasMoved()){
