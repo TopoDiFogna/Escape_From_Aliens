@@ -149,9 +149,9 @@ public class GameLogic{
      * It get the current sector and check if the card has the item.
      */
     public void useNoiseInYourSector(Player player) {
-        char letter=(char) ((player.getCurrentSector().getLetter())+97);
-        int number=player.getCurrentSector().getNumber()+1;
-        broker.publish("Noise in sector "+letter+number);
+        char letter=(char) ((player.getCurrentSector().getLetter())+96);
+        int number=player.getCurrentSector().getNumber();
+        broker.publish("Noise in sector "+letter+" "+number);
 
     }
 
@@ -352,7 +352,7 @@ public class GameLogic{
         useOtherCard(player, sectorCard);
         if(sectorCard instanceof NoiseInAnySectorCard){
             player.setNeedSectorNoise(true);
-            return "In which sector do you want a noise?";
+            return "In which sector do you want a noise? ";
         }
         return "";
     }

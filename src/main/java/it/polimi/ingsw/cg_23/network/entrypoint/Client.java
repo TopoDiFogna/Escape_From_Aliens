@@ -1,4 +1,5 @@
 package it.polimi.ingsw.cg_23.network.entrypoint;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -12,11 +13,18 @@ public class Client {
     private final String ip;
     private final String name;
     
+    private Scanner stdin;
+    
+    private Socket socket = null;
+    private Scanner SocketIn = null;
+    private PrintWriter socketOut = null;
+    
     private CopyOfClient receiver;
+    
     
     public Client() {
         
-        Scanner stdin = new Scanner(System.in);
+        stdin = new Scanner(System.in);
         
         System.out.println("inserisci indirizzo ip");
         ip = stdin.nextLine();
@@ -24,60 +32,58 @@ public class Client {
         port=stdin.nextInt();
         stdin.nextLine();
         System.out.println("Inserisci nick");
-        name=stdin.nextLine();
-        
+        name=stdin.nextLine();        
     }
     
     public void startClient() throws IOException{
+
+        String inputLine = "";
+        String serverMessage = null;
+        
+        while(!inputLine.equalsIgnoreCase("exit")){
+            
+            stdin = new Scanner(System.in);
+            inputLine = stdin.nextLine();
+            
+            if(!inputLine.equalsIgnoreCase("exit")){
+        
+                try {
+                    socket = new Socket(ip,port);
+                } catch (UnknownHostException e) {
+                    System.err.println("ERROR: Unknown host!");
+                    System.err.println("ERROR: Try verifying your ip and relaunch the client");
+                    return;
+                } catch (IOException e) {
+                    System.err.println("ERROR: Cannot connect to the specified host!");
+                    System.err.println("ERROR: Try verifying your ip and port and relaunch the client");
+                    return;
+                }
                 
-        Socket socket = null;
-        Scanner SocketIn = null;
-        PrintWriter socketOut = null;
-        
-        while(true){
-        
-
-            try {
-                socket = new Socket(ip,port);
-            } catch (UnknownHostException e) {
-                System.err.println("ERROR: Unknown host!");
-                System.err.println("ERROR: Try verifying your ip and relaunch the client");
-                return;
-            } catch (IOException e) {
-                System.err.println("ERROR: Cannot connect to the specified host!");
-                System.err.println("ERROR: Try verifying your ip and port and relaunch the client");
-                return;
+                try {
+                    SocketIn = new Scanner(socket.getInputStream());
+                } catch (IOException e) {
+                    System.err.println("ERROR: Stream error!");
+                }
+                
+                try {
+                    socketOut = new PrintWriter(socket.getOutputStream());
+                } catch (IOException e) {
+                    System.err.println("ERROR: Stream error!");
+                }
+                
+                socketOut.println(name+" "+inputLine);
+                socketOut.flush();
+                
+                serverMessage = SocketIn.nextLine();
+                System.out.println(serverMessage);
+                
+                if(inputLine.equalsIgnoreCase("join galilei") || inputLine.equalsIgnoreCase("join fermi") || inputLine.equalsIgnoreCase("join galvani"))
+                {
+                    receiver= new CopyOfClient(socket);
+                    receiver.start();
+                }
             }
-            
-            try {
-                SocketIn = new Scanner(socket.getInputStream());
-            } catch (IOException e) {
-                System.err.println("ERROR: Stream error!");
-            }
-            
-            try {
-                socketOut = new PrintWriter(socket.getOutputStream());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        
-
-        Scanner stdin = new Scanner(System.in);
-        
-        receiver= new CopyOfClient(socket);
-        
-        receiver.start();
-            
-            
-        
-            
-            String inputLine = stdin.nextLine();
-            
-            socketOut.println(name+" "+inputLine);
-            socketOut.flush();
         }
-        
     }
 
     public static void main(String[] args) throws IOException {
@@ -85,5 +91,4 @@ public class Client {
         client.startClient();
 
     }
-
 }

@@ -14,30 +14,26 @@ public class BrokerThread extends Thread{
     public BrokerThread(Socket socket){
         this.socket = socket;
         buffer = new ConcurrentLinkedQueue<String>();
+        
         try {
             out = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
             System.err.println("Cannot connect to subscriber");
-        }
-        
+        } 
     }
-    
-    public void send(String msg){
-        out.println(msg);
-        out.flush();
-    }
-    
-    
+
     @Override
     public void run() {
         while(true){
             String msg = buffer.poll();
-            if(msg != null) 
+            if(msg != null){ 
                 send(msg);
+                System.out.println("Sending...");
+            }
             else{
                 try {
                     synchronized (buffer) {
-                        buffer.wait();
+                        buffer.wait();  
                     }
                 } catch (InterruptedException e) {
                    System.err.println("Cannot wait on the queue");
@@ -52,5 +48,10 @@ public class BrokerThread extends Thread{
         synchronized(buffer){
             buffer.notify();
         }
+    }
+    
+    public void send(String msg){
+        out.println(msg);
+        out.flush();
     }
 }
