@@ -191,6 +191,7 @@ public class Match extends Observable{
         return this.players;
     }
 
+    //TODO da controllare se serve davvero (in caso aggiungere all'uml)
     public void addNewPlayerToList(Player player) {
         this.players.add(player);
     }
@@ -212,30 +213,54 @@ public class Match extends Observable{
         turnNumber++;
     }
 
+    /** 
+     * @return name of the current map
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * @return the enum defining the state of the game
+     */
     public GameState getMatchState() {
         return matchState;
     }
 
+    /**
+     * Sets the state of the match.
+     * 
+     * @param matchState
+     */
     public void setMatchState(GameState matchState) {
         this.matchState = matchState;
     }
 
+    /**
+     * @return the current player playing the turn
+     */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+    /**
+     * Sets who is the player playing the turn.
+     * @param currentPlayer
+     */
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     * @return the number of usable escape hatch 
+     */
     public int getnUsableEscapeHatch() {
         return nUsableEscapeHatch;
     }
 
+    /**
+     * Decreases the number of usable escape hatch, after using it.
+     */
     public void removeEcapeHatch() {
         this.nUsableEscapeHatch--;
     }
