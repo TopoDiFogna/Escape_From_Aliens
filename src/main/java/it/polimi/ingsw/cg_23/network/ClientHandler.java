@@ -81,7 +81,7 @@ public class ClientHandler implements Runnable{
             
         String line = socketIn.nextLine();
         
-        System.out.println("SERVER: getting the command: "+line);
+        System.out.println("CLIENT: Command: "+line);
         
         tokenizer = new StringTokenizer(line);
         
@@ -90,9 +90,9 @@ public class ClientHandler implements Runnable{
         if(tokenizer.hasMoreTokens()){
             send(parseCommand(tokenizer.nextToken()));
         }
-        else send("Hi "+id+"! Nothing to do here! Thanks for coming! Bye!");
+        else 
+            send("Hi "+id+"! Nothing to do here! Thanks for coming! Bye!");
         
-        close();
     }
     
     /**
@@ -106,7 +106,7 @@ public class ClientHandler implements Runnable{
         return false;
     }
     
-    private String parseCommand(String msg){//TODO finish this
+    private String parseCommand(String msg){
         
         String response = null;
         if(msg == null){
@@ -172,20 +172,6 @@ public class ClientHandler implements Runnable{
         System.out.println("SERVER: Sending: "+msg);
         socketOut.println(msg);
         socketOut.flush();
-    }
-    
-    /**
-     * Closes the connection with a client
-     * 
-     */
-    private void close() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            System.err.println("ERROR: Cannot close the connection");
-        } finally {
-            socket = null;
-        }
     }
     
     private String checkGames(){
@@ -336,7 +322,7 @@ public class ClientHandler implements Runnable{
                 if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                         response = match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
-                        response = response + " You moved in sector "+letter+" "+number;
+                        response = response + "You moved in sector "+letter+" "+number;
                         break;
                     }
                     else 

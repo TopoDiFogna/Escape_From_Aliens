@@ -59,11 +59,11 @@ public class Client {
                     return;
                 }
                 
-                /*try {
+                try {
                     SocketIn = new Scanner(socket.getInputStream());
                 } catch (IOException e) {
                     System.err.println("ERROR: Stream error!");
-                }*/
+                }
                 
                 try {
                     socketOut = new PrintWriter(socket.getOutputStream());
@@ -74,8 +74,8 @@ public class Client {
                 socketOut.println(name+" "+inputLine);
                 socketOut.flush();
                 
-                /*serverMessage = SocketIn.nextLine();
-                System.out.println(serverMessage);*/
+                serverMessage = SocketIn.nextLine();
+                System.out.println(serverMessage);
                 
                 if(inputLine.equalsIgnoreCase("join galilei") || inputLine.equalsIgnoreCase("join fermi") || inputLine.equalsIgnoreCase("join galvani"))
                 {

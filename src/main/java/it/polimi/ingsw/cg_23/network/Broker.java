@@ -16,7 +16,7 @@ public class Broker{
     
     public void publish(String msg){
         if(!subscribers.isEmpty()){
-            System.out.println("Publishing message: "+msg);
+            System.out.println("SERVER: Broadcast: "+msg);
             for(BrokerThread subscriber : subscribers){
                 subscriber.dispatchMessage(msg);
             }

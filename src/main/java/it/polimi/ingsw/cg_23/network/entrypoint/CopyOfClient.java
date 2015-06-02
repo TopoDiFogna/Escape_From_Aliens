@@ -35,7 +35,6 @@ public class CopyOfClient extends Thread{
         try {
             msg=socketIn.readLine();
             if(msg!=null){
-                System.out.println("Received Message");
                 System.out.println(msg);
             }
         } catch (IOException e) {
