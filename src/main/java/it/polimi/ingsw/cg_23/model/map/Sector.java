@@ -127,6 +127,11 @@ public class Sector extends Coordinate {
         }
     }
 
+    /**
+     * Returns the list of neighbors.
+     * 
+     * @return the list of sector neighbors the starting one
+     */
     public List<Sector> getNeighbors() {
         return this.neighbors;
     }

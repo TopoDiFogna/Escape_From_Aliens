@@ -31,7 +31,7 @@ public class Alien extends Player {
     }
 
     /**
-     * Sets an anlien as a killer
+     * Sets an alien as a killer
      * 
      */
     public void setHasKilled() {

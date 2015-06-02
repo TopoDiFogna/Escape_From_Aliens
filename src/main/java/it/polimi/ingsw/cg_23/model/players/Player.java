@@ -173,31 +173,60 @@ public abstract class Player {
         return name;
     }
 
+    
+    /**
+     * It's a flag to indicate if player already moves in his turn.
+     * 
+     * @return true if player already moves, false if not
+     */
     public boolean hasMoved() {
         return hasMoved;
     }
 
+    /**
+     * Sets true if player already moves, false if not.
+     * 
+     * @param hasMoved
+     */
     public void setHasMoved(boolean hasMoved) {
         this.hasMoved = hasMoved;
     }
     
-    
+    /**
+     * It's a flag to indicate if player has four cards in his hand.
+     * 
+     * @return true if player has four cards, false if not
+     */
     public boolean hasFourCard() {
         return hasFourCard;
     }
 
+    
+    /**
+     * Sets a flag to indicate if player already has four cards and he needs to chose what to do.
+     * 
+     * @param hasFourCard
+     */
     public void setHasFourCard(boolean hasFourCard) {
         this.hasFourCard = hasFourCard;
     }
 
+    /**
+     * It's a flag to indicate if player has to communicate a sector for noise.
+     * 
+     * @return true if player has to communicate a sector, false if not
+     */
     public boolean needSectorNoise() {
         return needSectorNoise;
     }
 
+    /**
+     * Sets a flag to indicate if player has to communicate a sector where make noise.
+     * 
+     * @param needSectorNoise
+     */
     public void setNeedSectorNoise(boolean needSectorNoise) {
         this.needSectorNoise = needSectorNoise;
-    }
-    
-    
+    }    
      
 }
