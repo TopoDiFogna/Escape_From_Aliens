@@ -673,6 +673,8 @@ public class GameLogicTest {
         Sector sector = new Sector(16, 8, SectorTypeEnum.DANGEROUS, true);
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
+        Broker broker = new Broker("broker");
+        controller.setBroker(broker);
         player.setCurrentSector(sector);
         player.getCurrentSector().getPlayer().add(player);
         Card card = new SilenceCard(true);
