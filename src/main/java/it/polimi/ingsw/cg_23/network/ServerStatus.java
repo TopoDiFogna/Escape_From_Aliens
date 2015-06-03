@@ -1,6 +1,7 @@
 package it.polimi.ingsw.cg_23.network;
 
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
 
 import java.util.HashMap;
 
@@ -10,7 +11,7 @@ public class ServerStatus {
     
     private HashMap<String, Match> idLogicMap;
     
-    private HashMap<Match, Broker> logicBrokerMap;
+    private HashMap<Match, SocketBroker> logicBrokerMap;
     
     private int brokerNumber = 0;
 
@@ -34,7 +35,7 @@ public class ServerStatus {
         idLogicMap.put(name, match);
     }
     
-    public void addBrokerToMatch(Match match, Broker broker){
+    public void addBrokerToMatch(Match match, SocketBroker broker){
         logicBrokerMap.put(match, broker);
     }
 
@@ -42,7 +43,7 @@ public class ServerStatus {
         return idLogicMap;
     }
 
-    public HashMap<Match, Broker> getMatchBrokerMap() {
+    public HashMap<Match, SocketBroker> getMatchBrokerMap() {
         return logicBrokerMap;
     }
 

@@ -18,7 +18,7 @@ import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
-import it.polimi.ingsw.cg_23.network.Broker;
+import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
 
 /**
  * Description of GameLogic.
@@ -30,7 +30,7 @@ public class GameLogic{
 
     private Match match;
     
-    private Broker broker;
+    private SocketBroker broker;
 
     /**
      * The constructor.
@@ -45,7 +45,7 @@ public class GameLogic{
      * 
      * @param broker the broker to be added
      */
-    public void setBroker(Broker broker) {
+    public void setBroker(SocketBroker broker) {
         this.broker = broker;
     }
 

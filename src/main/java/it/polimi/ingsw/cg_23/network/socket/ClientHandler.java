@@ -1,4 +1,4 @@
-package it.polimi.ingsw.cg_23.network;
+package it.polimi.ingsw.cg_23.network.socket;
 
 import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
@@ -11,6 +11,7 @@ import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.ServerStatus;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -175,7 +176,7 @@ public class ClientHandler implements Runnable{
         socketOut.flush();
     }
     
-    private String checkGames(){
+    private synchronized String checkGames(){
         
         if(!tokenizer.hasMoreTokens())
             return "Join sintax: join mapname";
@@ -211,7 +212,7 @@ public class ClientHandler implements Runnable{
         return response;
     }
     
-    private void joinGame(Match match, Broker broker){
+    private void joinGame(Match match, SocketBroker broker){
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
@@ -246,7 +247,7 @@ public class ClientHandler implements Runnable{
         
         Match match = new Match(mapName);
         
-        Broker broker = new Broker(""+mapName+serverStatus.getBrokerNumber());
+        SocketBroker broker = new SocketBroker(""+mapName+serverStatus.getBrokerNumber());
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();

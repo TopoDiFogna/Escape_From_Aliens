@@ -1,4 +1,4 @@
-package it.polimi.ingsw.cg_23.network;
+package it.polimi.ingsw.cg_23.network.socket;
 
 import java.io.IOException;
 import java.io.PrintWriter;
