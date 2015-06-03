@@ -24,6 +24,9 @@ public class SilenceCard extends Card {
         this.hasItem = hasItem;
     }
 
+    /** 
+     * @return true if card has item symbol, false if not, but for this card is always false
+     */
     public boolean hasItem() {
         return hasItem;
     }

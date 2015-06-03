@@ -25,6 +25,9 @@ public class NoiseInYourSectorCard extends Card {
         this.hasItem = hasItem;
     }
 
+    /** 
+     * @return true if card has item symbol, false if not
+     */
     public boolean hasItem() {
         return hasItem;
     }
