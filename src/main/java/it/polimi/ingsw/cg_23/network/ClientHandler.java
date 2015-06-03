@@ -91,8 +91,7 @@ public class ClientHandler implements Runnable{
             send(parseCommand(tokenizer.nextToken()));
         }
         else 
-            send("Hi "+id+"! Nothing to do here! Thanks for coming! Bye!");
-        
+            send("Hi "+id+"! Nothing to do here! Thanks for coming! Bye!");        
     }
     
     /**
@@ -150,12 +149,7 @@ public class ClientHandler implements Runnable{
                 
             default:
                 response="Command not found!";
-                break;
-                
-                
-        
-        
-        
+                break; 
         }
         return response;
     }
