@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class ClientHandler implements Runnable{
     
-    private Logger logger;
+    private Logger logger = Logger.getLogger("logger");
     
     private String notInGame = "You are not in a game! Join one first!";    
     private String notStartedYet = "Game has not started yet!";

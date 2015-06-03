@@ -10,7 +10,7 @@ public class BrokerThread extends Thread{
 
     private Socket socket;
     private PrintWriter out;
-    private Logger logger;
+    private Logger logger = Logger.getLogger("logger");
     ConcurrentLinkedQueue<String> buffer;
 
     public BrokerThread(Socket socket){

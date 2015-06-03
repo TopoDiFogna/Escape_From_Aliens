@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 public class Server {
     
-    private Logger logger;
+    private Logger logger = Logger.getLogger("logger");
     
     /**
      * The port the server listen on.

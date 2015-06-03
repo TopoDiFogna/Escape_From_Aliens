@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class ClientSubscriber extends Thread{
     
-    private Logger logger;
+    private Logger logger = Logger.getLogger("logger");
     
     private BufferedReader socketIn;
     

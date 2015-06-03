@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 public class Broker{
     
-    private Logger logger;
+    private Logger logger = Logger.getLogger("logger");
     
     private String topic;
 

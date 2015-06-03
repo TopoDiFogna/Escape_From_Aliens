@@ -17,7 +17,7 @@ public class Client {
     private final String ip;
     private final String name;
     
-    private Logger logger;
+    private Logger logger = Logger.getLogger("logger");
     
     private Scanner stdin;
     
