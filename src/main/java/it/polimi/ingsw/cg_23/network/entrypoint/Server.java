@@ -1,6 +1,6 @@
 package it.polimi.ingsw.cg_23.network.entrypoint;
 
-import it.polimi.ingsw.cg_23.network.ClientHandler;
+import it.polimi.ingsw.cg_23.network.socket.ClientHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
