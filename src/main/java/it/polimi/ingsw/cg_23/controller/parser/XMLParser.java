@@ -109,9 +109,7 @@ public class XMLParser extends DefaultHandler{
         boolean crossable = getBooleanValue(sectorElement,"crossable");
 
         //Create a new Sector with the value read from the xml nodes
-        Sector sector = new Sector(letter, number, type, crossable);
-
-        return sector;
+        return new Sector(letter, number, type, crossable);
     }
 
 

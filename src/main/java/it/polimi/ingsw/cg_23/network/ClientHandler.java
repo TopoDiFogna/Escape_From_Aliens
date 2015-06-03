@@ -29,6 +29,13 @@ import java.util.TimerTask;
  */
 public class ClientHandler implements Runnable{
     
+    private String notInGame = "You are not in a game! Join one first!";    
+    private String notStartedYet = "Game has not started yet!";
+    private String notYourTurn = "It's not your turn!";
+    private String cantUseCard = "You can't use that card!";
+    private String spotlightSyntax = "Spotlight syntax: use spotlight letter number";
+    private String noiseSyntax = "Noise syntax: noise letter number";
+    
     /**
      * The socket of the client
      */
@@ -278,14 +285,14 @@ public class ClientHandler implements Runnable{
     private String movePlayer(){
         
         if(checkIdIfPresent())
-            return "You are not in a game! Join one first!";
+            return notInGame;
         
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
-            return "Game has not started yet!";
+            return notStartedYet;
         }
             
         if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return "It's not your turn!";
+            return notYourTurn;
         }
             
         int letter;
@@ -338,14 +345,14 @@ public class ClientHandler implements Runnable{
     private String moveAndAttack(){
         
         if(checkIdIfPresent())
-            return "You are not in a game! Join one first!";
+            return notInGame;
         
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
-            return "Game has not started yet!";
+            return notStartedYet;
         }
         
         if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return "It's not your turn!";
+            return notYourTurn;
         }
             
         int letter;
@@ -398,14 +405,14 @@ public class ClientHandler implements Runnable{
         String response = null;
         
         if(checkIdIfPresent())
-            return "You are not in a game! Join one first!";
+            return notInGame;
         
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
-            return "Game has not started yet!";
+            return notStartedYet;
         }
         
         if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return "It's not your turn!";
+            return notYourTurn;
         }
         
         if(!tokenizer.hasMoreTokens()){
@@ -435,7 +442,7 @@ public class ClientHandler implements Runnable{
                         response="You used the Adrenaline card!";
                     }
                     else 
-                        response="You can't use that card!";
+                        response=cantUseCard;
                 }  
             }
             
@@ -458,7 +465,7 @@ public class ClientHandler implements Runnable{
                         response="You used the Sedatives card!";
                     }
                     else 
-                        response="You can't use that card!";
+                        response=cantUseCard;
                 }
             }
             break;
@@ -471,16 +478,16 @@ public class ClientHandler implements Runnable{
                 letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
             
             else
-                return "Spotlight syntax: use spotlight letter number";
+                return spotlightSyntax;
             
             if(tokenizer.hasMoreTokens())
                 number=Integer.parseInt(tokenizer.nextToken())-1;
 
             else
-                return "Spotlight syntax: use spotlight letter number";
+                return spotlightSyntax;
             
             if(letter<0 || letter>=23 || number <0 || number >=14)
-                return "Spotlight syntax: use spotlight letter number";
+                return spotlightSyntax;
             
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
@@ -490,7 +497,7 @@ public class ClientHandler implements Runnable{
                         response="You used the Spotlight card!";
                     }
                     else
-                        response = "You can't use that card!";
+                        response = cantUseCard;
                 }
             }
             
@@ -505,7 +512,7 @@ public class ClientHandler implements Runnable{
                         response="You used the Teleport card!";
                     }
                     else
-                        response = "You can't use that card!";
+                        response = cantUseCard;
                 }
             }
             break;
@@ -525,30 +532,30 @@ public class ClientHandler implements Runnable{
         Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
-            return "You are not in a game! Join one first!";
+            return notInGame;
         
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
-            return "Game has not started yet!";
+            return notStartedYet;
         }
         
         if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return "It's not your turn!";
+            return notYourTurn;
         }     
         
         if(tokenizer.hasMoreTokens())
             letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
         
         else
-            return "Noise syntax: noise letter number";
+            return noiseSyntax;
         
         if(tokenizer.hasMoreTokens())
             number=Integer.parseInt(tokenizer.nextToken())-1;
 
         else
-            return "Noise syntax: noise letter number";
+            return noiseSyntax;
         
         if(letter<0 || letter>=23 || number <0 || number >=14)
-            return "Noise syntax: noise letter number";
+            return noiseSyntax;
         
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id))
@@ -568,14 +575,14 @@ public class ClientHandler implements Runnable{
         Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
-            return "You are not in a game! Join one first!";
+            return notInGame;
         
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
-            return "Game has not started yet!";
+            return notStartedYet;
         }
         
         if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return "It's not your turn!";
+            return notYourTurn;
         }
         
         if(!tokenizer.hasMoreTokens()){
@@ -677,14 +684,14 @@ public class ClientHandler implements Runnable{
         Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
-            return "You are not in a game! Join one first!";
+            return notInGame;
         
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
-            return "Game has not started yet!";
+            return notStartedYet;
         }
         
         if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return "It's not your turn!";
+            return notYourTurn;
         }
         
         String response = "";
