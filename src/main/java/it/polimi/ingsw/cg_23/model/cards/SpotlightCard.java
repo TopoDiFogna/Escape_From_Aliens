@@ -24,6 +24,7 @@ public class SpotlightCard extends Card {
      */
     @Override
     public void doAction(Player player, GameLogic controller) {
+        //This method is never called.
     }
 
 }

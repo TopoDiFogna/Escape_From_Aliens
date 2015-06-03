@@ -16,7 +16,7 @@ public class Client {
     private Scanner stdin;
     
     private Socket socket = null;
-    private Scanner SocketIn = null;
+    private Scanner socketIn = null;
     private PrintWriter socketOut = null;
     
     private CopyOfClient receiver;
@@ -60,7 +60,7 @@ public class Client {
                 }
                 
                 try {
-                    SocketIn = new Scanner(socket.getInputStream());
+                    socketIn = new Scanner(socket.getInputStream());
                 } catch (IOException e) {
                     System.err.println("ERROR: Stream error!");
                 }
@@ -74,7 +74,7 @@ public class Client {
                 socketOut.println(name+" "+inputLine);
                 socketOut.flush();
                 
-                serverMessage = SocketIn.nextLine();
+                serverMessage = socketIn.nextLine();
                 System.out.println(serverMessage);
                 
                 if(inputLine.equalsIgnoreCase("join galilei") || inputLine.equalsIgnoreCase("join fermi") || inputLine.equalsIgnoreCase("join galvani"))

@@ -186,7 +186,7 @@ public class ClientHandler implements Runnable{
         if(!checkIdIfPresent())
             return "You are already in a game!";
         
-        if(mapName.equals("galilei") || mapName.equals("fermi") || mapName.equals("galvani")){
+        if("galilei".equals(mapName) || "fermi".equals(mapName) || "galvani".equals(mapName)){
             
             for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
                 if(match.getName().equals(mapName) && match.getMatchState() != GameState.RUNNING && match.getPlayers().size()<8){
@@ -214,7 +214,7 @@ public class ClientHandler implements Runnable{
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
-        serverStatus.getMatchBrokerMap().get(match).addSubscriber(brokerThread);
+        broker.addSubscriber(brokerThread);
         
         Player newPlayer;
         

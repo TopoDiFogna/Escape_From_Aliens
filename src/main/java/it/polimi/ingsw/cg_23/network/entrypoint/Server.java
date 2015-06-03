@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 /**
  * From here we start the server.<br>
- * It accepts connection and passes them to the client handler
+ * It accepts connection and passes them to the client handler.
  * 
  * @author Paolo
  *
@@ -19,9 +19,9 @@ import java.util.concurrent.Executors;
 public class Server {
     
     /**
-     * The port the server listen on
+     * The port the server listen on.
      */
-    private final static int SOCKET_PORT=10412;
+    private static final int SOCKET_PORT=10412;
         
     /**
      * The client handler will manage every connection to the game.
@@ -29,9 +29,14 @@ public class Server {
     private ClientHandler clientHandler;
     
     /**
-     * Error to handle client connection
+     * Error to handle client connection.
      */
-    private boolean error;    
+    private boolean error;
+
+    /**
+     * The status of the server.
+     */
+    private boolean running = true;
 
     /**
      * Constructor: spawns the server and launches it
@@ -40,7 +45,6 @@ public class Server {
         this.startSocket();
     }
     
-    private boolean running=true;
     
     /**
      * Connection handling.<br>

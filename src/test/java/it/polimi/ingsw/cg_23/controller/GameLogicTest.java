@@ -107,6 +107,7 @@ public class GameLogicTest {
             }
         }
         assertTrue(player.getCanMoveFaster());
+        assertFalse(((Alien) player).getHasKilled());
     }
     
     @Test 

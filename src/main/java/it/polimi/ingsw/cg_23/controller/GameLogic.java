@@ -3,6 +3,7 @@ package it.polimi.ingsw.cg_23.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
@@ -101,7 +102,7 @@ public class GameLogic{
      * @param playerWhoAttack
      */
     public void useAttack(Player playerWhoAttack) {
-        ArrayList<Player> playerList = (ArrayList<Player>) playerWhoAttack.getCurrentSector().getPlayer();
+        List<Player> playerList = (ArrayList<Player>) playerWhoAttack.getCurrentSector().getPlayer();
         Iterator<Player> playerIterator = playerList.iterator();
         while (playerIterator.hasNext()) {
             Player playerAttacked = playerIterator.next();
@@ -524,7 +525,7 @@ public class GameLogic{
      */
     public void makeANoise(int letter, int number) {
         char noiseLetter = (char) (letter+97);
-        number=number+1;
+        number++;
         broker.publish("Noise in sector "+noiseLetter+" "+number);
         
     }
@@ -554,7 +555,12 @@ public class GameLogic{
         broker.publish("Game started. The first player is: "+match.getCurrentPlayer().getName());
     }
     
-    //TODO javadoc l'implementazione è giusta?
+    /**
+     * This method reset hasMoved to false. Set the next player in list as current player. <br>
+     * If the current player is the last of the list, set as current player the first player of the list. <br>
+     * Call nextTurn for increment the turn number. Check if the turn is arrived to 40, and in this case <br>
+     * call endGame! 
+     */
     public void endTurn(){
         match.getCurrentPlayer().setHasMoved(false);
         int currentPlayerIndex = 0;
