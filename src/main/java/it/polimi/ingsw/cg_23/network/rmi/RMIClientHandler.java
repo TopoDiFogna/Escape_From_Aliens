@@ -1,6 +1,8 @@
 package it.polimi.ingsw.cg_23.network.rmi;
 
 public class RMIClientHandler implements RMIClientHandlerInterface {
+    
+    private RMIClientInterface clientInterface;
 
     public RMIClientHandler() {
         // TODO Auto-generated constructor stub

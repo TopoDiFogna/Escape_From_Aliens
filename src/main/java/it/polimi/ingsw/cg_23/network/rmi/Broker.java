@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Broker implements BrokerInterface{
 
-	private  List<SubscriberInterface> subscribers = new ArrayList<SubscriberInterface>();
+	private  List<RMIClientInterface> subscribers = new ArrayList<RMIClientInterface>();
 	private String topic;
 	
 	public Broker(String topic){
@@ -22,7 +22,7 @@ public class Broker implements BrokerInterface{
 	public void publish(String msg){
 		if(!subscribers.isEmpty()){
 			System.out.println("Publishing message on topic "+topic);
-			for (SubscriberInterface sub : subscribers) {
+			for (RMIClientInterface sub : subscribers) {
 				try {
 					sub.dispatchMessage(msg);
 				} catch (RemoteException e) {
@@ -39,7 +39,7 @@ public class Broker implements BrokerInterface{
 	 * The method updates the list of subscriber interfaces that are subscribed to the broker
 	 */
 	@Override
-	public void subscribe(SubscriberInterface r) {
+	public void subscribe(RMIClientInterface r) {
 		subscribers.add(r);
 	}
 }
