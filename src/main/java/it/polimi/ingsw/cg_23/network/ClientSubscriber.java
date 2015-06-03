@@ -1,4 +1,4 @@
-package it.polimi.ingsw.cg_23.network.entrypoint;
+package it.polimi.ingsw.cg_23.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,14 +6,14 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 
-public class CopyOfClient extends Thread{
+public class ClientSubscriber extends Thread{
     
     private BufferedReader socketIn;
     
     private Socket socket;
     
     
-    public CopyOfClient(Socket socket) throws IOException{
+    public ClientSubscriber(Socket socket) throws IOException{
         this.socket=socket;
         socketIn = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); 
     }
