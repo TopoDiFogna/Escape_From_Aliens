@@ -19,6 +19,7 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 /**
  * This class receive commands from the client and executes them.
@@ -28,6 +29,8 @@ import java.util.TimerTask;
  *
  */
 public class ClientHandler implements Runnable{
+    
+    private Logger logger;
     
     private String notInGame = "You are not in a game! Join one first!";    
     private String notStartedYet = "Game has not started yet!";
@@ -88,7 +91,7 @@ public class ClientHandler implements Runnable{
             
         String line = socketIn.nextLine();
         
-        System.out.println("CLIENT: Command: "+line);
+        logger.info("CLIENT: Command: "+line);
         
         tokenizer = new StringTokenizer(line);
         
@@ -170,7 +173,7 @@ public class ClientHandler implements Runnable{
      * @param msg the string to sent to the client
      */
     private void send(String msg){
-        System.out.println("SERVER: Sending: "+msg);
+        logger.info("SERVER: Sending: "+msg);
         socketOut.println(msg);
         socketOut.flush();
     }
@@ -178,7 +181,7 @@ public class ClientHandler implements Runnable{
     private String checkGames(){
         
         if(!tokenizer.hasMoreTokens())
-            return "Join sintax: join mapname";
+            return "Join syntax: join mapname";
         
         String mapName = tokenizer.nextToken().toLowerCase();
         
@@ -270,7 +273,7 @@ public class ClientHandler implements Runnable{
                     match.getGameLogic().startGame();
                 }
                 else{
-                    System.out.println("SERVER: Cannot start the game");
+                    logger.info("SERVER: Cannot start the game");
                     serverStatus.getIdMatchMap().remove(id);
                 }
             }

@@ -2,8 +2,11 @@ package it.polimi.ingsw.cg_23.network;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Broker{
+    
+    private Logger logger;
     
     private String topic;
 
@@ -16,13 +19,13 @@ public class Broker{
     
     public void publish(String msg){
         if(!subscribers.isEmpty()){
-            System.out.println("SERVER: Broadcast: "+msg);
+            logger.info("SERVER: Broadcast: "+msg);
             for(BrokerThread subscriber : subscribers){
                 subscriber.dispatchMessage(msg);
             }
         }
         else{
-            System.err.println("No subscribers!!");
+            logger.warning("No subscribers!!");
         }
     }
 
