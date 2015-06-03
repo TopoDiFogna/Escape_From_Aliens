@@ -1,5 +1,7 @@
 package it.polimi.ingsw.cg_23.network.entrypoint;
 
+import it.polimi.ingsw.cg_23.network.ClientSubscriber;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -19,7 +21,7 @@ public class Client {
     private Scanner socketIn = null;
     private PrintWriter socketOut = null;
     
-    private CopyOfClient receiver;
+    private ClientSubscriber receiver;
     
     
     public Client() {
@@ -79,7 +81,7 @@ public class Client {
                 
                 if(inputLine.equalsIgnoreCase("join galilei") || inputLine.equalsIgnoreCase("join fermi") || inputLine.equalsIgnoreCase("join galvani"))
                 {
-                    receiver= new CopyOfClient(socket);
+                    receiver= new ClientSubscriber(socket);
                     receiver.start();
                 }
             }
