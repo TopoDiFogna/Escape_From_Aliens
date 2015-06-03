@@ -6,8 +6,7 @@ import java.util.logging.Logger;
 
 public class Broker{
     
-    private Logger logger = Logger.getLogger("logger");
-    
+    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     private String topic;
 
     private List<BrokerThread> subscribers;
@@ -19,13 +18,13 @@ public class Broker{
     
     public void publish(String msg){
         if(!subscribers.isEmpty()){
-            logger.info("SERVER: Broadcast: "+msg);
+            LOGGER.info("SERVER: Broadcast: "+msg);
             for(BrokerThread subscriber : subscribers){
                 subscriber.dispatchMessage(msg);
             }
         }
         else{
-            logger.warning("No subscribers!!");
+            LOGGER.warning("No subscribers!!");
         }
     }
 

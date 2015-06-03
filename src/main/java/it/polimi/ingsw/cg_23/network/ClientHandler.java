@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class ClientHandler implements Runnable{
     
-    private Logger logger = Logger.getLogger("logger");
+    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     private String notInGame = "You are not in a game! Join one first!";    
     private String notStartedYet = "Game has not started yet!";
@@ -91,7 +91,7 @@ public class ClientHandler implements Runnable{
             
         String line = socketIn.nextLine();
         
-        logger.info("CLIENT: Command: "+line);
+        LOGGER.info("CLIENT: Command: "+line);
         
         tokenizer = new StringTokenizer(line);
         
@@ -173,7 +173,7 @@ public class ClientHandler implements Runnable{
      * @param msg the string to sent to the client
      */
     private void send(String msg){
-        logger.info("SERVER: Sending: "+msg);
+        LOGGER.info("SERVER: Sending: "+msg);
         socketOut.println(msg);
         socketOut.flush();
     }
@@ -273,7 +273,7 @@ public class ClientHandler implements Runnable{
                     match.getGameLogic().startGame();
                 }
                 else{
-                    logger.info("SERVER: Cannot start the game");
+                    LOGGER.info("SERVER: Cannot start the game");
                     serverStatus.getIdMatchMap().remove(id);
                 }
             }

@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 public class Server {
     
-    private Logger logger = Logger.getLogger("logger");
+    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     /**
      * The port the server listen on.
@@ -63,9 +63,9 @@ public class Server {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(SOCKET_PORT);
-            logger.info("SERVER: Ready");
+            LOGGER.info("SERVER: Ready");
         } catch (IOException e1) {
-            logger.log(Level.SEVERE, "ERROR: Cannot run server on port: "+SOCKET_PORT+"!", e1);
+            LOGGER.log(Level.SEVERE, "ERROR: Cannot run server on port: "+SOCKET_PORT+"!", e1);
             running=false;
         }
 
@@ -78,7 +78,7 @@ public class Server {
             try {
                 socket = serverSocket.accept(); //waiting for connections
             } catch (IOException e) {
-                logger.log(Level.SEVERE,"ERROR: Cannot accept client connection!", e);
+                LOGGER.log(Level.SEVERE,"ERROR: Cannot accept client connection!", e);
                 error=true;  
             }
             

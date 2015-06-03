@@ -10,7 +10,7 @@ public class BrokerThread extends Thread{
 
     private Socket socket;
     private PrintWriter out;
-    private Logger logger = Logger.getLogger("logger");
+    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     ConcurrentLinkedQueue<String> buffer;
 
     public BrokerThread(Socket socket){
@@ -20,7 +20,7 @@ public class BrokerThread extends Thread{
         try {
             out = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            logger.warning("Cannot connect to subscriber");
+            LOGGER.warning("Cannot connect to subscriber");
         } 
     }
 
@@ -30,7 +30,7 @@ public class BrokerThread extends Thread{
             String msg = buffer.poll();
             if(msg != null){ 
                 send(msg);
-                logger.info("Sending...");
+                LOGGER.info("Sending...");
             }
             else{
                 try {
@@ -38,7 +38,7 @@ public class BrokerThread extends Thread{
                         buffer.wait();  
                     }
                 } catch (InterruptedException e) {
-                    logger.warning("Cannot wait on the queue");
+                    LOGGER.warning("Cannot wait on the queue");
                 }
             }
         }
