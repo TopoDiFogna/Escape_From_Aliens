@@ -28,7 +28,7 @@ import java.util.TimerTask;
  * @author Paolo
  *
  */
-public class ClientHandler implements Runnable{
+public class SocketClientHandler implements Runnable{
     
     private String notInGame = "You are not in a game! Join one first!";    
     private String notStartedYet = "Game has not started yet!";
@@ -63,7 +63,7 @@ public class ClientHandler implements Runnable{
      * 
      * @param socket
      */
-    public ClientHandler(Socket socket) {
+    public SocketClientHandler(Socket socket) {
         
         this.socket=socket;
         

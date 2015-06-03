@@ -6,14 +6,14 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 
-public class ClientSocketSubscriber extends Thread{
+public class SocketClientSubscriber extends Thread{
     
     private BufferedReader socketIn;
     
     private Socket socket;
     
     
-    public ClientSocketSubscriber(Socket socket) throws IOException{
+    public SocketClientSubscriber(Socket socket) throws IOException{
         this.socket=socket;
         socketIn = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); 
     }

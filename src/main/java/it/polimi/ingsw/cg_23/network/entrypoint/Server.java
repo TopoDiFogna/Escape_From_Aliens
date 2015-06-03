@@ -1,10 +1,16 @@
 package it.polimi.ingsw.cg_23.network.entrypoint;
 
-import it.polimi.ingsw.cg_23.network.socket.ClientHandler;
+import it.polimi.ingsw.cg_23.network.rmi.RMIClientHandler;
+import it.polimi.ingsw.cg_23.network.rmi.RMIClientHandlerInterface;
+import it.polimi.ingsw.cg_23.network.socket.SocketClientHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,9 +30,14 @@ public class Server {
     private static final int SOCKET_PORT=10412;
         
     /**
-     * The client handler will manage every connection to the game.
+     * The client handler that will manage every socket connection to the game.
      */
-    private ClientHandler clientHandler;
+    private SocketClientHandler socketClientHandler;
+    
+    /**
+     * The client handler that will manage every rmi connection to the game.
+     */
+    private RMIClientHandler rmiClientHandler;
     
     /**
      * Error to handle client connection.
@@ -42,15 +53,15 @@ public class Server {
      * Constructor: spawns the server and launches it
      */
     public Server() {
-        this.startSocket();
+        //Nothing to do here
     }
     
     
     /**
-     * Connection handling.<br>
+     * Socket connection handling.<br>
      * If cannot accept a client connection doesn't try to add to the GameManager.
      */
-    public void startSocket(){
+    private void startSocket(){
         
         //Create a new thread pool
         ExecutorService executor = Executors.newCachedThreadPool();
@@ -79,9 +90,9 @@ public class Server {
             }
             
             if(!error){
-                clientHandler = new ClientHandler(socket);//creates a new client handler for this socket
+                socketClientHandler = new SocketClientHandler(socket);//creates a new client handler for this socket
             
-                executor.submit(clientHandler);//runs the client handler for this connection
+                executor.submit(socketClientHandler);//runs the client handler for this connection
             }
         }
     }
@@ -95,15 +106,36 @@ public class Server {
         
         return running;
     }
+    
+    /**
+     * Create the registry with the interface and binds them
+     */
+    private void startRMI(){
+        
+        try {
+            Registry registry = LocateRegistry.createRegistry(1099);
+            
+            rmiClientHandler = new RMIClientHandler();
+            
+            RMIClientHandlerInterface serverStub = (RMIClientHandlerInterface) UnicastRemoteObject.exportObject(rmiClientHandler, 1099);
+        
+            registry.rebind("game", serverStub);
+            
+        } catch (RemoteException e) {
+            System.err.println("ERROR: Cannot create RMI registry!");
+        }  
+    }
 
     /**
      * Entry point for the server.
      * 
-     * @param args
+     * @param args no args required
      */
     public static void main(String[] args) {
         
         //create the server and starts it
-        new Server();
+        Server server = new Server();
+        server.startRMI();
+        server.startSocket();
     }
 }
