@@ -22,7 +22,7 @@ public class AttackCardTest {
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		SocketBroker broker = new SocketBroker("broker");
-		controller.setBroker(broker);
+		controller.setSocketBroker(broker);
 		Sector sector = new Sector(3, 6, SectorTypeEnum.DANGEROUS, true);
 		match.addNewPlayerToList(player1);
 		match.addNewPlayerToList(player2);

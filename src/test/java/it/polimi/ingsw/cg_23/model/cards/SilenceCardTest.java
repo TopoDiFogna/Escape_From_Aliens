@@ -19,7 +19,7 @@ public class SilenceCardTest {
 		Match match = new Match(mapName);
 		GameLogic controller = new GameLogic(match);
 		SocketBroker broker = new SocketBroker("broker");
-		controller.setBroker(broker);
+		controller.setSocketBroker(broker);
 		card.doAction(player, controller);
 	}
 

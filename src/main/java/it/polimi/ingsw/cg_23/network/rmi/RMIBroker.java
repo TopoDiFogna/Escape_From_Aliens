@@ -4,12 +4,12 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Broker implements BrokerInterface{
+public class RMIBroker implements RMIBrokerInterface{
 
 	private  List<RMIClientInterface> subscribers = new ArrayList<RMIClientInterface>();
 	private String topic;
 	
-	public Broker(String topic){
+	public RMIBroker(String topic){
 		this.topic = topic;
 	}
 	

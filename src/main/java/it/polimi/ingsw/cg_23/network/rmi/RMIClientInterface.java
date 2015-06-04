@@ -5,7 +5,5 @@ import java.rmi.RemoteException;
 
 public interface RMIClientInterface extends Remote {
     
-    public void getName() throws RemoteException;
-    
     public void dispatchMessage(String msg) throws RemoteException;
 }

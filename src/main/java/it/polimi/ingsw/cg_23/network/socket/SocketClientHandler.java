@@ -12,6 +12,7 @@ import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
 import it.polimi.ingsw.cg_23.network.ServerStatus;
+import it.polimi.ingsw.cg_23.network.rmi.RMIBroker;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -190,9 +191,9 @@ public class SocketClientHandler implements Runnable{
         
         if("galilei".equals(mapName) || "fermi".equals(mapName) || "galvani".equals(mapName)){
             
-            for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
-                if(match.getName().equals(mapName) && match.getMatchState() != GameState.RUNNING && match.getPlayers().size()<8){
-                    joinGame(match, serverStatus.getMatchBrokerMap().get(match));
+            for (Match match : serverStatus.getMatchSocketBrokerMap().keySet()) {
+                if(match.getName().equals(mapName) && match.getMatchState() == GameState.WAITING && match.getPlayers().size()<8){
+                    joinGame(match, serverStatus.getMatchSocketBrokerMap().get(match));
                     response = "You were added to a game with map "+mapName;
                 }
                 else{
@@ -201,7 +202,7 @@ public class SocketClientHandler implements Runnable{
                 }
             }
             
-            if(serverStatus.getMatchBrokerMap().isEmpty()){
+            if(serverStatus.getMatchSocketBrokerMap().isEmpty()){
                 joinNewGame(mapName);
                 response = "You were added to a new game with map "+mapName;
             }
@@ -249,15 +250,21 @@ public class SocketClientHandler implements Runnable{
         
         SocketBroker broker = new SocketBroker(""+mapName+serverStatus.getBrokerNumber());
         
+        RMIBroker rmiBroker = new RMIBroker(""+mapName+serverStatus.getBrokerNumber());
+        
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
         broker.addSubscriber(brokerThread);
         
         match.addNewPlayerToList(new Alien(id));
         
-        match.getGameLogic().setBroker(broker);
+        match.getGameLogic().setSocketBroker(broker);
         
-        serverStatus.addBrokerToMatch(match, broker);
+        match.getGameLogic().setRMIBroker(rmiBroker);
+        
+        serverStatus.addSocketBrokerToMatch(match, broker);
+        
+        serverStatus.addRMIBrokerToMatch(match, rmiBroker);
         
         serverStatus.addPlayerToMatch(id, match);
         

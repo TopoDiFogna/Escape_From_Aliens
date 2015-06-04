@@ -19,7 +19,7 @@ public class NoiseInYourSectorCardTest {
 		Match match = new Match(mapName);
 		GameLogic controller = new GameLogic(match);
 		SocketBroker broker = new SocketBroker("broker");
-        controller.setBroker(broker);
+        controller.setSocketBroker(broker);
         player.setCurrentSector(match.getMap().getSector()[0][0]);
 		card.doAction(player, controller);
 		

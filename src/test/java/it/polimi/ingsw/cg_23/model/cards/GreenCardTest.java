@@ -20,7 +20,7 @@ public class GreenCardTest {
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
 		SocketBroker broker = new SocketBroker("broker");
-		controller.setBroker(broker);
+		controller.setSocketBroker(broker);
 		Sector sector = new Sector(2, 2, SectorTypeEnum.ESCAPEHATCH, true);
 		player.setCurrentSector(sector);
 		card.doAction(player, controller);

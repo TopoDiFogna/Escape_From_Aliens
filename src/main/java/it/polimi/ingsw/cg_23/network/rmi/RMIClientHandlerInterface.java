@@ -7,6 +7,6 @@ public interface RMIClientHandlerInterface extends Remote{
     
     public void getGameList(RMIClientInterface clientInterface) throws RemoteException;
     
-    public void joinGame(RMIClientInterface clientIterface) throws RemoteException;
+    public void joinMatch(String id, String mapName, RMIClientInterface clientInterface) throws RemoteException;
 
 }
