@@ -74,14 +74,12 @@ public class ClientHandler implements Runnable{
         try {
             socketIn=new Scanner(socket.getInputStream());
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
             LOGGER.throwing("ClientHandler", "constructor", e1);
         }
         
         try {
             socketOut = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             LOGGER.throwing("ClientHandler", "constructor", e);
         }
     }
