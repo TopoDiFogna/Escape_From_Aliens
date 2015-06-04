@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BrokerThread extends Thread{
@@ -20,7 +21,7 @@ public class BrokerThread extends Thread{
         try {
             out = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            LOGGER.warning("Cannot connect to subscriber");
+            LOGGER.log(Level.WARNING, "Cannot connect to subscriber", e);
         } 
     }
 
@@ -38,7 +39,7 @@ public class BrokerThread extends Thread{
                         buffer.wait();  
                     }
                 } catch (InterruptedException e) {
-                    LOGGER.warning("Cannot wait on the queue");
+                    LOGGER.log(Level.WARNING, "Cannot wait on the queue", e);
                 }
             }
         }

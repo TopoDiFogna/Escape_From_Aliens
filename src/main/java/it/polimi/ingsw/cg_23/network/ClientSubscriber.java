@@ -28,7 +28,7 @@ public class ClientSubscriber extends Thread{
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.throwing("ClientSubscriber", "run", e);
             }
         }
     }
@@ -42,7 +42,7 @@ public class ClientSubscriber extends Thread{
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.throwing("ClientSubscriber", "recive", e);
         }
         
     }

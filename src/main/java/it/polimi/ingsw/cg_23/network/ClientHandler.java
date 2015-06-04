@@ -75,14 +75,14 @@ public class ClientHandler implements Runnable{
             socketIn=new Scanner(socket.getInputStream());
         } catch (IOException e1) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+            LOGGER.throwing("ClientHandler", "constructor", e1);
         }
         
         try {
             socketOut = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.throwing("ClientHandler", "constructor", e);
         }
     }
     
@@ -164,8 +164,6 @@ public class ClientHandler implements Runnable{
         return response;
     }
     
-    
-
 
     /**
      * Sends Strings to the client
@@ -282,7 +280,7 @@ public class ClientHandler implements Runnable{
     
     
     private String moveError(){
-        return "Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.";
+        return "Move syntax: move letter number. The letter can go from A to W, the number from 1 to 14.";
     }
     
     private String movePlayer(){
@@ -419,7 +417,7 @@ public class ClientHandler implements Runnable{
         }
         
         if(!tokenizer.hasMoreTokens()){
-            return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+            return "Use syntax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
         
         Match match = serverStatus.getIdMatchMap().get(id);
@@ -521,7 +519,7 @@ public class ClientHandler implements Runnable{
             break;
 
         default:
-            response= "Use sintax: use cardname. Available card names are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+            response= "Use syntax: use cardname. Available card names are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
             break;
         }
         
@@ -589,7 +587,7 @@ public class ClientHandler implements Runnable{
         }
         
         if(!tokenizer.hasMoreTokens()){
-            return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+            return "Use syntax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
         
         switch (tokenizer.nextToken().toLowerCase()) {

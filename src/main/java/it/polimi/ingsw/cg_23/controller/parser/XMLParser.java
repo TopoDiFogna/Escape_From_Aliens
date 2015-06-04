@@ -4,6 +4,7 @@ import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.map.SectorTypeEnum;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +18,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 
 public class XMLParser extends DefaultHandler{
+    
+    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     /**
      * The XML file converted to DOM
@@ -181,11 +184,11 @@ public class XMLParser extends DefaultHandler{
 
 
         }catch(ParserConfigurationException pce) {
-            pce.printStackTrace();
+            LOGGER.throwing("XLMParser", "parseXmlFile", pce);
         }catch(SAXException se) {
-            se.printStackTrace();
+            LOGGER.throwing("XLMParser", "parseXmlFile", se);
         }catch(IOException ioe) {
-            ioe.printStackTrace();
+            LOGGER.throwing("XLMParser", "parseXmlFile", ioe);
         }
     }  
 }
