@@ -3,12 +3,14 @@ package it.polimi.ingsw.cg_23.network;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Logger;
 
 
 public class ClientSubscriber extends Thread{
-    
+
+    private static PrintStream out=new PrintStream(System.out);
     private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     private BufferedReader socketIn;
@@ -38,7 +40,7 @@ public class ClientSubscriber extends Thread{
         try {
             msg=socketIn.readLine();
             if(msg!=null){
-                LOGGER.info(msg);
+                out.println(msg);
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block

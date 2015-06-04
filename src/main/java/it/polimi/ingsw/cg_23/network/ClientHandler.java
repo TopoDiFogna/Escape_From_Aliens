@@ -13,6 +13,7 @@ import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -29,7 +30,8 @@ import java.util.logging.Logger;
  *
  */
 public class ClientHandler implements Runnable{
-    
+
+    private static PrintStream out=new PrintStream(System.out);
     private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     private String notInGame = "You are not in a game! Join one first!";    
@@ -89,7 +91,7 @@ public class ClientHandler implements Runnable{
             
         String line = socketIn.nextLine();
         
-        LOGGER.info("CLIENT: Command: "+line);
+        out.println("CLIENT: Command: "+line);
         
         tokenizer = new StringTokenizer(line);
         
@@ -169,7 +171,7 @@ public class ClientHandler implements Runnable{
      * @param msg the string to sent to the client
      */
     private void send(String msg){
-        LOGGER.info("SERVER: Sending: "+msg);
+        out.println("SERVER: Sending: "+msg);
         socketOut.println(msg);
         socketOut.flush();
     }
@@ -269,7 +271,7 @@ public class ClientHandler implements Runnable{
                     match.getGameLogic().startGame();
                 }
                 else{
-                    LOGGER.info("SERVER: Cannot start the game");
+                    out.println("SERVER: Cannot start the game");
                     serverStatus.getIdMatchMap().remove(id);
                 }
             }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.cg_23.network.entrypoint;
 import it.polimi.ingsw.cg_23.network.ClientHandler;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  */
 
 public class Server {
-    
+    private static PrintStream out=new PrintStream(System.out);
     private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     /**
@@ -63,7 +64,7 @@ public class Server {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(SOCKET_PORT);
-            LOGGER.info("SERVER: Ready");
+            out.println("SERVER: Ready");
         } catch (IOException e1) {
             LOGGER.log(Level.SEVERE, "ERROR: Cannot run server on port: "+SOCKET_PORT+"!", e1);
             running=false;

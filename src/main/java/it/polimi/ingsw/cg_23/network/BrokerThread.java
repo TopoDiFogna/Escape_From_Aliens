@@ -1,6 +1,7 @@
 package it.polimi.ingsw.cg_23.network;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -11,6 +12,8 @@ public class BrokerThread extends Thread{
 
     private Socket socket;
     private PrintWriter out;
+
+    private static PrintStream streamOut = new PrintStream(System.out);
     private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     ConcurrentLinkedQueue<String> buffer;
 
@@ -31,7 +34,7 @@ public class BrokerThread extends Thread{
             String msg = buffer.poll();
             if(msg != null){ 
                 send(msg);
-                LOGGER.info("Sending...");
+                streamOut.println("Sending...");
             }
             else{
                 try {

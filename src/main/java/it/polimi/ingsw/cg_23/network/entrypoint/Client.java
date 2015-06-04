@@ -3,6 +3,7 @@ package it.polimi.ingsw.cg_23.network.entrypoint;
 import it.polimi.ingsw.cg_23.network.ClientSubscriber;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -17,6 +18,8 @@ public class Client {
     private final String ip;
     private final String name;
     
+
+    private static PrintStream out=new PrintStream(System.out);
     private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     private Scanner stdin;
@@ -32,12 +35,12 @@ public class Client {
         
         stdin = new Scanner(System.in);
         
-        LOGGER.info("inserisci indirizzo ip");
+        out.println("inserisci indirizzo ip");
         ip = stdin.nextLine();
-        LOGGER.info("inserisci porta");
+        out.println("inserisci porta");
         port=stdin.nextInt();
         stdin.nextLine();
-        LOGGER.info("Inserisci nick");
+        out.println("Inserisci nick");
         name=stdin.nextLine();        
     }
     
@@ -81,7 +84,7 @@ public class Client {
                 socketOut.flush();
                 
                 serverMessage = socketIn.nextLine();
-                LOGGER.info(serverMessage);
+                out.println(serverMessage);
                 
                 if(inputLine.equalsIgnoreCase("join galilei") || inputLine.equalsIgnoreCase("join fermi") || inputLine.equalsIgnoreCase("join galvani"))
                 {
