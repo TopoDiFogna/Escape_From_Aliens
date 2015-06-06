@@ -292,14 +292,16 @@ public class SocketClientHandler implements Runnable{
     
     private String movePlayer(){
         
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
             
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
             
@@ -320,8 +322,6 @@ public class SocketClientHandler implements Runnable{
         
         if(letter<0 || letter>=23 || number <0 || number >=14)
             return moveError();
-        
-        Match match = serverStatus.getIdMatchMap().get(id);
         
         Sector[][] sector = match.getMap().getSector();
         
@@ -352,14 +352,16 @@ public class SocketClientHandler implements Runnable{
     
     private String moveAndAttack(){
         
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
             
@@ -380,8 +382,6 @@ public class SocketClientHandler implements Runnable{
         
         if(letter<0 || letter>=23 || number <0 || number >=14)
             return moveError();
-        
-        Match match = serverStatus.getIdMatchMap().get(id);
         
         Sector[][] sector = match.getMap().getSector();
         
@@ -410,16 +410,19 @@ public class SocketClientHandler implements Runnable{
     }
     
     private String useCard(){
-        String response = null;
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        String response = "";
         
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
         
@@ -427,14 +430,14 @@ public class SocketClientHandler implements Runnable{
             return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
         
-        Match match = serverStatus.getIdMatchMap().get(id);
+
         
-        for (Player playerList : match.getPlayers()) {
-            if(playerList.getName().equals(id)){
-                if(!(playerList instanceof Human)){
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName().equals(id)){
+                if(!(playerInList instanceof Human)){
                     return "You are an alien! You can't use Item Cards!";
                 }
-                if(playerList.needSectorNoise())
+                if(playerInList.needSectorNoise())
                     return "You need to specify a sector where make a noise";
             }
         }
@@ -542,11 +545,11 @@ public class SocketClientHandler implements Runnable{
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }     
         

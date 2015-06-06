@@ -17,6 +17,8 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
     private ServerStatus serverStatus;
     
     private static final String messageError = "Cannot send message to client!";
+    
+    private RMIGameCommandsInterface gameInterface;
 
     public RMIClientHandler() {
         serverStatus = ServerStatus.getInstance();
@@ -41,7 +43,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
     
 
     @Override
-    public void joinMatch(String id, String mapName, RMIClientInterface clientInterface) {//TODO synchronized
+    public RMIGameCommandsInterface joinMatch(String id, String mapName, RMIClientInterface clientInterface) {//TODO synchronized
         if(!checkIdIfPresent(id))
             try {
                 clientInterface.dispatchMessage("You are already in a game!");
@@ -84,6 +86,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
             } catch (RemoteException e) {
                 System.err.println(messageError);
             }
+        return gameInterface;
     }
     
     private void joinGame(String id, RMIClientInterface clientInterface, Match match, RMIBroker broker){
