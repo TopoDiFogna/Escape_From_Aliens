@@ -1,10 +1,13 @@
 package it.polimi.ingsw.cg_23.network;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Broker{
-    
+    private static PrintStream out=new PrintStream(System.out);
+    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     private String topic;
 
     private List<BrokerThread> subscribers;
@@ -16,13 +19,13 @@ public class Broker{
     
     public void publish(String msg){
         if(!subscribers.isEmpty()){
-            System.out.println("SERVER: Broadcast: "+msg);
+            out.println("SERVER: Broadcast: "+msg);
             for(BrokerThread subscriber : subscribers){
                 subscriber.dispatchMessage(msg);
             }
         }
         else{
-            System.err.println("No subscribers!!");
+            LOGGER.warning("No subscribers!!");
         }
     }
 

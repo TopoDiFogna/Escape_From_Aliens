@@ -3,10 +3,13 @@ package it.polimi.ingsw.cg_23.network.entrypoint;
 import it.polimi.ingsw.cg_23.network.ClientHandler;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * From here we start the server.<br>
@@ -17,6 +20,8 @@ import java.util.concurrent.Executors;
  */
 
 public class Server {
+    private static PrintStream out=new PrintStream(System.out);
+    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     /**
      * The port the server listen on.
@@ -59,9 +64,9 @@ public class Server {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(SOCKET_PORT);
-            System.out.println("SERVER: Ready");
+            out.println("SERVER: Ready");
         } catch (IOException e1) {
-            System.err.println("ERROR: Cannot run server on port: "+SOCKET_PORT+"!");
+            LOGGER.log(Level.SEVERE, "ERROR: Cannot run server on port: "+SOCKET_PORT+"!", e1);
             running=false;
         }
 
@@ -74,7 +79,7 @@ public class Server {
             try {
                 socket = serverSocket.accept(); //waiting for connections
             } catch (IOException e) {
-                System.err.println("ERROR: Cannot accept client connection!");
+                LOGGER.log(Level.SEVERE,"ERROR: Cannot accept client connection!", e);
                 error=true;  
             }
             

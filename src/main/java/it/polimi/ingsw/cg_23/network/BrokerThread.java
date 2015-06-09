@@ -1,14 +1,20 @@
 package it.polimi.ingsw.cg_23.network;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BrokerThread extends Thread{
 
     private Socket socket;
     private PrintWriter out;
+
+    private static PrintStream streamOut = new PrintStream(System.out);
+    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     ConcurrentLinkedQueue<String> buffer;
 
     public BrokerThread(Socket socket){
@@ -18,7 +24,7 @@ public class BrokerThread extends Thread{
         try {
             out = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            System.err.println("Cannot connect to subscriber");
+            LOGGER.log(Level.WARNING, "Cannot connect to subscriber", e);
         } 
     }
 
@@ -28,7 +34,7 @@ public class BrokerThread extends Thread{
             String msg = buffer.poll();
             if(msg != null){ 
                 send(msg);
-                System.out.println("Sending...");
+                streamOut.println("Sending...");
             }
             else{
                 try {
@@ -36,7 +42,7 @@ public class BrokerThread extends Thread{
                         buffer.wait();  
                     }
                 } catch (InterruptedException e) {
-                   System.err.println("Cannot wait on the queue");
+                    LOGGER.log(Level.WARNING, "Cannot wait on the queue", e);
                 }
             }
         }
