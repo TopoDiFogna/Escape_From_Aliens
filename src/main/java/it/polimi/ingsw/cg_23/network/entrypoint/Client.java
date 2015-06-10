@@ -3,6 +3,7 @@ package it.polimi.ingsw.cg_23.network.entrypoint;
 import it.polimi.ingsw.cg_23.network.rmi.RMIClient;
 import it.polimi.ingsw.cg_23.network.rmi.RMIClientHandlerInterface;
 import it.polimi.ingsw.cg_23.network.rmi.RMIClientInterface;
+import it.polimi.ingsw.cg_23.network.rmi.RMIGameCommandsInterface;
 import it.polimi.ingsw.cg_23.network.socket.SocketClientSubscriber;
 
 import java.io.IOException;
@@ -32,6 +33,12 @@ public class Client {
     
     private boolean RMI;
     
+    private RMIClient clientInterface;
+    
+    private RMIClientHandlerInterface clientHandler;
+    
+    private RMIGameCommandsInterface gameCommands=null;
+    
     private SocketClientSubscriber receiver;
     
     
@@ -41,7 +48,7 @@ public class Client {
         
         System.out.println("inserisci indirizzo ip");
         ip = stdin.nextLine();
-        System.out.println("Socket or RMI?");
+        System.out.println("Socket or RMI? (Default is Socket)");
         if(stdin.nextLine().equalsIgnoreCase("rmi")){
             RMI=true;
             port=1099;
@@ -109,10 +116,10 @@ public class Client {
         String commandParsed = "";
         stdin = new Scanner(System.in);
         StringTokenizer tokenizer;
-        RMIClientHandlerInterface clientHandler;
+
         
         
-        RMIClient clientInterface = new RMIClient();
+        clientInterface = new RMIClient();
         
         try {
             Registry registry = LocateRegistry.getRegistry(ip,port);
@@ -139,9 +146,33 @@ public class Client {
                         
                     case "join":
                         if(tokenizer.hasMoreTokens())
-                            clientHandler.joinMatch(name, tokenizer.nextToken(), exportedClientInterface);
+                            gameCommands=clientHandler.joinMatch(name, tokenizer.nextToken(), exportedClientInterface);
                         else
                             System.out.println("You need to speicify a map name.");
+                        break;
+                        
+                    case "move":
+                        movePlayer(tokenizer);
+                        break;
+                       
+                    case "moveattack":
+                        moveAndAttack(tokenizer);
+                        break;
+                        
+                    case "use":
+                        useCard(tokenizer);
+                        break;
+                        
+                    case "noise":
+                        makeNoise(tokenizer);
+                        break;
+                        
+                    case "discard":
+                        discardCard(tokenizer);
+                        break;
+                             
+                    case "endturn":
+                        gameCommands.endTurn(clientInterface, name);
                         break;
     
                     case "exit":
@@ -157,16 +188,98 @@ public class Client {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (NotBoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println("Cannot read the RMI registry!");
         } 
     }
     
 
-    public boolean useRMI() {
+    private void discardCard(StringTokenizer tokenizer) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    private void makeNoise(StringTokenizer tokenizer) throws RemoteException {
+        int letter;
+        int number;
+        
+        if(tokenizer.hasMoreTokens()){
+            letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
+        }
+        else{
+            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            return;
+        }
+        
+        if(tokenizer.hasMoreTokens()){
+            number=Integer.parseInt(tokenizer.nextToken())-1;
+        }
+        else{
+            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            return;
+        }
+        
+        gameCommands.makeNoise(clientInterface, name, letter, number);
+        
+    }
+
+    private void useCard(StringTokenizer tokenizer) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    private void moveAndAttack(StringTokenizer tokenizer) throws RemoteException {
+        int letter;
+        int number;
+        
+        if(tokenizer.hasMoreTokens()){
+            letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
+        }
+        else{
+            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            return;
+        }
+        
+        if(tokenizer.hasMoreTokens()){
+            number=Integer.parseInt(tokenizer.nextToken())-1;
+        }
+        else{
+            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            return;
+        }
+        
+        gameCommands.moveAndAttack(clientInterface, name, letter, number);
+        
+    }
+
+    private boolean useRMI() {
         return RMI;
     }
 
+    private void movePlayer(StringTokenizer tokenizer) throws RemoteException{
+        
+        int letter;
+        int number;
+        
+        if(tokenizer.hasMoreTokens()){
+            letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
+        }
+        else{
+            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            return;
+        }
+        
+        if(tokenizer.hasMoreTokens()){
+            number=Integer.parseInt(tokenizer.nextToken())-1;
+        }
+        else{
+            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            return;
+        }
+        
+        gameCommands.movePlayer(clientInterface, name, letter, number);
+        
+    }
+    
     public static void main(String[] args) throws IOException {
         Client client = new Client();
         if(client.useRMI()){
