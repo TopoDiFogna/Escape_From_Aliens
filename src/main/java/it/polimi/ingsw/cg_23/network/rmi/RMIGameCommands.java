@@ -3,6 +3,7 @@ package it.polimi.ingsw.cg_23.network.rmi;
 import java.rmi.RemoteException;
 
 import it.polimi.ingsw.cg_23.model.cards.Card;
+import it.polimi.ingsw.cg_23.model.cards.SpotlightCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
@@ -17,11 +18,10 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
     private String notStartedYet = "Game has not started yet!";
     private String notYourTurn = "It's not your turn!";
     private String cantUseCard = "You can't use that card!";
-    private String spotlightSyntax = "Spotlight syntax: use spotlight letter number";
     
 
     public RMIGameCommands() {
-        // TODO Auto-generated constructor stub
+        // the constructor is void, no need to instantiate variables
     }
     
     private boolean checkIdIfPresent(String id){
@@ -151,7 +151,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
     }
 
     @Override
-    public void useCard(RMIClientInterface clientInterface, String id, Card card) {
+    public void useCard(RMIClientInterface clientInterface, String id, Card card, int letter, int number) {
         
         ServerStatus serverStatus = ServerStatus.getInstance();
 
@@ -193,9 +193,14 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         try{
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    if(match.getGameLogic().hasCard(playerInList, card)){
+                    if(card.getClass()!= SpotlightCard.class && match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().useItemCard(playerInList, card);
                         clientInterface.dispatchMessage("You used the Adrenaline card!");//TODO card to string
+                        return;
+                    }
+                    else if(card.getClass()== SpotlightCard.class && match.getGameLogic().hasCard(playerInList, card)){
+                        match.getGameLogic().useSpotlight(letter, number);
+                        clientInterface.dispatchMessage("You used the Spotlight card!");
                         return;
                     }
                     else {

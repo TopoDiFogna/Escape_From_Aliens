@@ -10,7 +10,7 @@ public class RMIClient implements RMIClientInterface {
 
     @Override
     public void dispatchMessage(String msg) throws RemoteException {
-        // TODO Auto-generated method stub
+        System.out.println("Received message: "+msg);
 
     }
 

@@ -9,10 +9,13 @@ import it.polimi.ingsw.cg_23.network.ServerStatus;
 import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class RMIClientHandler implements RMIClientHandlerInterface {
+    
+   
     
     private ServerStatus serverStatus;
     
@@ -26,6 +29,9 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
 
     @Override
     public void getGameList(RMIClientInterface clientInterface) {
+        
+        System.out.println("SERVER: Received Command: getGameList");
+        
         try {
             clientInterface.dispatchMessage("This maps are playable: Galilei, Galvani, Fermi");
         } catch (RemoteException e) {
@@ -43,14 +49,22 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
     
 
     @Override
-    public RMIGameCommandsInterface joinMatch(String id, String mapName, RMIClientInterface clientInterface) {//TODO synchronized
-        if(!checkIdIfPresent(id))
+    public RMIGameCommandsInterface joinMatch(String id, String mapName, RMIClientInterface clientInterface) throws RemoteException {//TODO synchronized
+        
+        
+        
+        gameInterface = new RMIGameCommands();
+        
+        
+        
+        if(!checkIdIfPresent(id)){
             try {
                 clientInterface.dispatchMessage("You are already in a game!");
+                return gameInterface;
             } catch (RemoteException e) {
                 System.err.println(messageError);
             }
-        
+        }
         if("galilei".equals(mapName) || "fermi".equals(mapName) || "galvani".equals(mapName)){
             
             for (Match match : serverStatus.getMatchRMIBrokerMap().keySet()) {
@@ -86,7 +100,10 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
             } catch (RemoteException e) {
                 System.err.println(messageError);
             }
-        return gameInterface;
+        
+        
+        
+        return (RMIGameCommandsInterface) UnicastRemoteObject.exportObject(gameInterface,0);
     }
     
     private void joinGame(String id, RMIClientInterface clientInterface, Match match, RMIBroker broker){
