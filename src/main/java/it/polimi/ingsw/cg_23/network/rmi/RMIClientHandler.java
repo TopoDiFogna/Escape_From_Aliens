@@ -50,13 +50,9 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
 
     @Override
     public RMIGameCommandsInterface joinMatch(String id, String mapName, RMIClientInterface clientInterface) throws RemoteException {//TODO synchronized
-        
-        
-        
+
         gameInterface = new RMIGameCommands();
-        
-        
-        
+
         if(!checkIdIfPresent(id)){
             try {
                 clientInterface.dispatchMessage("You are already in a game!");

@@ -2,7 +2,6 @@ package it.polimi.ingsw.cg_23.network.entrypoint;
 
 import it.polimi.ingsw.cg_23.network.rmi.RMIClientHandler;
 import it.polimi.ingsw.cg_23.network.rmi.RMIClientHandlerInterface;
-import it.polimi.ingsw.cg_23.network.rmi.RMIGameCommandsInterface;
 import it.polimi.ingsw.cg_23.network.socket.SocketClientHandler;
 
 import java.io.IOException;
