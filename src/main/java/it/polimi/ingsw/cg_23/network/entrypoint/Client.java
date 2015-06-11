@@ -3,13 +3,10 @@ package it.polimi.ingsw.cg_23.network.entrypoint;
 import it.polimi.ingsw.cg_23.network.ClientSubscriber;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class Client {
@@ -18,9 +15,6 @@ public class Client {
     private final String ip;
     private final String name;
     
-
-    private static PrintStream out=new PrintStream(System.out);
-    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     private Scanner stdin;
     
@@ -35,12 +29,12 @@ public class Client {
         
         stdin = new Scanner(System.in);
         
-        out.println("inserisci indirizzo ip");
+        System.out.println("inserisci indirizzo ip");
         ip = stdin.nextLine();
-        out.println("inserisci porta");
+        System.out.println("inserisci porta");
         port=stdin.nextInt();
         stdin.nextLine();
-        out.println("Inserisci nick");
+        System.out.println("Inserisci nick");
         name=stdin.nextLine();        
     }
     
@@ -59,32 +53,32 @@ public class Client {
                 try {
                     socket = new Socket(ip,port);
                 } catch (UnknownHostException e) {
-                    LOGGER.log(Level.SEVERE, "ERROR: Unknown host!", e);
-                    LOGGER.log(Level.SEVERE, "ERROR: Try verifying your ip and relaunch the client", e);
+                    System.err.println("ERROR: Unknown host!");
+                    System.err.println("ERROR: Try verifying your ip and relaunch the client");
                     return;
                 } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, "ERROR: Cannot connect to the specified host!", e);
-                    LOGGER.log(Level.SEVERE, "ERROR: Try verifying your ip and port and relaunch the client", e);
+                    System.err.println("ERROR: Cannot connect to the specified host!");
+                    System.err.println("ERROR: Try verifying your ip and port and relaunch the client");
                     return;
                 }
                 
                 try {
                     socketIn = new Scanner(socket.getInputStream());
                 } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE,"ERROR: Stream error!", e);
+                    System.err.println("ERROR: Stream error!");
                 }
                 
                 try {
                     socketOut = new PrintWriter(socket.getOutputStream());
                 } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, "ERROR: Stream error!", e);
+                    System.err.println("ERROR: Stream error!");
                 }
                 
                 socketOut.println(name+" "+inputLine);
                 socketOut.flush();
                 
                 serverMessage = socketIn.nextLine();
-                out.println(serverMessage);
+                System.out.println(serverMessage);
                 
                 if(inputLine.equalsIgnoreCase("join galilei") || inputLine.equalsIgnoreCase("join fermi") || inputLine.equalsIgnoreCase("join galvani"))
                 {

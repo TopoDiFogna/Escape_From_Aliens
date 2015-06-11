@@ -13,14 +13,12 @@ import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
 
 /**
  * This class receive commands from the client and executes them.
@@ -31,8 +29,6 @@ import java.util.logging.Logger;
  */
 public class ClientHandler implements Runnable{
 
-    private static PrintStream out=new PrintStream(System.out);
-    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     private String notInGame = "You are not in a game! Join one first!";    
     private String notStartedYet = "Game has not started yet!";
@@ -76,13 +72,14 @@ public class ClientHandler implements Runnable{
         try {
             socketIn=new Scanner(socket.getInputStream());
         } catch (IOException e1) {
-            LOGGER.throwing("ClientHandler", "constructor", e1);
+            e1.printStackTrace();
+
         }
         
         try {
             socketOut = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            LOGGER.throwing("ClientHandler", "constructor", e);
+            e.printStackTrace();
         }
     }
     
@@ -91,7 +88,7 @@ public class ClientHandler implements Runnable{
             
         String line = socketIn.nextLine();
         
-        out.println("CLIENT: Command: "+line);
+        System.out.println("CLIENT: Command: "+line);
         
         tokenizer = new StringTokenizer(line);
         
@@ -171,7 +168,7 @@ public class ClientHandler implements Runnable{
      * @param msg the string to sent to the client
      */
     private void send(String msg){
-        out.println("SERVER: Sending: "+msg);
+        System.out.println("SERVER: Sending: "+msg);
         socketOut.println(msg);
         socketOut.flush();
     }
@@ -271,7 +268,7 @@ public class ClientHandler implements Runnable{
                     match.getGameLogic().startGame();
                 }
                 else{
-                    out.println("SERVER: Cannot start the game");
+                    System.out.println("SERVER: Cannot start the game");
                     serverStatus.getIdMatchMap().remove(id);
                 }
             }

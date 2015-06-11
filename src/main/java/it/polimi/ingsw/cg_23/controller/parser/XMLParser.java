@@ -19,7 +19,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLParser extends DefaultHandler{
     
-    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
     
     /**
      * The XML file converted to DOM
@@ -184,11 +183,11 @@ public class XMLParser extends DefaultHandler{
 
 
         }catch(ParserConfigurationException pce) {
-            LOGGER.throwing("XLMParser", "parseXmlFile", pce);
+            pce.printStackTrace();
         }catch(SAXException se) {
-            LOGGER.throwing("XLMParser", "parseXmlFile", se);
+            se.printStackTrace();
         }catch(IOException ioe) {
-            LOGGER.throwing("XLMParser", "parseXmlFile", ioe);
+            ioe.printStackTrace();
         }
     }  
 }
