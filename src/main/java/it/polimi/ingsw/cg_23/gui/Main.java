@@ -11,7 +11,6 @@ public class Main {
             public void run() {
                 StartingTable gameTable = new StartingTable();
                 gameTable.setVisible(true);
-                
             }
         });
 
