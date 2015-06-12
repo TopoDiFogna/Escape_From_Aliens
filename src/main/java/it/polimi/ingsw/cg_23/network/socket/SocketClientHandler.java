@@ -73,14 +73,13 @@ public class SocketClientHandler implements Runnable{
         try {
             socketIn=new Scanner(socket.getInputStream());
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
+
         }
         
         try {
             socketOut = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -163,8 +162,6 @@ public class SocketClientHandler implements Runnable{
         return response;
     }
     
-    
-
 
     /**
      * Sends Strings to the client
@@ -180,7 +177,7 @@ public class SocketClientHandler implements Runnable{
     private synchronized String checkGames(){
         
         if(!tokenizer.hasMoreTokens())
-            return "Join sintax: join mapname";
+            return "Join syntax: join mapname";
         
         String mapName = tokenizer.nextToken().toLowerCase();
         
@@ -287,7 +284,7 @@ public class SocketClientHandler implements Runnable{
     
     
     private String moveError(){
-        return "Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.";
+        return "Move syntax: move letter number. The letter can go from A to W, the number from 1 to 14.";
     }
     
     private String movePlayer(){
@@ -427,7 +424,7 @@ public class SocketClientHandler implements Runnable{
         }
         
         if(!tokenizer.hasMoreTokens()){
-            return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+            return "Use syntax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
         
 
@@ -529,7 +526,7 @@ public class SocketClientHandler implements Runnable{
             break;
 
         default:
-            response= "Use sintax: use cardname. Available card names are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+            response= "Use syntax: use cardname. Available card names are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
             break;
         }
         
@@ -597,7 +594,7 @@ public class SocketClientHandler implements Runnable{
         }
         
         if(!tokenizer.hasMoreTokens()){
-            return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+            return "Use syntax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
         
         switch (tokenizer.nextToken().toLowerCase()) {

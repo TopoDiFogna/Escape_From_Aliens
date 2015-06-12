@@ -25,6 +25,7 @@ public class Client {
     private final String ip;
     private final String name;
     
+    
     private Scanner stdin;
     
     private Socket socket = null;

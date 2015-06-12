@@ -9,6 +9,7 @@ public class BrokerThread extends Thread{
 
     private Socket socket;
     private PrintWriter out;
+
     ConcurrentLinkedQueue<String> buffer;
 
     public BrokerThread(Socket socket){
@@ -18,7 +19,7 @@ public class BrokerThread extends Thread{
         try {
             out = new PrintWriter(this.socket.getOutputStream());
         } catch (IOException e) {
-            System.err.println("Cannot connect to subscriber");
+            System.out.println("Cannot connect to subscriber");
         } 
     }
 
@@ -36,7 +37,7 @@ public class BrokerThread extends Thread{
                         buffer.wait();  
                     }
                 } catch (InterruptedException e) {
-                   System.err.println("Cannot wait on the queue");
+                    System.out.println("Cannot wait on the queue");
                 }
             }
         }

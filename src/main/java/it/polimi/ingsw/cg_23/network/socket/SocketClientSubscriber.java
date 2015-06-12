@@ -37,9 +37,9 @@ public class SocketClientSubscriber extends Thread{
             if(msg!=null){
                 System.out.println(msg);
             }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+        } catch (IOException e) {                
             e.printStackTrace();
+
         }
         
     }

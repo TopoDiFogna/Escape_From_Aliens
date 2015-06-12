@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SocketBroker{
-    
+
     private String topic;
 
     private List<BrokerThread> subscribers;
@@ -22,7 +22,7 @@ public class SocketBroker{
             }
         }
         else{
-            System.err.println("No subscribers!!");
+            System.out.println("No subscribers!!");
         }
     }
 
