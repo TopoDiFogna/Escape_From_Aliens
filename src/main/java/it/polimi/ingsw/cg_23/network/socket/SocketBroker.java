@@ -1,15 +1,15 @@
-package it.polimi.ingsw.cg_23.network;
+package it.polimi.ingsw.cg_23.network.socket;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Broker{
+public class SocketBroker{
     
     private String topic;
 
     private List<BrokerThread> subscribers;
     
-    public Broker(String topic) {
+    public SocketBroker(String topic) {
         this.topic = topic;
         subscribers = new ArrayList<BrokerThread>();
     }

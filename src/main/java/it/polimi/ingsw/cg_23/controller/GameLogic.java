@@ -18,7 +18,8 @@ import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
-import it.polimi.ingsw.cg_23.network.Broker;
+import it.polimi.ingsw.cg_23.network.rmi.RMIBroker;
+import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
 
 /**
  * Description of GameLogic.
@@ -30,23 +31,35 @@ public class GameLogic{
 
     private Match match;
     
-    private Broker broker;
+    private SocketBroker socketBroker;
+    
+    private RMIBroker rmiBroker;
 
     /**
      * The constructor.
      */
-    public GameLogic(Match match) {
+    public GameLogic(Match match) {//TODO add rmibroker publishing and return drawn card
         this.match = match;
     }
 
     /**
-     * Allows to set the broker before starting the game.
-     * Done as this to not rewrite tons of code.
+     * Allows to set the socket broker before starting the game.
      * 
      * @param broker the broker to be added
      */
-    public void setBroker(Broker broker) {
-        this.broker = broker;
+    //     * Done as this to not rewrite tons of code.*
+    public void setSocketBroker(SocketBroker broker) {
+        this.socketBroker = broker;
+    }
+    
+    /**
+     * Allows to set the rmi broker before starting the game.
+     * 
+     * @param broker the broker to be added
+     */
+    //     * Done as this to not rewrite tons of code.*
+    public void setRMIBroker(RMIBroker broker) {
+        this.rmiBroker = broker;
     }
 
     /**
@@ -133,7 +146,7 @@ public class GameLogic{
         match.removeEcapeHatch();
         removeAfterWinning(player);
         if(match.getnUsableEscapeHatch()==0){
-            broker.publish("All escape hatches have been used or are unusable!");
+            socketBroker.publish("All escape hatches have been used or are unusable!");
             endGame();
         }
     }
@@ -152,7 +165,7 @@ public class GameLogic{
     public void useNoiseInYourSector(Player player) {
         char letter=(char) ((player.getCurrentSector().getLetter())+96);
         int number=player.getCurrentSector().getNumber();
-        broker.publish("Noise in sector "+letter+" "+number);
+        socketBroker.publish("Noise in sector "+letter+" "+number);
 
     }
 
@@ -163,9 +176,9 @@ public class GameLogic{
         player.getCurrentSector().setEscapeHatchSectorNotCrossable();
         char letter=(char) (player.getCurrentSector().getLetter()+97);
         int number=player.getCurrentSector().getNumber();
-        broker.publish("The Escape Hatch "+letter+" "+number+" is broken!");
+        socketBroker.publish("The Escape Hatch "+letter+" "+number+" is broken!");
         if(match.getnUsableEscapeHatch()==0){
-            broker.publish("All escape hatches have been used or are unusable!");
+            socketBroker.publish("All escape hatches have been used or are unusable!");
             endGame();
         }
     }
@@ -182,7 +195,7 @@ public class GameLogic{
      * The action simply notify the view to tells other players "silence".
      */
     public void useSilence() {
-        broker.publish("Silence!");
+        socketBroker.publish("Silence!");
     }
 
     /**
@@ -200,7 +213,7 @@ public class GameLogic{
         for (Player players : sector[letter][number].getPlayer()) {
             String name = players.getName();
             String type = players.toString();
-            broker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
+            socketBroker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
         }
         
         for (Sector sectors : sector[letter][number].getNeighbors()) {
@@ -211,7 +224,7 @@ public class GameLogic{
             for (Player players : sectors.getPlayer()) {
                 String name = players.getName();
                 String type = players.toString();
-                broker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
+                socketBroker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
             }
         }
     }
@@ -428,7 +441,7 @@ public class GameLogic{
         if (!player.isAlive()) {
             match.getPlayers().remove(player);
         }
-        broker.publish("Player "+player.getName()+" has died!");
+        socketBroker.publish("Player "+player.getName()+" has died!");
     }
 
     /**
@@ -441,7 +454,7 @@ public class GameLogic{
             player.getCurrentSector().getPlayer().remove(player);
             match.getPlayers().remove(player);
         }
-        broker.publish("Player "+player.getName()+" has escaped!");
+        socketBroker.publish("Player "+player.getName()+" has escaped!");
     }
 
     /**
@@ -494,7 +507,7 @@ public class GameLogic{
                 nHuman++; 
         }
         if(nHuman==0){
-            broker.publish("All remaining humans are dead!");
+            socketBroker.publish("All remaining humans are dead!");
             endGame();
         }
     }
@@ -526,7 +539,7 @@ public class GameLogic{
     public void makeANoise(int letter, int number) {
         char noiseLetter = (char) (letter+97);
         number++;
-        broker.publish("Noise in sector "+noiseLetter+" "+number);
+        socketBroker.publish("Noise in sector "+noiseLetter+" "+number);
         
     }
     
@@ -552,7 +565,7 @@ public class GameLogic{
         match.setCurrentPlayer(match.getPlayers().get(0));
         match.nextTurn();
         match.setMatchState(GameState.RUNNING);
-        broker.publish("Game started. The first player is: "+match.getCurrentPlayer().getName());
+        socketBroker.publish("Game started. The first player is: "+match.getCurrentPlayer().getName());
     }
     
     /**
@@ -576,9 +589,9 @@ public class GameLogic{
             match.setCurrentPlayer(match.getPlayers().get(0));
             match.nextTurn();
         }
-        broker.publish("Next player is: "+match.getCurrentPlayer().getName());
+        socketBroker.publish("Next player is: "+match.getCurrentPlayer().getName());
         if(match.getTurnNumber()==40){
-            broker.publish("Turn 39 has ended! Too late! Remaining humans are killed by aliens!");
+            socketBroker.publish("Turn 39 has ended! Too late! Remaining humans are killed by aliens!");
             endGame();
         }
     }
@@ -588,7 +601,7 @@ public class GameLogic{
      */
     private void endGame(){
         match.setMatchState(GameState.ENDED);
-        broker.publish("The game has ended!");
+        socketBroker.publish("The game has ended!");
     }
 
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.cg_23.network;
+package it.polimi.ingsw.cg_23.network.socket;
 
 import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
@@ -11,6 +11,8 @@ import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.ServerStatus;
+import it.polimi.ingsw.cg_23.network.rmi.RMIBroker;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,7 +29,7 @@ import java.util.TimerTask;
  * @author Paolo
  *
  */
-public class ClientHandler implements Runnable{
+public class SocketClientHandler implements Runnable{
     
     private String notInGame = "You are not in a game! Join one first!";    
     private String notStartedYet = "Game has not started yet!";
@@ -62,7 +64,7 @@ public class ClientHandler implements Runnable{
      * 
      * @param socket
      */
-    public ClientHandler(Socket socket) {
+    public SocketClientHandler(Socket socket) {
         
         this.socket=socket;
         
@@ -175,7 +177,7 @@ public class ClientHandler implements Runnable{
         socketOut.flush();
     }
     
-    private String checkGames(){
+    private synchronized String checkGames(){
         
         if(!tokenizer.hasMoreTokens())
             return "Join sintax: join mapname";
@@ -189,9 +191,9 @@ public class ClientHandler implements Runnable{
         
         if("galilei".equals(mapName) || "fermi".equals(mapName) || "galvani".equals(mapName)){
             
-            for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
-                if(match.getName().equals(mapName) && match.getMatchState() != GameState.RUNNING && match.getPlayers().size()<8){
-                    joinGame(match, serverStatus.getMatchBrokerMap().get(match));
+            for (Match match : serverStatus.getMatchSocketBrokerMap().keySet()) {
+                if(match.getName().equals(mapName) && match.getMatchState() == GameState.WAITING && match.getPlayers().size()<8){
+                    joinGame(match, serverStatus.getMatchSocketBrokerMap().get(match));
                     response = "You were added to a game with map "+mapName;
                 }
                 else{
@@ -200,7 +202,7 @@ public class ClientHandler implements Runnable{
                 }
             }
             
-            if(serverStatus.getMatchBrokerMap().isEmpty()){
+            if(serverStatus.getMatchSocketBrokerMap().isEmpty()){
                 joinNewGame(mapName);
                 response = "You were added to a new game with map "+mapName;
             }
@@ -211,7 +213,7 @@ public class ClientHandler implements Runnable{
         return response;
     }
     
-    private void joinGame(Match match, Broker broker){
+    private void joinGame(Match match, SocketBroker broker){
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
@@ -246,7 +248,9 @@ public class ClientHandler implements Runnable{
         
         Match match = new Match(mapName);
         
-        Broker broker = new Broker(""+mapName+serverStatus.getBrokerNumber());
+        SocketBroker broker = new SocketBroker(""+mapName+serverStatus.getBrokerNumber());
+        
+        RMIBroker rmiBroker = new RMIBroker(""+mapName+serverStatus.getBrokerNumber());
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
@@ -254,9 +258,13 @@ public class ClientHandler implements Runnable{
         
         match.addNewPlayerToList(new Alien(id));
         
-        match.getGameLogic().setBroker(broker);
+        match.getGameLogic().setSocketBroker(broker);
         
-        serverStatus.addBrokerToMatch(match, broker);
+        match.getGameLogic().setRMIBroker(rmiBroker);
+        
+        serverStatus.addSocketBrokerToMatch(match, broker);
+        
+        serverStatus.addRMIBrokerToMatch(match, rmiBroker);
         
         serverStatus.addPlayerToMatch(id, match);
         
@@ -284,14 +292,16 @@ public class ClientHandler implements Runnable{
     
     private String movePlayer(){
         
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
             
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
             
@@ -312,8 +322,6 @@ public class ClientHandler implements Runnable{
         
         if(letter<0 || letter>=23 || number <0 || number >=14)
             return moveError();
-        
-        Match match = serverStatus.getIdMatchMap().get(id);
         
         Sector[][] sector = match.getMap().getSector();
         
@@ -344,14 +352,16 @@ public class ClientHandler implements Runnable{
     
     private String moveAndAttack(){
         
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
             
@@ -372,8 +382,6 @@ public class ClientHandler implements Runnable{
         
         if(letter<0 || letter>=23 || number <0 || number >=14)
             return moveError();
-        
-        Match match = serverStatus.getIdMatchMap().get(id);
         
         Sector[][] sector = match.getMap().getSector();
         
@@ -402,16 +410,19 @@ public class ClientHandler implements Runnable{
     }
     
     private String useCard(){
-        String response = null;
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        String response = "";
         
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
         
@@ -419,14 +430,14 @@ public class ClientHandler implements Runnable{
             return "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
         
-        Match match = serverStatus.getIdMatchMap().get(id);
+
         
-        for (Player playerList : match.getPlayers()) {
-            if(playerList.getName().equals(id)){
-                if(!(playerList instanceof Human)){
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName().equals(id)){
+                if(!(playerInList instanceof Human)){
                     return "You are an alien! You can't use Item Cards!";
                 }
-                if(playerList.needSectorNoise())
+                if(playerInList.needSectorNoise())
                     return "You need to specify a sector where make a noise";
             }
         }
@@ -449,11 +460,11 @@ public class ClientHandler implements Runnable{
             break;
        
         case "attack":            
-            response="You can not the Attack card!";
+            response="You can not use the Attack card!";
             break;
         
         case "defense":
-            response="You can not the Defense card!";
+            response="You can not use the Defense card!";
             break;
             
         case "sedatives":
@@ -534,11 +545,11 @@ public class ClientHandler implements Runnable{
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }     
         

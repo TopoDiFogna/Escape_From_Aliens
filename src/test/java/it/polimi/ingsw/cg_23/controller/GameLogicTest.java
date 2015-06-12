@@ -19,7 +19,7 @@ import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
-import it.polimi.ingsw.cg_23.network.Broker;
+import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
 
 import org.junit.Test;
 
@@ -30,8 +30,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Sector sector = new Sector(2, 7, SectorTypeEnum.VOID, false);
         player.setCurrentSector(sector);
         assertFalse(controller.validMove(player, sector));
@@ -42,8 +42,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Sector sector = new Sector(12, 8, SectorTypeEnum.HUMAN, false);
         player.setCurrentSector(sector);
         assertFalse(controller.validMove(player, sector));
@@ -54,8 +54,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Sector sector = new Sector(12, 6, SectorTypeEnum.ALIEN, false);
         player.setCurrentSector(sector);
         assertFalse(controller.validMove(player, sector));
@@ -66,8 +66,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Sector sector = match.getMap().getSector()[1][7];
         player.setCurrentSector(sector);
         Sector destination = match.getMap().getSector()[2][7];
@@ -80,8 +80,8 @@ public class GameLogicTest {
        Player player = new Human("Dummy");
        Match match = new Match("galilei");
        GameLogic controller = new GameLogic(match);
-       Broker broker = new Broker("broker");
-       controller.setBroker(broker);
+       SocketBroker broker = new SocketBroker("broker");
+       controller.setSocketBroker(broker);
        Sector sector = match.getMap().getSector()[1][7];
        player.setCurrentSector(sector);
        Sector destination = match.getMap().getSector()[20][5];
@@ -94,8 +94,8 @@ public class GameLogicTest {
         Player player = new Alien("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Sector sector = match.getMap().getSector()[1][7];
         Sector destination = match.getMap().getSector()[3][7];
         player.setCurrentSector(sector);        
@@ -115,8 +115,8 @@ public class GameLogicTest {
         Player player = new Alien("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Sector sector = match.getMap().getSector()[1][7];
         Sector destination = match.getMap().getSector()[4][7];
         player.setCurrentSector(sector);   
@@ -199,8 +199,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         match.getPlayers().add(player);
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new GreenCard();
         Deck<Card> deckEscapeHatch = DeckFactory.createDeck(2);
         deckEscapeHatch.add(card);
@@ -217,8 +217,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         match.getPlayers().add(player);
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new RedCard();
         Deck<Card> deckEscapeHatch = DeckFactory.createDeck(2);
         deckEscapeHatch.add(card);
@@ -234,8 +234,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card1 = new NoiseInAnySectorCard(true);
         Card card2 = new NoiseInAnySectorCard(false);
         match.getSectorDeck().clear();
@@ -251,8 +251,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new NoiseInAnySectorCard(true);
         match.getSectorDeck().add(0, card);
         controller.drawSectorCard(player);
@@ -265,8 +265,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new SilenceCard(false);
         match.getSectorDeck().add(0, card);
         controller.drawSectorCard(player);
@@ -279,8 +279,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new NoiseInAnySectorCard(false);
         match.getSectorDeck().add(0, card);
         controller.drawSectorCard(player);
@@ -293,8 +293,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new NoiseInYourSectorCard(true);
         player.setCurrentSector(match.getMap().getSector()[0][0]);
         match.getSectorDeck().add(0, card);
@@ -307,8 +307,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new NoiseInYourSectorCard(false);
         player.setCurrentSector(match.getMap().getSector()[0][0]);
         match.getSectorDeck().add(0, card);
@@ -321,8 +321,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new NoiseInYourSectorCard(true);
         Card card1 = new AttackCard();
         Card card2 = new SedativesCard();
@@ -342,8 +342,8 @@ public class GameLogicTest {
         Player player = new Human("Dummy");
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new NoiseInAnySectorCard(true);
         Card card1 = new AttackCard();
         Card card2 = new SedativesCard();
@@ -455,8 +455,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         Sector[][] map = match.getMap().getSector();
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player.setCurrentSector(map[1][1]);
         match.addNewPlayerToList(player);
         player.setDead();
@@ -472,8 +472,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         Sector[][] map = match.getMap().getSector();
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player.setCurrentSector(map[1][1]);
         match.addNewPlayerToList(player);
         controller.removeAfterDying(player);
@@ -486,8 +486,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         match.addNewPlayerToList(player);
         player.getCurrentSector().setEscapeHatchSectorNotCrossable();
@@ -503,8 +503,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         match.addNewPlayerToList(player);
         controller.removeAfterWinning(player);
@@ -531,8 +531,8 @@ public class GameLogicTest {
         Sector sector = new Sector(16, 8, SectorTypeEnum.DANGEROUS, true);
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Card card = new SilenceCard(false);
         match.getSectorDeck().add(card);
         player.setCurrentSector(sector);
@@ -549,8 +549,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         Card card = new GreenCard();
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         match.getEscapeHatchDeck().add(card);
         player.setCurrentSector(sector);
         player.getCurrentSector().getPlayer().add(player);
@@ -565,8 +565,8 @@ public class GameLogicTest {
         Sector sector = new Sector(2, 5, SectorTypeEnum.SECURE, true);
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         player.getCurrentSector().getPlayer().add(player);
         controller.movePlayer(player, sector);
@@ -579,8 +579,8 @@ public class GameLogicTest {
         Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, false);
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         player.getCurrentSector().getPlayer().add(player);
         controller.movePlayer(player, sector);
@@ -593,8 +593,8 @@ public class GameLogicTest {
         Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, false);
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         player.getCurrentSector().getPlayer().add(player);
         controller.movePlayer(player, sector);
@@ -607,8 +607,8 @@ public class GameLogicTest {
         Sector sector = new Sector(16, 8, SectorTypeEnum.DANGEROUS, true);
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         player.getCurrentSector().getPlayer().add(player);
         Card card = new SilenceCard(true);
@@ -630,8 +630,8 @@ public class GameLogicTest {
         match.getPlayers().add(player2);
         match.getPlayers().add(player1);
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         player1.setCurrentSector(sector1);
         player1.getCurrentSector().getPlayer().add(player1);
         player2.setCurrentSector(sector2);
@@ -649,8 +649,8 @@ public class GameLogicTest {
     public void testStartGame(){
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Player player1 = new Alien("Dummy1");
         Player player2 = new Alien("Dummy2");
         Player player3 = new Human("Dummy3");
@@ -669,8 +669,8 @@ public class GameLogicTest {
     public void testEndTurnWithFirstPlayerPlaying(){
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Player player1 = new Alien("Dummy1");
         Player player2 = new Human("Dummy2");
         match.getPlayers().add(player1);
@@ -686,8 +686,8 @@ public class GameLogicTest {
     public void testEndTurnWithSecondPlayerPlaying(){
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Player player1 = new Alien("Dummy1");
         Player player2 = new Human("Dummy2");
         match.getPlayers().add(player1);
@@ -703,8 +703,8 @@ public class GameLogicTest {
     public void testEndTurnAt39thTurn(){
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
-        Broker broker = new Broker("broker");
-        controller.setBroker(broker);
+        SocketBroker broker = new SocketBroker("broker");
+        controller.setSocketBroker(broker);
         Player player1 = new Alien("Dummy1");
         Player player2 = new Human("Dummy2");
         match.getPlayers().add(player1);

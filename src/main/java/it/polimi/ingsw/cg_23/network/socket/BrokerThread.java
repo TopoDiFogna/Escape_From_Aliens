@@ -1,4 +1,4 @@
-package it.polimi.ingsw.cg_23.network;
+package it.polimi.ingsw.cg_23.network.socket;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,7 +16,7 @@ public class BrokerThread extends Thread{
         buffer = new ConcurrentLinkedQueue<String>();
         
         try {
-            out = new PrintWriter(socket.getOutputStream());
+            out = new PrintWriter(this.socket.getOutputStream());
         } catch (IOException e) {
             System.err.println("Cannot connect to subscriber");
         } 
