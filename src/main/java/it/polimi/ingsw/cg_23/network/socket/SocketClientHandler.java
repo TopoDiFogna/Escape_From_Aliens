@@ -460,11 +460,11 @@ public class SocketClientHandler implements Runnable{
             break;
        
         case "attack":            
-            response="You can not the Attack card!";
+            response="You can not use the Attack card!";
             break;
         
         case "defense":
-            response="You can not the Defense card!";
+            response="You can not use the Defense card!";
             break;
             
         case "sedatives":

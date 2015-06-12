@@ -2,8 +2,11 @@ package it.polimi.ingsw.cg_23.network.rmi;
 
 import java.rmi.RemoteException;
 
+import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
+import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
 import it.polimi.ingsw.cg_23.model.cards.SpotlightCard;
+import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
@@ -14,10 +17,11 @@ import it.polimi.ingsw.cg_23.network.ServerStatus;
 public class RMIGameCommands implements RMIGameCommandsInterface {
     
     private static final String messageError = "Cannot send message to client!";
-    private String notInGame = "You are not in a game! Join one first!";    
-    private String notStartedYet = "Game has not started yet!";
-    private String notYourTurn = "It's not your turn!";
-    private String cantUseCard = "You can't use that card!";
+    private static final String notInGame = "You are not in a game! Join one first!";    
+    private static final String notStartedYet = "Game has not started yet!";
+    private static final String notYourTurn = "It's not your turn!";
+    private static final String cantUseCard = "You can't use that card!";
+    private static final String spotlightSyntax = "Spotlight syntax: use spotlight letter number";
     
 
     public RMIGameCommands() {
@@ -151,7 +155,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
     }
 
     @Override
-    public void useCard(RMIClientInterface clientInterface, String id, Card card, int letter, int number) {
+    public void useCard(RMIClientInterface clientInterface, String id, String cardUsed, int letter, int number) {
         
         ServerStatus serverStatus = ServerStatus.getInstance();
 
@@ -191,23 +195,88 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         }
         
         try{
-            for (Player playerInList : match.getPlayers()) {
-                if(playerInList.getName().equals(id)){
-                    if(card.getClass()!= SpotlightCard.class && match.getGameLogic().hasCard(playerInList, card)){
-                        match.getGameLogic().useItemCard(playerInList, card);
-                        clientInterface.dispatchMessage("You used the Adrenaline card!");//TODO card to string
-                        return;
+            switch (cardUsed) {
+            
+            case "adrenaline":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new AdrenalineCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)){
+                            match.getGameLogic().useItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You used the Adrenaline card!");
+                        }
+                        else 
+                            clientInterface.dispatchMessage(cantUseCard);
+                    }  
+                }
+                
+                break;
+           
+            case "attack":            
+                clientInterface.dispatchMessage("You can not use the Attack card!");
+                break;
+            
+            case "defense":
+                clientInterface.dispatchMessage("You can not use the Defense card!");
+                break;
+                
+            case "sedatives":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new SedativesCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)) {
+                            match.getGameLogic().useItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You used the Sedatives card!");
+                        }
+                        else 
+                            clientInterface.dispatchMessage(cantUseCard);
                     }
-                    else if(card.getClass()== SpotlightCard.class && match.getGameLogic().hasCard(playerInList, card)){
-                        match.getGameLogic().useSpotlight(letter, number);
-                        clientInterface.dispatchMessage("You used the Spotlight card!");
-                        return;
+                }
+                break;
+                
+            case "spotlight":
+                
+                if(letter == 0 || number == 0){
+                    clientInterface.dispatchMessage(spotlightSyntax);
+                    return;
+                }
+                                
+                if(letter<0 || letter>=23 || number <0 || number >=14){
+                    clientInterface.dispatchMessage(spotlightSyntax);
+                    return;
+                }
+                
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new SpotlightCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)) {
+                            match.getGameLogic().useSpotlight(letter, number);
+                            clientInterface.dispatchMessage("You used the Spotlight card!");
+                        }
+                        else
+                            clientInterface.dispatchMessage(cantUseCard);
                     }
-                    else {
-                        clientInterface.dispatchMessage(cantUseCard);
-                        return;
+                }
+                
+                break;
+                
+            case "teleport":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new TeleportCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)) {
+                            match.getGameLogic().useItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You used the Teleport card!");
+                        }
+                        else
+                            clientInterface.dispatchMessage(cantUseCard);
                     }
-                }  
+                }
+                break;
+
+            default:
+                clientInterface.dispatchMessage("Use sintax: use cardname. Available card names are: Adrenaline, Attack, Sedatives, Spotlight, Teleport");
+                break;
             }
         } catch (RemoteException e){
             System.err.println(messageError);
@@ -261,7 +330,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
     }
 
     @Override
-    public void discardCard(RMIClientInterface clientInterface, String id, Card card) {
+    public void discardCard(RMIClientInterface clientInterface, String id, String cardDiscarded) {
         
         ServerStatus serverStatus = ServerStatus.getInstance();
 
@@ -287,15 +356,92 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         }
         
         try {
-            for (Player playerInList : match.getPlayers()) {
-                if(playerInList.getName().equals(id)){
-                    if(match.getGameLogic().hasCard(playerInList, card)){
-                        match.getGameLogic().discardItemCard(playerInList, card);
+            switch (cardDiscarded) {
+            
+            case "adrenaline":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new AdrenalineCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)){
+                            match.getGameLogic().discardItemCard(playerInList, card);
+                        }
                     }
                 }
-            }
-            clientInterface.dispatchMessage("You discarded the Adrenaline card!");
+                clientInterface.dispatchMessage("You discarded the Adrenaline card!");
+                break;
+                
+            case "attack":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new AdrenalineCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)){
+                            match.getGameLogic().discardItemCard(playerInList, card);
+                        }
+                    }
+                }
+                clientInterface.dispatchMessage("You discarded the Attack card!");
+                break;
             
+            case "defense":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new AdrenalineCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)){
+                            match.getGameLogic().discardItemCard(playerInList, card);
+                        }
+                    }
+                }
+                clientInterface.dispatchMessage("You discarded the Defense card!");
+                break;
+                
+            case "sedatives":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new AdrenalineCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)){
+                            match.getGameLogic().discardItemCard(playerInList, card);
+                        }
+                    }
+                }
+                clientInterface.dispatchMessage("You discarded the Sedatives card!");
+                break;
+                
+            case "silence":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new AdrenalineCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)){
+                            match.getGameLogic().discardItemCard(playerInList, card);
+                        }
+                    }
+                }
+                clientInterface.dispatchMessage("You discarded the Silence card!");
+                break;
+            
+            case "spotlight":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new AdrenalineCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)){
+                            match.getGameLogic().discardItemCard(playerInList, card);
+                        }
+                    }
+                }
+                clientInterface.dispatchMessage("You discarded the Spotlight card!");
+                break;
+                
+            case "teleport":
+                for (Player playerInList : match.getPlayers()) {
+                    if(playerInList.getName().equals(id)){
+                        Card card = new AdrenalineCard();
+                        if(match.getGameLogic().hasCard(playerInList, card)){
+                            match.getGameLogic().discardItemCard(playerInList, card);
+                        }
+                    }
+                }
+                clientInterface.dispatchMessage("You discarded the Teleport card!");
+                break;
+            }
         } catch (RemoteException e){
             System.err.println(messageError);
         }

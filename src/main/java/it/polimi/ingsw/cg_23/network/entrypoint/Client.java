@@ -193,8 +193,11 @@ public class Client {
     }
     
 
-    private void discardCard(StringTokenizer tokenizer) {
-        // TODO Auto-generated method stub
+    private void discardCard(StringTokenizer tokenizer) throws RemoteException {
+        if(tokenizer.hasMoreTokens())
+                gameCommands.discardCard(clientInterface, name, tokenizer.nextToken());
+        else
+            System.out.println("You need to specify a card to discard!");
         
     }
 
@@ -222,8 +225,26 @@ public class Client {
         
     }
 
-    private void useCard(StringTokenizer tokenizer) {
-        // TODO Auto-generated method stub
+    private void useCard(StringTokenizer tokenizer) throws RemoteException {
+        String card="";
+        int letter = 0;
+        int number = 0;
+        
+        if(tokenizer.hasMoreTokens()){
+            card=tokenizer.nextToken();
+        }
+        else
+            System.out.println("Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport");
+        
+        if(tokenizer.hasMoreTokens()){
+            letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
+        }
+        
+        if(tokenizer.hasMoreTokens()){
+            number=Integer.parseInt(tokenizer.nextToken())-1;
+        }
+        
+        gameCommands.useCard(clientInterface, name, card, letter, number);
         
     }
 
