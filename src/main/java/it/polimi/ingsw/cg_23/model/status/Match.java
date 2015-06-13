@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Observable;
 
 /**
- * Description of Match.
+ * The Match is the core of every game. In this class are tracked all the status of a single match.
  * 
  * @author Paolo
  */
@@ -65,21 +65,35 @@ public class Match extends Observable{
      */
     private int turnNumber;
     
+    /**
+     * Here is saved the satus of the match tanke from GameState enumeration.    
+     */
     private GameState matchState;
     
+    /**
+     * Name of the map played in the match
+     */
     private final String name;
     
+    /**
+     * Gamelogic associated to the match
+     */
     private final GameLogic gameLogic;
 
+    /**
+     * The player who is currently playing
+     */
     private Player currentPlayer;
     
+    /**
+     * Number of sectors Escape Hatch still usable
+     */
     private int nUsableEscapeHatch = 4;
     
 
     /**
-     * The constructor.
+     * The constructor. Sets all the needed variables to start the game.
      */
-
     public Match(String mapName){
         
         this.name=mapName;
@@ -144,39 +158,83 @@ public class Match extends Observable{
         return this.itemDeck;
     }
 
+    /**
+     * Returns the current state of Escape Hatch discarded card deck.
+     * 
+     * @return the escape hatch deck
+     */
     public Deck<Card> getEscapeHatchDeckDiscarded() {
         return escapeHatchDeckDiscarded;
     }
 
+    /**
+     * Returns the current state of Sector discarded card deck.
+     * 
+     * @return the discarded sector card deck
+     */
     public Deck<Card> getSectorDeckDiscarded() {
         return sectorDeckDiscarded;
     }
 
+    /**
+     * Returns the current state of item discarded card deck.
+     * 
+     * @return the discarded item card deck
+     */
     public Deck<Card> getItemDeckDiscarded() {
         return itemDeckDiscarded;
     }
 
+    /**
+     * Sets a deck where add sector deck cards
+     * 
+     * @param sectorDeck a deck for sector cards
+     */
     public void setSectorDeck(Deck<Card> sectorDeck) {
         this.sectorDeck = sectorDeck;
     }
 
+    /**
+     * Sets a deck where add discarded item deck cards
+     * 
+     * @param sectorDeck a deck for item cards
+     */
     public void setItemDeck(Deck<Card> itemDeck) {
         this.itemDeck = itemDeck;
     }
 
+    /**
+     * Sets a deck where add discarded escape hatch deck cards
+     * 
+     * @param sectorDeck an empty deck for escape hatch discarded cards
+     */
     public void setEscapeHatchDeckDiscarded(Deck<Card> escapeHatchDeckDiscarded) {
         this.escapeHatchDeckDiscarded = escapeHatchDeckDiscarded;
     }
 
-    
+    /**
+     * Sets a deck where add discarded sector deck cards
+     * 
+     * @param sectorDeck an empty deck for sector discarded cards
+     */
     public void setSectorDeckDiscarded(Deck<Card> sectorDeckDiscarded) {
         this.sectorDeckDiscarded = sectorDeckDiscarded;
     }
 
+    /**
+     * Sets a deck where add discarded item deck cards
+     * 
+     * @param sectorDeck an empty deck for item discarded cards
+     */
     public void setItemDeckDiscarded(Deck<Card> itemDeckDiscarded) {
         this.itemDeckDiscarded = itemDeckDiscarded;
     }
 
+    /**
+     * Sets a deck where add discarded escape hatch deck cards
+     * 
+     * @param sectorDeck a deck for escape hatch cards
+     */
     public void setEscapeHatchDeck(Deck<Card> escapeHatchDeck) {
         this.escapeHatchDeck = escapeHatchDeck;
     }
@@ -190,9 +248,12 @@ public class Match extends Observable{
         
         return this.players;
     }
-
-    //TODO da controllare se serve davvero (in caso aggiungere all'uml)
-    public void addNewPlayerToList(Player player) {
+    
+    /**
+     * Adds a player to the list of player in the match.
+     * @param player the player to be added
+     */
+    public void addNewPlayerToList(Player player) {//TODO da controllare se serve davvero (in caso aggiungere all'uml)
         this.players.add(player);
     }
 

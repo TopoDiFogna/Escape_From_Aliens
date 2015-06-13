@@ -5,19 +5,42 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-
+/**
+ * This class handles the thread to receive message from the server
+ * 
+ * @author Paolo
+ *
+ */
 public class SocketClientSubscriber extends Thread{
     
+    /**
+     * The reader to receive the messages
+     */
     private BufferedReader socketIn;
     
+    /**
+     * Socket associates to the subscriber in the broker
+     */
     private Socket socket;
     
-    
-    public SocketClientSubscriber(Socket socket) throws IOException{
+    /**
+     * Constructor. Initialize the socket and the reader.
+     * 
+     * @param socket
+     */
+    public SocketClientSubscriber(Socket socket) {
         this.socket=socket;
-        socketIn = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); 
+        try {
+            socketIn = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        } catch (IOException e) {
+            System.err.println("Can't create the reader to recieve server messages.");
+        } 
     }
 
+    /**
+     * Main method of the thread. Receives the messages and calls a method tho handle them
+     * 
+     */
     @Override
     public void run() {
         while(true){
@@ -30,6 +53,9 @@ public class SocketClientSubscriber extends Thread{
         }
     }
     
+    /**
+     * If the input from the server is not empty prints it on the console
+     */
     private void receive() {
         String msg = null;
         try {
@@ -39,8 +65,6 @@ public class SocketClientSubscriber extends Thread{
             }
         } catch (IOException e) {                
             e.printStackTrace();
-
         }
-        
     }
 }

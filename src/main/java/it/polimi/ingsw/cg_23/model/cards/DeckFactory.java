@@ -1,7 +1,16 @@
 package it.polimi.ingsw.cg_23.model.cards;
 
+/**
+ * This class creates the deck, putting the right number and type of card in every deck
+ * 
+ * @author Arianna
+ *
+ */
 public class DeckFactory {
 
+    /**
+     * Constructor
+     */
     private DeckFactory() {
         // no need to create an object
     }
