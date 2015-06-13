@@ -21,28 +21,87 @@ import java.util.StringTokenizer;
 
 public class Client {
 
+    /**
+     * Port used for connections
+     */
     private final int port;
+    
+    /**
+     * Ip where connect to
+     */
     private final String ip;
+    
+    /**
+     * Identifier of the client. It's Unique
+     */
     private final String name;
     
+    /**
+     * String to display if move command syntax is not correct
+     */
+    private static final String MOVE_ERROR = "Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.";
     
+    /**
+     * String to display if use card command syntax is not correct
+     */
+    private static final String CARD_ERROR = "Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
+    
+    /**
+     * String to display if noise command syntax is not correct
+     */
+    private static final String NOISE_ERROR = "Noise sintax: move letter number. The letter can go from A to W, the number from 1 to 14.";
+
+    /**
+     * Scanner used to read from console command
+     */
     private Scanner stdin;
     
+    /**
+     * Socket used to connect to the server
+     */
     private Socket socket = null;
+    
+    /**
+     * Scanner used to read server input
+     */
     private Scanner socketIn = null;
+    
+    /**
+     * PrintWriter to send to the server the commands
+     */
     private PrintWriter socketOut = null;
     
-    private boolean RMI;
+    /**
+     * Tells if we are using rmi
+     */
+    private boolean rmi;
     
+    /**
+     * The interface to expose to the server to get responses when using rmi
+     */
     private RMIClient clientInterface;
     
+    /**
+     * Where the server interface exposed to the client is saved
+     */
     private RMIClientHandlerInterface clientHandler;
     
+    /**
+     * Where the interface containing the game commads is saved
+     */
     private RMIGameCommandsInterface gameCommands=null;
     
+    /**
+     * The receiver to get server messages when using socket. It runs on one other thread.
+     */
     private SocketClientSubscriber receiver;
     
+    private boolean clientJoined = false;
     
+    /**
+     * Constructor <br>
+     * Asks to enter various things used to determine where to connect, which connection to use and the client identifier
+     */
     public Client() {
         
         stdin = new Scanner(System.in);
@@ -50,8 +109,8 @@ public class Client {
         System.out.println("inserisci indirizzo ip");
         ip = stdin.nextLine();
         System.out.println("Socket or RMI? (Default is Socket)");
-        if(stdin.nextLine().equalsIgnoreCase("rmi")){
-            RMI=true;
+        if("rmi".equalsIgnoreCase(stdin.nextLine())){
+            rmi=true;
             port=1099;
         }
         else
@@ -60,17 +119,23 @@ public class Client {
         name=stdin.nextLine(); 
     }
     
-    public void startSocketClient() throws IOException{
+    /**
+     * This method is called only if socket is chosen as a kind of connection.<br>
+     * First initialize the scanner and gets the first command from the client. Then, if it isn't the exit command, creates a socket, connects to the server and sends the command.<br>
+     * In particular if the command is one to join a match creates a new thread to listen to the match broker.
+     * 
+     */
+    public void startSocketClient() {
 
         String inputLine = "";
         String serverMessage = null;
         
-        while(!inputLine.equalsIgnoreCase("exit")){
+        while(!("exit".equalsIgnoreCase(inputLine))){
             
             stdin = new Scanner(System.in);
             inputLine = stdin.nextLine();
             
-            if(!inputLine.equalsIgnoreCase("exit")){
+            if(!("exit".equalsIgnoreCase(inputLine))){
         
                 try {
                     socket = new Socket(ip,port);
@@ -102,7 +167,7 @@ public class Client {
                 serverMessage = socketIn.nextLine();
                 System.out.println(serverMessage);
                 
-                if(inputLine.equalsIgnoreCase("join galilei") || inputLine.equalsIgnoreCase("join fermi") || inputLine.equalsIgnoreCase("join galvani"))
+                if("join galilei".equalsIgnoreCase(inputLine) || "join fermi".equalsIgnoreCase(inputLine) || "join galvani".equalsIgnoreCase(inputLine))
                 {
                     receiver= new SocketClientSubscriber(socket);
                     receiver.start();
@@ -111,6 +176,11 @@ public class Client {
         }
     }
     
+    /**
+     * This method is called only if rmi is chosen as a kind of connection.<br>
+     * It creates a client interface to export to the server, then looks  for the server remote interface.<br>
+     * Then parses the command and calls the appropriate method on the server interface.
+     */
     public void startRMIClient(){
         
         String inputLine = "";
@@ -146,8 +216,12 @@ public class Client {
                         break;
                         
                     case "join":
-                        if(tokenizer.hasMoreTokens())
+                        if(!clientJoined && tokenizer.hasMoreTokens()){
                             gameCommands=clientHandler.joinMatch(name, tokenizer.nextToken(), exportedClientInterface);
+                            clientJoined=true;
+                        }
+                        else if (clientJoined)
+                            System.out.println("You are already in a game!");
                         else
                             System.out.println("You need to speicify a map name.");
                         break;
@@ -186,15 +260,24 @@ public class Client {
                 }
             } 
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println("Error!");
         } catch (NotBoundException e) {
             System.err.println("Cannot read the RMI registry!");
         } 
     }
     
-
+    /**
+     * This method execute the command discard card and calls the relative method on the server
+     * 
+     * @param tokenizer tokenizer to parse the remaining of the string
+     * @throws RemoteException
+     */
     private void discardCard(StringTokenizer tokenizer) throws RemoteException {
+        if(!clientJoined){
+            System.out.println("you are not in a game");
+            return;
+        }
+        
         if(tokenizer.hasMoreTokens())
                 gameCommands.discardCard(clientInterface, name, tokenizer.nextToken());
         else
@@ -202,7 +285,18 @@ public class Client {
         
     }
 
+    /**
+     * This method execute the command noise and calls the relative method on the server
+     * 
+     * @param tokenizer tokenizer to parse the remaining of the string
+     * @throws RemoteException
+     */
     private void makeNoise(StringTokenizer tokenizer) throws RemoteException {
+        if(!clientJoined){
+            System.out.println("you are not in a game");
+            return;
+        }
+        
         int letter;
         int number;
         
@@ -210,7 +304,7 @@ public class Client {
             letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
         }
         else{
-            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            System.out.println(NOISE_ERROR);
             return;
         }
         
@@ -218,7 +312,7 @@ public class Client {
             number=Integer.parseInt(tokenizer.nextToken())-1;
         }
         else{
-            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            System.out.println(NOISE_ERROR);
             return;
         }
         
@@ -226,7 +320,18 @@ public class Client {
         
     }
 
+    /**
+     * This method execute the command use card and calls the relative method on the server
+     * 
+     * @param tokenizer tokenizer to parse the remaining of the string
+     * @throws RemoteException
+     */
     private void useCard(StringTokenizer tokenizer) throws RemoteException {
+        if(!clientJoined){
+            System.out.println("you are not in a game");
+            return;
+        }
+        
         String card="";
         int letter = 0;
         int number = 0;
@@ -235,7 +340,7 @@ public class Client {
             card=tokenizer.nextToken();
         }
         else
-            System.out.println("Use sintax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport");
+            System.out.println(CARD_ERROR);
         
         if(tokenizer.hasMoreTokens()){
             letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
@@ -248,8 +353,18 @@ public class Client {
         gameCommands.useCard(clientInterface, name, card, letter, number);
         
     }
-
+    /**
+     * This method execute the command move and attack and calls the relative method on the server
+     * 
+     * @param tokenizer tokenizer to parse the remaining of the string
+     * @throws RemoteException
+     */
     private void moveAndAttack(StringTokenizer tokenizer) throws RemoteException {
+        if(!clientJoined){
+            System.out.println("you are not in a game");
+            return;
+        }
+        
         int letter;
         int number;
         
@@ -257,7 +372,7 @@ public class Client {
             letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
         }
         else{
-            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            System.out.println(MOVE_ERROR);
             return;
         }
         
@@ -265,7 +380,7 @@ public class Client {
             number=Integer.parseInt(tokenizer.nextToken())-1;
         }
         else{
-            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            System.out.println(MOVE_ERROR);
             return;
         }
         
@@ -273,11 +388,26 @@ public class Client {
         
     }
 
+    /**
+     * Returns the status of rmi value to check if the client is using rmi or socket
+     * 
+     * @return rmi boolean value
+     */
     private boolean useRMI() {
-        return RMI;
+        return rmi;
     }
 
+    /**
+     * This method execute the command move and calls the relative method on the server
+     * 
+     * @param tokenizer tokenizer to parse the remaining of the string
+     * @throws RemoteException
+     */
     private void movePlayer(StringTokenizer tokenizer) throws RemoteException{
+        if(!clientJoined){
+            System.out.println("you are not in a game");
+            return;
+        }
         
         int letter;
         int number;
@@ -286,7 +416,7 @@ public class Client {
             letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
         }
         else{
-            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            System.out.println(MOVE_ERROR);
             return;
         }
         
@@ -294,7 +424,7 @@ public class Client {
             number=Integer.parseInt(tokenizer.nextToken())-1;
         }
         else{
-            System.out.println("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
+            System.out.println(MOVE_ERROR);
             return;
         }
         
@@ -302,13 +432,18 @@ public class Client {
         
     }
     
-    public static void main(String[] args) throws IOException {
+    /**
+     * The entry point for the client.
+     * 
+     * @param args
+     * @throws IOException
+     */
+    public static void main(String[] args) {
         Client client = new Client();
         if(client.useRMI()){
             client.startRMIClient();
         }
         else
             client.startSocketClient();
-
     }
 }

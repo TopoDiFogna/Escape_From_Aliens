@@ -13,9 +13,13 @@ public class SocketClientSubscriber extends Thread{
     private Socket socket;
     
     
-    public SocketClientSubscriber(Socket socket) throws IOException{
+    public SocketClientSubscriber(Socket socket) {
         this.socket=socket;
-        socketIn = new BufferedReader(new InputStreamReader(this.socket.getInputStream())); 
+        try {
+            socketIn = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        } catch (IOException e) {
+            System.err.println("Can't create the reader to recieve server messages.");
+        } 
     }
 
     @Override
