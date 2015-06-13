@@ -55,14 +55,23 @@ public class SocketClientHandler implements Runnable{
      */
     private PrintWriter socketOut;
     
+    /**
+     * Status of all the matches, broker and clients connected.
+     */
     private ServerStatus serverStatus;
     
+    /**
+     * Tokenizer used to parse the received command
+     */
     private StringTokenizer tokenizer;
     
+    /**
+     * Unique id of the client connected
+     */
     private String id;
 
     /**
-     * Constructor
+     * Constructor. Initialize the socket and gets the intance of serverstatus
      * 
      * @param socket
      */
@@ -86,6 +95,10 @@ public class SocketClientHandler implements Runnable{
         }
     }
     
+    /**
+     * Main method of the client handler. Receives the command and calls another method to parse it.<br>
+     * When the command is parsed sends a response to the client e closes the connection.
+     */
     @Override
     public void run() {
             
@@ -115,6 +128,12 @@ public class SocketClientHandler implements Runnable{
         return false;
     }
     
+    /**
+     * Parses the command sent by the client
+     * 
+     * @param msg the command received
+     * @return the response for the client to its command
+     */
     private String parseCommand(String msg){
         
         String response = null;
@@ -176,7 +195,12 @@ public class SocketClientHandler implements Runnable{
         socketOut.flush();
     }
     
-    private synchronized String checkGames(){
+    /**
+     * Checks for games and make a client join one
+     * 
+     * @return the response for the client to its command
+     */
+    private synchronized String checkGames(){//TODO check synchronized here
         
         if(!tokenizer.hasMoreTokens())
             return "Join syntax: join mapname";
@@ -212,6 +236,12 @@ public class SocketClientHandler implements Runnable{
         return response;
     }
     
+    /**
+     * Makes the client join an already existing game
+     * 
+     * @param match the match to be joint
+     * @param broker the broker linked to the match
+     */
     private void joinGame(Match match, SocketBroker broker){
         
         BrokerThread brokerThread = new BrokerThread(socket);
@@ -243,6 +273,11 @@ public class SocketClientHandler implements Runnable{
         
     }
     
+    /**
+     * Makes the client join a fresh match. The match is created and addded to the list of waiting Matches, the the client joins it.
+     * 
+     * @param mapName the name of the map the palyer has chosen to play
+     */
     private void joinNewGame(String mapName){
         
         Match match = new Match(mapName);
@@ -284,11 +319,20 @@ public class SocketClientHandler implements Runnable{
         }, 20000);//20 seconds
     }
     
-    
+    /**
+     * Returns a string for the move error
+     * 
+     * @return the response for the client to its command
+     */
     private String moveError(){
         return "Move syntax: move letter number. The letter can go from A to W, the number from 1 to 14.";
     }
     
+    /**
+     * Makes a player move in the specified sector if he can go there
+     * 
+     * @return the response for the client to its command
+     */
     private String movePlayer(){
         
         Match match = serverStatus.getIdMatchMap().get(id);
@@ -349,6 +393,11 @@ public class SocketClientHandler implements Runnable{
         
     }    
     
+    /**
+     * Makes the player move and attack in the specified sector if he can go there
+     * 
+     * @return the response for the client to its command
+     */
     private String moveAndAttack(){
         
         Match match = serverStatus.getIdMatchMap().get(id);
@@ -408,6 +457,11 @@ public class SocketClientHandler implements Runnable{
         return response;
     }
     
+    /**
+     * Makes the player use the specified card if he can
+     * 
+     * @return the response for the client to its command
+     */
     private String useCard(){
         
         Match match = serverStatus.getIdMatchMap().get(id);
@@ -535,6 +589,11 @@ public class SocketClientHandler implements Runnable{
         return response;
     }
     
+    /**
+     * Make a noise in the specified sector
+     * 
+     * @return the response for the client to its command
+     */
     private String makeNoise(){
         int letter;
         int number;
@@ -579,6 +638,11 @@ public class SocketClientHandler implements Runnable{
         return "Noise done";
     }
     
+    /**
+     * Makes a client discard the specified card only of he has more than 3 card
+     * 
+     * @return the response for the client to its command
+     */
     private String discardCard() {
         String response = null;
         
@@ -676,7 +740,11 @@ public class SocketClientHandler implements Runnable{
         return response;
     }
     
-
+    /**
+     * Makes the player end his turn
+     * 
+     * @return the response for the client to its command
+     */
     private String endTurn() {
         
         Match match = serverStatus.getIdMatchMap().get(id);
