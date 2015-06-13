@@ -13,6 +13,12 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * This class handles the first connection of a client.
+ * 
+ * @author Paolo
+ *
+ */
 public class RMIClientHandler implements RMIClientHandlerInterface {
     
     /**
@@ -167,7 +173,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
      * 
      * @param id the unique name of the client
      * @param clientInterface the interface of the client that permits to send messages
-     * @param mapName the name of the map where the match is palyed on
+     * @param mapName the name of the map where the match is played on
      */
     private void joinNewGame(final String id, RMIClientInterface clientInterface, String mapName){
         

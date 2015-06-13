@@ -492,7 +492,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
     }
 
     /**
-     * make the player end his tur
+     * Makes the player end his turn
      */
     @Override
     public void endTurn(RMIClientInterface clientInterface, String id) {
