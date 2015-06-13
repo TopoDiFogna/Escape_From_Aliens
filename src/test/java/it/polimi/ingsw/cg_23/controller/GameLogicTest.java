@@ -19,6 +19,7 @@ import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.rmi.RMIBroker;
 import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
 
 import org.junit.Test;
@@ -200,6 +201,8 @@ public class GameLogicTest {
         match.getPlayers().add(player);
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Card card = new GreenCard();
         Deck<Card> deckEscapeHatch = DeckFactory.createDeck(2);
@@ -217,6 +220,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         match.getPlayers().add(player);
         GameLogic controller = new GameLogic(match);
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         SocketBroker broker = new SocketBroker("broker");
         controller.setSocketBroker(broker);
         Card card = new RedCard();
@@ -266,6 +271,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Card card = new SilenceCard(false);
         match.getSectorDeck().add(0, card);
@@ -294,6 +301,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Card card = new NoiseInYourSectorCard(true);
         player.setCurrentSector(match.getMap().getSector()[0][0]);
@@ -308,6 +317,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Card card = new NoiseInYourSectorCard(false);
         player.setCurrentSector(match.getMap().getSector()[0][0]);
@@ -322,6 +333,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Card card = new NoiseInYourSectorCard(true);
         Card card1 = new AttackCard();
@@ -456,6 +469,8 @@ public class GameLogicTest {
         Sector[][] map = match.getMap().getSector();
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         player.setCurrentSector(map[1][1]);
         match.addNewPlayerToList(player);
@@ -473,6 +488,8 @@ public class GameLogicTest {
         Sector[][] map = match.getMap().getSector();
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         player.setCurrentSector(map[1][1]);
         match.addNewPlayerToList(player);
@@ -487,6 +504,8 @@ public class GameLogicTest {
         Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         match.addNewPlayerToList(player);
@@ -504,6 +523,8 @@ public class GameLogicTest {
         Sector sector = new Sector(2, 13, SectorTypeEnum.ESCAPEHATCH, true);
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         match.addNewPlayerToList(player);
@@ -532,6 +553,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Card card = new SilenceCard(false);
         match.getSectorDeck().add(card);
@@ -550,6 +573,8 @@ public class GameLogicTest {
         GameLogic controller = new GameLogic(match);
         Card card = new GreenCard();
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         match.getEscapeHatchDeck().add(card);
         player.setCurrentSector(sector);
@@ -608,6 +633,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         player.setCurrentSector(sector);
         player.getCurrentSector().getPlayer().add(player);
@@ -650,6 +677,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Player player1 = new Alien("Dummy1");
         Player player2 = new Alien("Dummy2");
@@ -670,6 +699,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Player player1 = new Alien("Dummy1");
         Player player2 = new Human("Dummy2");
@@ -687,6 +718,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Player player1 = new Alien("Dummy1");
         Player player2 = new Human("Dummy2");
@@ -704,6 +737,8 @@ public class GameLogicTest {
         Match match = new Match("galilei");
         GameLogic controller = new GameLogic(match);
         SocketBroker broker = new SocketBroker("broker");
+        RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
         controller.setSocketBroker(broker);
         Player player1 = new Alien("Dummy1");
         Player player2 = new Human("Dummy2");
