@@ -18,7 +18,12 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-
+/**
+ * This class is the client core. It choose how to connect to the server and handles the connction.
+ * 
+ * @author Paolo
+ *
+ */
 public class Client {
 
     /**

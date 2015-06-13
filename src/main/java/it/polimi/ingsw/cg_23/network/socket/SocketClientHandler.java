@@ -1,7 +1,9 @@
 package it.polimi.ingsw.cg_23.network.socket;
 
 import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
+import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
+import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
 import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
 import it.polimi.ingsw.cg_23.model.cards.SpotlightCard;
 import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
@@ -614,7 +616,7 @@ public class SocketClientHandler implements Runnable{
         case "attack":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new AttackCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -626,7 +628,7 @@ public class SocketClientHandler implements Runnable{
         case "defense":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new DefenseCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -638,7 +640,7 @@ public class SocketClientHandler implements Runnable{
         case "sedatives":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new SedativesCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -646,23 +648,11 @@ public class SocketClientHandler implements Runnable{
             }
             response="You discarded the Sedatives card!";
             break;
-            
-        case "silence":
-            for (Player playerInList : match.getPlayers()) {
-                if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
-                    if(match.getGameLogic().hasCard(playerInList, card)){
-                        match.getGameLogic().discardItemCard(playerInList, card);
-                    }
-                }
-            }
-            response="You discarded the Silence card!";
-            break;
         
         case "spotlight":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new SpotlightCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -674,7 +664,7 @@ public class SocketClientHandler implements Runnable{
         case "teleport":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new TeleportCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }

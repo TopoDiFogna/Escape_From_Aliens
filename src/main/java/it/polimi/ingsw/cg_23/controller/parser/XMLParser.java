@@ -16,6 +16,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 
+/**
+ * This class handles the parsing of the files where the maps are saved
+ * 
+ * @author Paolo
+ *
+ */
 public class XMLParser extends DefaultHandler{
     
     

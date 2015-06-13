@@ -3,7 +3,9 @@ package it.polimi.ingsw.cg_23.network.rmi;
 import java.rmi.RemoteException;
 
 import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
+import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
+import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
 import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
 import it.polimi.ingsw.cg_23.model.cards.SpotlightCard;
 import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
@@ -14,20 +16,58 @@ import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
 import it.polimi.ingsw.cg_23.network.ServerStatus;
 
+/**
+ * This class handles the game commands sent by rmi clients.
+ * 
+ * @author Paolo
+ *
+ */
 public class RMIGameCommands implements RMIGameCommandsInterface {
     
-    private static final String messageError = "Cannot send message to client!";
-    private static final String notInGame = "You are not in a game! Join one first!";    
-    private static final String notStartedYet = "Game has not started yet!";
-    private static final String notYourTurn = "It's not your turn!";
-    private static final String cantUseCard = "You can't use that card!";
-    private static final String spotlightSyntax = "Spotlight syntax: use spotlight letter number";
+    /**
+     * Generic error message 
+     */
+    private static final String ERROR_MESSAGE = "Cannot send message to client!";
+    
+    /**
+     * Error if a player is not i a match
+     */
+    private static final String ERROR_NOTINGAME = "You are not in a game! Join one first!"; 
+    
+    /**
+     * Error if the match has not started yet
+     */
+    private static final String ERROR_NOTSTARTEDYET = "Game has not started yet!";
+    
+    /**
+     * Error if it's not the player's turn
+     */
+    private static final String ERROR_NOTYOURTURN = "It's not your turn!";
+    
+    /**
+     * Error if the player can't use the specified card
+     */
+    private static final String ERROR_CANTUSECARD = "You can't use that card!";
+    
+    /**
+     * Error if the spotlight card is used in a not correct way
+     */
+    private static final String ERROR_SPOTLIGHTSYNTAX = "Spotlight syntax: use spotlight letter number";
     
 
+    /**
+     * Constructor. Is void because we don't have any parameters
+     */
     public RMIGameCommands() {
         // the constructor is void, no need to instantiate variables
     }
     
+    /**
+     * Checks if the specified id is already in a match
+     * 
+     * @param id the name identifier of a client
+     * @return true if the client is already associated with a match, false otherwise
+     */
     private boolean checkIdIfPresent(String id){
         ServerStatus serverStatus = ServerStatus.getInstance();
 
@@ -36,6 +76,9 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         return false;
     }
 
+    /**
+     * Moves the player in the specified sector if he can go there
+     */
     @Override
     public void movePlayer(RMIClientInterface clientInterface, String id, int letter, int number) {
         
@@ -45,17 +88,17 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         
         try{
             if(checkIdIfPresent(id)){
-                clientInterface.dispatchMessage(notInGame);
+                clientInterface.dispatchMessage(ERROR_NOTINGAME);
                 return;
             }
             
             if(!(match.getMatchState()==GameState.RUNNING)){
-                clientInterface.dispatchMessage(notStartedYet);
+                clientInterface.dispatchMessage(ERROR_NOTSTARTEDYET);
                 return;
             }
                 
             if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-                clientInterface.dispatchMessage(notYourTurn);
+                clientInterface.dispatchMessage(ERROR_NOTYOURTURN);
                 return;
             }
                         
@@ -64,7 +107,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 return;
             }
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
         Sector[][] sector = match.getMap().getSector();
@@ -91,10 +134,13 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 }
             } 
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }  
     }
 
+    /**
+     * Moves the player and makes him attack in the specified sector if he can go there
+     */
     @Override
     public void moveAndAttack(RMIClientInterface clientInterface, String id, int letter, int number) {
         
@@ -104,17 +150,17 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         
         try{
             if(checkIdIfPresent(id)){
-                clientInterface.dispatchMessage(notInGame);
+                clientInterface.dispatchMessage(ERROR_NOTINGAME);
                 return;
             }
             
             if(!(match.getMatchState()==GameState.RUNNING)){
-                clientInterface.dispatchMessage(notStartedYet);
+                clientInterface.dispatchMessage(ERROR_NOTSTARTEDYET);
                 return;
             }
                 
             if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-                clientInterface.dispatchMessage(notYourTurn);
+                clientInterface.dispatchMessage(ERROR_NOTYOURTURN);
                 return;
             }
                         
@@ -123,7 +169,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 return;
             }
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
         Sector[][] sector = match.getMap().getSector();
@@ -150,10 +196,13 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 }
             } 
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         } 
     }
 
+    /**
+     * Makes the client use a specified card
+     */
     @Override
     public void useCard(RMIClientInterface clientInterface, String id, String cardUsed, int letter, int number) {
         
@@ -163,17 +212,17 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         
         try{
             if(checkIdIfPresent(id)){
-                clientInterface.dispatchMessage(notInGame);
+                clientInterface.dispatchMessage(ERROR_NOTINGAME);
                 return;
             }
             
             if(!(match.getMatchState()==GameState.RUNNING)){
-                clientInterface.dispatchMessage(notStartedYet);
+                clientInterface.dispatchMessage(ERROR_NOTSTARTEDYET);
                 return;
             }
                 
             if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-                clientInterface.dispatchMessage(notYourTurn);
+                clientInterface.dispatchMessage(ERROR_NOTYOURTURN);
                 return;
             }
             
@@ -191,7 +240,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             }
                         
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
         try{
@@ -206,7 +255,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You used the Adrenaline card!");
                         }
                         else 
-                            clientInterface.dispatchMessage(cantUseCard);
+                            clientInterface.dispatchMessage(ERROR_CANTUSECARD);
                     }  
                 }
                 
@@ -229,7 +278,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You used the Sedatives card!");
                         }
                         else 
-                            clientInterface.dispatchMessage(cantUseCard);
+                            clientInterface.dispatchMessage(ERROR_CANTUSECARD);
                     }
                 }
                 break;
@@ -237,12 +286,12 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             case "spotlight":
                 
                 if(letter == 0 || number == 0){
-                    clientInterface.dispatchMessage(spotlightSyntax);
+                    clientInterface.dispatchMessage(ERROR_SPOTLIGHTSYNTAX);
                     return;
                 }
                                 
                 if(letter<0 || letter>=23 || number <0 || number >=14){
-                    clientInterface.dispatchMessage(spotlightSyntax);
+                    clientInterface.dispatchMessage(ERROR_SPOTLIGHTSYNTAX);
                     return;
                 }
                 
@@ -254,7 +303,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You used the Spotlight card!");
                         }
                         else
-                            clientInterface.dispatchMessage(cantUseCard);
+                            clientInterface.dispatchMessage(ERROR_CANTUSECARD);
                     }
                 }
                 
@@ -269,7 +318,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You used the Teleport card!");
                         }
                         else
-                            clientInterface.dispatchMessage(cantUseCard);
+                            clientInterface.dispatchMessage(ERROR_CANTUSECARD);
                     }
                 }
                 break;
@@ -279,10 +328,13 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 break;
             }
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
     }
 
+    /**
+     * Make a noise in a sector when the player needs to do that and letter and number of the sector are specified 
+     */
     @Override
     public void makeNoise(RMIClientInterface clientInterface, String id, int letter, int number) {
         
@@ -292,21 +344,21 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         
         try{
             if(checkIdIfPresent(id)){
-                clientInterface.dispatchMessage(notInGame);
+                clientInterface.dispatchMessage(ERROR_NOTINGAME);
                 return;
             }
             
             if(!(match.getMatchState()==GameState.RUNNING)){
-                clientInterface.dispatchMessage(notStartedYet);
+                clientInterface.dispatchMessage(ERROR_NOTSTARTEDYET);
                 return;
             }
                 
             if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-                clientInterface.dispatchMessage(notYourTurn);
+                clientInterface.dispatchMessage(ERROR_NOTYOURTURN);
                 return;
             }
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
         try{
@@ -324,11 +376,14 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             clientInterface.dispatchMessage("Noise done");
             
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
     }
 
+    /**
+     * Makes the player discard a card. This can occur when the player has more than 3 cards in his hand
+     */
     @Override
     public void discardCard(RMIClientInterface clientInterface, String id, String cardDiscarded) {
         
@@ -338,21 +393,21 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         
         try{
             if(checkIdIfPresent(id)){
-                clientInterface.dispatchMessage(notInGame);
+                clientInterface.dispatchMessage(ERROR_NOTINGAME);
                 return;
             }
             
             if(!(match.getMatchState()==GameState.RUNNING)){
-                clientInterface.dispatchMessage(notStartedYet);
+                clientInterface.dispatchMessage(ERROR_NOTSTARTEDYET);
                 return;
             }
                 
             if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-                clientInterface.dispatchMessage(notYourTurn);
+                clientInterface.dispatchMessage(ERROR_NOTYOURTURN);
                 return;
             }
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
         try {
@@ -373,7 +428,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             case "attack":
                 for (Player playerInList : match.getPlayers()) {
                     if(playerInList.getName().equals(id)){
-                        Card card = new AdrenalineCard();
+                        Card card = new AttackCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
                         }
@@ -385,7 +440,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             case "defense":
                 for (Player playerInList : match.getPlayers()) {
                     if(playerInList.getName().equals(id)){
-                        Card card = new AdrenalineCard();
+                        Card card = new DefenseCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
                         }
@@ -397,7 +452,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             case "sedatives":
                 for (Player playerInList : match.getPlayers()) {
                     if(playerInList.getName().equals(id)){
-                        Card card = new AdrenalineCard();
+                        Card card = new SedativesCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
                         }
@@ -405,23 +460,11 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 }
                 clientInterface.dispatchMessage("You discarded the Sedatives card!");
                 break;
-                
-            case "silence":
-                for (Player playerInList : match.getPlayers()) {
-                    if(playerInList.getName().equals(id)){
-                        Card card = new AdrenalineCard();
-                        if(match.getGameLogic().hasCard(playerInList, card)){
-                            match.getGameLogic().discardItemCard(playerInList, card);
-                        }
-                    }
-                }
-                clientInterface.dispatchMessage("You discarded the Silence card!");
-                break;
             
             case "spotlight":
                 for (Player playerInList : match.getPlayers()) {
                     if(playerInList.getName().equals(id)){
-                        Card card = new AdrenalineCard();
+                        Card card = new SpotlightCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
                         }
@@ -433,7 +476,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             case "teleport":
                 for (Player playerInList : match.getPlayers()) {
                     if(playerInList.getName().equals(id)){
-                        Card card = new AdrenalineCard();
+                        Card card = new TeleportCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
                         }
@@ -443,11 +486,14 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 break;
             }
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
     }
 
+    /**
+     * make the player end his tur
+     */
     @Override
     public void endTurn(RMIClientInterface clientInterface, String id) {
         
@@ -457,21 +503,21 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         
         try{
             if(checkIdIfPresent(id)){
-                clientInterface.dispatchMessage(notInGame);
+                clientInterface.dispatchMessage(ERROR_NOTINGAME);
                 return;
             }
             
             if(!(match.getMatchState()==GameState.RUNNING)){
-                clientInterface.dispatchMessage(notStartedYet);
+                clientInterface.dispatchMessage(ERROR_NOTSTARTEDYET);
                 return;
             }
                 
             if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-                clientInterface.dispatchMessage(notYourTurn);
+                clientInterface.dispatchMessage(ERROR_NOTYOURTURN);
                 return;
             }
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
         try {
@@ -486,7 +532,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 }
             }
         } catch (RemoteException e){
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
     }

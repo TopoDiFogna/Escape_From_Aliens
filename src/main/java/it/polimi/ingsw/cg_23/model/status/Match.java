@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Observable;
 
 /**
- * Description of Match.
+ * The Match is the core of every game. In this class are tracked all the status of a single match.
  * 
  * @author Paolo
  */

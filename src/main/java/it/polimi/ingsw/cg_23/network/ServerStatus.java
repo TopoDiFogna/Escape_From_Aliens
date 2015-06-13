@@ -7,6 +7,12 @@ import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class handles all the matches, brokers and players that are in the game.
+ * 
+ * @author Paolo
+ *
+ */
 public class ServerStatus {
     
     /**
