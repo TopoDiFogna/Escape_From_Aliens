@@ -3,8 +3,17 @@ package it.polimi.ingsw.cg_23.controller;
 import it.polimi.ingsw.cg_23.controller.parser.XMLParser;
 import it.polimi.ingsw.cg_23.model.map.Sector;
 
+/**
+ * This class initialize the map
+ * 
+ * @author Paolo
+ *
+ */
 public class MapInitializer {
     
+    /**
+     * Constructor
+     */
     private MapInitializer(){
         //no need to create an object of this type
     }
@@ -109,7 +118,4 @@ public class MapInitializer {
             }
         }
     }
-    
-    
-
 }
