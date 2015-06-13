@@ -15,18 +15,32 @@ import java.util.TimerTask;
 
 public class RMIClientHandler implements RMIClientHandlerInterface {
     
-   
-    
+    /**
+     * Where to save the server status object
+     */
     private ServerStatus serverStatus;
     
-    private static final String messageError = "Cannot send message to client!";
+    /**
+     * Generic error message
+     */
+    private static final String ERROR_MESSAGE = "Cannot send message to client!";
     
+    /**
+     * Where to save the interface conaining all the game commands
+     */
     private RMIGameCommandsInterface gameInterface;
 
+    /**
+     * Construnctor. Gets the only instance of server status
+     */
     public RMIClientHandler() {
         serverStatus = ServerStatus.getInstance();
     }
 
+    /**
+     * Method called from remote.<br>
+     * Gets the game list from the server status and returns it to the client
+     */
     @Override
     public void getGameList(RMIClientInterface clientInterface) {
         
@@ -35,12 +49,17 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
         try {
             clientInterface.dispatchMessage("This maps are playable: Galilei, Galvani, Fermi");
         } catch (RemoteException e) {
-            System.err.println(messageError);
+            System.err.println(ERROR_MESSAGE);
         }
         
     }
     
-    
+    /**
+     * Checks if the specified id is already in a match
+     * 
+     * @param id the name identifier of a client
+     * @return true if the client is already associated with a match, false otherwise
+     */
     private boolean checkIdIfPresent(String id){
         if(!serverStatus.getIdMatchMap().containsKey(id))
             return true;
@@ -48,6 +67,10 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
     }
     
 
+    /**
+     * Method called from remote.<br>
+     * First checks if a player is already in a game, if not, creates a new match if non available or makes the client join a match with the specified map.
+     */
     @Override
     public RMIGameCommandsInterface joinMatch(String id, String mapName, RMIClientInterface clientInterface) throws RemoteException {//TODO synchronized
 
@@ -58,7 +81,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
                 clientInterface.dispatchMessage("You are already in a game!");
                 return gameInterface;
             } catch (RemoteException e) {
-                System.err.println(messageError);
+                System.err.println(ERROR_MESSAGE);
             }
         }
         if("galilei".equals(mapName) || "fermi".equals(mapName) || "galvani".equals(mapName)){
@@ -69,7 +92,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
                     try {
                         clientInterface.dispatchMessage("You were added to a game with map "+mapName);
                     } catch (RemoteException e) {
-                        System.err.println(messageError);
+                        System.err.println(ERROR_MESSAGE);
                     }
                 }
                 else{
@@ -77,7 +100,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
                     try {
                         clientInterface.dispatchMessage("You were added to a new game with map "+mapName);
                     } catch (RemoteException e) {
-                        System.err.println(messageError);
+                        System.err.println(ERROR_MESSAGE);
                     }
                 }
             }
@@ -87,14 +110,14 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
                 try {
                     clientInterface.dispatchMessage("You were added to a new game with map "+mapName);
                 } catch (RemoteException e) {
-                    
+                    System.err.println(ERROR_MESSAGE);
                 }
             }
         } else
             try {
                 clientInterface.dispatchMessage("Map "+mapName+" not implemented!");
             } catch (RemoteException e) {
-                System.err.println(messageError);
+                System.err.println(ERROR_MESSAGE);
             }
         
         
@@ -102,6 +125,14 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
         return (RMIGameCommandsInterface) UnicastRemoteObject.exportObject(gameInterface,0);
     }
     
+    /**
+     * Makes a client join a already created match which is waiting for more players.
+     * 
+     * @param id the unique name of the client
+     * @param clientInterface the interface of the client that permits to send messages
+     * @param match the match to be joined
+     * @param broker the broker associated to the match that is joined
+     */
     private void joinGame(String id, RMIClientInterface clientInterface, Match match, RMIBroker broker){
         
         broker.subscribe(clientInterface);
@@ -131,6 +162,13 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
         
     }
     
+    /**
+     * Makes a client join a new match and sets it waiting for more players.
+     * 
+     * @param id the unique name of the client
+     * @param clientInterface the interface of the client that permits to send messages
+     * @param mapName the name of the map where the match is palyed on
+     */
     private void joinNewGame(final String id, RMIClientInterface clientInterface, String mapName){
         
         Match match = new Match(mapName);
@@ -169,7 +207,4 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
             }
         }, 20000);//20 seconds
     }
-
-    
-
 }
