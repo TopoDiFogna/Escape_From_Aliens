@@ -1,29 +1,30 @@
 package it.polimi.ingsw.cg_23.gui;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.awt.event.ActionEvent;
 
 public class StartingTable extends JFrame {
     
     private  Image backgroundImage;
     private  Image logoImage;
-    private  Image loadingImage;
+    private static Icon loadingImage;
     private  JLabel backgroundLabel;
     private  JLabel logoLabel;
-    private  JLabel loadingLabel;
-    private  JLayeredPane layeredPane;
+    private static JLabel loadingLabel;
+    private static  JLayeredPane layeredPane;
     private final static int LAYER_BACKGROUND = 1;
     private final static int LAYER_LOGO = 2;
     private final static int LAYER_LOGIN = 3;
-    private final static int LAYER_LOADING = 3;
+    private final static int LAYER_LOADING = 4;
     
     /**
      * The constructor. <br>
@@ -47,7 +48,7 @@ public class StartingTable extends JFrame {
         try {
             backgroundImage = ImageIO.read(new File("./img/background_table.png"));
             logoImage = ImageIO.read(new File("./img/logo.png"));
-            loadingImage = ImageIO.read(new File("./img/Loading.gif"));
+            loadingImage = new ImageIcon("./img/loading.gif") ;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,7 +70,7 @@ public class StartingTable extends JFrame {
         layeredPane.setLayer(logoLabel, LAYER_LOGO);
     }
     
-    private void initializeLogin() {
+    protected void initializeLogin() {
         
         Login login = new Login();        
         layeredPane.add(login);
@@ -78,10 +79,9 @@ public class StartingTable extends JFrame {
         login.setVisible(true);
     }
     
-    protected void initializeLoading() {
-        
-        loadingLabel = new JLabel(new ImageIcon(loadingImage));
-        loadingLabel.setBounds(400, 200, 400, 300);
+    protected static void initializeLoading() {
+        loadingLabel = new JLabel(loadingImage);
+        loadingLabel.setBounds(413, 250, 173, 132);
         layeredPane.add(loadingLabel);
         layeredPane.setLayer(loadingLabel, LAYER_LOADING);
     }
