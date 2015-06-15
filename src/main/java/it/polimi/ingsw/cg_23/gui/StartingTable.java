@@ -1,6 +1,5 @@
 package it.polimi.ingsw.cg_23.gui;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
