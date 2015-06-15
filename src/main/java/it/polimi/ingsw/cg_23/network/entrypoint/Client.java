@@ -107,7 +107,7 @@ public class Client {
      * Constructor <br>
      * Asks to enter various things used to determine where to connect, which connection to use and the client identifier
      */
-    public Client() {
+    private Client() {
         
         stdin = new Scanner(System.in);
         
@@ -122,6 +122,17 @@ public class Client {
             port=10412;   
         System.out.println("Inserisci nick");
         name=stdin.nextLine(); 
+    }
+    
+    public Client(String ip, String connection, String nickname){
+        this.ip=ip;
+        if("rmi".equalsIgnoreCase(connection)){
+            rmi=true;
+            port=1099;            
+        }else{
+            port=10412;
+        }
+        this.name=nickname;        
     }
     
     /**

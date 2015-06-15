@@ -1,5 +1,7 @@
 package it.polimi.ingsw.cg_23.gui;
 
+import it.polimi.ingsw.cg_23.network.entrypoint.Client;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -14,12 +16,13 @@ import javax.swing.JTextField;
 
 public class Login extends JPanel {
     
+   
     
     public Login(){
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);
-        setBounds(0,0,120,130);
+        setBounds(0,0,120,150);
         
         
         final JTextField nickname = new JTextField("Enter a Nickname");
@@ -38,6 +41,23 @@ public class Login extends JPanel {
             }
         });
         
+        
+        
+        final JTextField ip = new JTextField("Enter IP address");
+        ip.setPreferredSize(new Dimension(105,25));
+        ip.setFont(font);
+        add(ip);
+        
+        //This mouse listener delete Enter IP address when click on the text field.
+        ip.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e){
+                if(ip.getText().equals("Enter IP address")){
+                    ip.setText("");
+                    repaint();
+                    revalidate();
+                }
+            }
+        });
         
         String[] mapType = {"Galilei", "Galvani", "Fermi"};
         final JComboBox mapList = new JComboBox(mapType);;
@@ -66,34 +86,13 @@ public class Login extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if(!nickname.getText().equals("Enter a Nickname") && !nickname.getText().equals("")){                    
                     
-                    
-                    //This listener saves the nickname selected by player into a string variable.
-                    nickname.addActionListener(new ActionListener() {            
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            String name = nickname.getText();                
-                        }
-                    });
-                    
-                    
-                    //This listener saves the selected map
-                    mapList.addActionListener(new ActionListener() {            
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            String map = mapList.getSelectedItem().toString().toLowerCase();
-                            map = "join" + map;
-                        }
-                    });
-                    
-                    
-                  //This listener saves the selected connection
-                    connectionList.addActionListener(new ActionListener() {            
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            String connection = connectionList.getSelectedItem().toString().toLowerCase();
-                        }
-                    });
-                    
+                    Client client = new Client(ip.getText(), connectionList.getSelectedItem().toString().toLowerCase(), nickname.getText());
+                    if("rmi".equalsIgnoreCase(connectionList.getSelectedItem().toString())){
+                        client.startRMIClient();
+                    } else {
+                        client.startSocketClient();
+                    }
+                            
                     StartingTable.initializeLoading();
                     setVisible(false);
                     repaint();
