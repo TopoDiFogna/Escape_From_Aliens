@@ -8,7 +8,8 @@ import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.Match;
-import it.polimi.ingsw.cg_23.network.Broker;
+import it.polimi.ingsw.cg_23.network.rmi.RMIBroker;
+import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
 
 import org.junit.Test;
 
@@ -21,8 +22,10 @@ public class AttackCardTest {
 		Card card = new AttackCard();
 		Match match = new Match("galilei");
 		GameLogic controller = new GameLogic(match);
-		Broker broker = new Broker("broker");
-		controller.setBroker(broker);
+		SocketBroker broker = new SocketBroker("broker");
+		RMIBroker rmibroker = new RMIBroker("broker");
+        controller.setRMIBroker(rmibroker);
+		controller.setSocketBroker(broker);
 		Sector sector = new Sector(3, 6, SectorTypeEnum.DANGEROUS, true);
 		match.addNewPlayerToList(player1);
 		match.addNewPlayerToList(player2);

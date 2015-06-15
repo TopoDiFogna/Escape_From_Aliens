@@ -1,7 +1,9 @@
-package it.polimi.ingsw.cg_23.network;
+package it.polimi.ingsw.cg_23.network.socket;
 
 import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
+import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
+import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
 import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
 import it.polimi.ingsw.cg_23.model.cards.SpotlightCard;
 import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
@@ -11,16 +13,16 @@ import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
 import it.polimi.ingsw.cg_23.model.status.Match;
+import it.polimi.ingsw.cg_23.network.ServerStatus;
+import it.polimi.ingsw.cg_23.network.rmi.RMIBroker;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Logger;
 
 /**
  * This class receive commands from the client and executes them.
@@ -29,10 +31,7 @@ import java.util.logging.Logger;
  * @author Paolo
  *
  */
-public class ClientHandler implements Runnable{
-
-    private static PrintStream out=new PrintStream(System.out);
-    private static final Logger LOGGER = Logger.getLogger("EscapeFromAliensLogger");
+public class SocketClientHandler implements Runnable{
     
     private String notInGame = "You are not in a game! Join one first!";    
     private String notStartedYet = "Game has not started yet!";
@@ -56,18 +55,27 @@ public class ClientHandler implements Runnable{
      */
     private PrintWriter socketOut;
     
+    /**
+     * Status of all the matches, broker and clients connected.
+     */
     private ServerStatus serverStatus;
     
+    /**
+     * Tokenizer used to parse the received command
+     */
     private StringTokenizer tokenizer;
     
+    /**
+     * Unique id of the client connected
+     */
     private String id;
 
     /**
-     * Constructor
+     * Constructor. Initialize the socket and gets the intance of serverstatus
      * 
      * @param socket
      */
-    public ClientHandler(Socket socket) {
+    public SocketClientHandler(Socket socket) {
         
         this.socket=socket;
         
@@ -76,22 +84,27 @@ public class ClientHandler implements Runnable{
         try {
             socketIn=new Scanner(socket.getInputStream());
         } catch (IOException e1) {
-            LOGGER.throwing("ClientHandler", "constructor", e1);
+            e1.printStackTrace();
+
         }
         
         try {
             socketOut = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            LOGGER.throwing("ClientHandler", "constructor", e);
+            e.printStackTrace();
         }
     }
     
+    /**
+     * Main method of the client handler. Receives the command and calls another method to parse it.<br>
+     * When the command is parsed sends a response to the client e closes the connection.
+     */
     @Override
     public void run() {
             
         String line = socketIn.nextLine();
         
-        out.println("CLIENT: Command: "+line);
+        System.out.println("CLIENT: Command: "+line);
         
         tokenizer = new StringTokenizer(line);
         
@@ -115,6 +128,12 @@ public class ClientHandler implements Runnable{
         return false;
     }
     
+    /**
+     * Parses the command sent by the client
+     * 
+     * @param msg the command received
+     * @return the response for the client to its command
+     */
     private String parseCommand(String msg){
         
         String response = null;
@@ -171,12 +190,17 @@ public class ClientHandler implements Runnable{
      * @param msg the string to sent to the client
      */
     private void send(String msg){
-        out.println("SERVER: Sending: "+msg);
+        System.out.println("SERVER: Sending: "+msg);
         socketOut.println(msg);
         socketOut.flush();
     }
     
-    private String checkGames(){
+    /**
+     * Checks for games and make a client join one
+     * 
+     * @return the response for the client to its command
+     */
+    private synchronized String checkGames(){//TODO check synchronized here
         
         if(!tokenizer.hasMoreTokens())
             return "Join syntax: join mapname";
@@ -190,9 +214,9 @@ public class ClientHandler implements Runnable{
         
         if("galilei".equals(mapName) || "fermi".equals(mapName) || "galvani".equals(mapName)){
             
-            for (Match match : serverStatus.getMatchBrokerMap().keySet()) {
-                if(match.getName().equals(mapName) && match.getMatchState() != GameState.RUNNING && match.getPlayers().size()<8){
-                    joinGame(match, serverStatus.getMatchBrokerMap().get(match));
+            for (Match match : serverStatus.getMatchSocketBrokerMap().keySet()) {
+                if(match.getName().equals(mapName) && match.getMatchState() == GameState.WAITING && match.getPlayers().size()<8){
+                    joinGame(match, serverStatus.getMatchSocketBrokerMap().get(match));
                     response = "You were added to a game with map "+mapName;
                 }
                 else{
@@ -201,7 +225,7 @@ public class ClientHandler implements Runnable{
                 }
             }
             
-            if(serverStatus.getMatchBrokerMap().isEmpty()){
+            if(serverStatus.getMatchSocketBrokerMap().isEmpty()){
                 joinNewGame(mapName);
                 response = "You were added to a new game with map "+mapName;
             }
@@ -212,7 +236,13 @@ public class ClientHandler implements Runnable{
         return response;
     }
     
-    private void joinGame(Match match, Broker broker){
+    /**
+     * Makes the client join an already existing game
+     * 
+     * @param match the match to be joint
+     * @param broker the broker linked to the match
+     */
+    private void joinGame(Match match, SocketBroker broker){
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
@@ -243,11 +273,18 @@ public class ClientHandler implements Runnable{
         
     }
     
+    /**
+     * Makes the client join a fresh match. The match is created and addded to the list of waiting Matches, the the client joins it.
+     * 
+     * @param mapName the name of the map the palyer has chosen to play
+     */
     private void joinNewGame(String mapName){
         
         Match match = new Match(mapName);
         
-        Broker broker = new Broker(""+mapName+serverStatus.getBrokerNumber());
+        SocketBroker broker = new SocketBroker(""+mapName+serverStatus.getBrokerNumber());
+        
+        RMIBroker rmiBroker = new RMIBroker(""+mapName+serverStatus.getBrokerNumber());
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
@@ -255,9 +292,13 @@ public class ClientHandler implements Runnable{
         
         match.addNewPlayerToList(new Alien(id));
         
-        match.getGameLogic().setBroker(broker);
+        match.getGameLogic().setSocketBroker(broker);
         
-        serverStatus.addBrokerToMatch(match, broker);
+        match.getGameLogic().setRMIBroker(rmiBroker);
+        
+        serverStatus.addSocketBrokerToMatch(match, broker);
+        
+        serverStatus.addRMIBrokerToMatch(match, rmiBroker);
         
         serverStatus.addPlayerToMatch(id, match);
         
@@ -271,28 +312,39 @@ public class ClientHandler implements Runnable{
                     match.getGameLogic().startGame();
                 }
                 else{
-                    out.println("SERVER: Cannot start the game");
+                    System.out.println("SERVER: Cannot start the game");
                     serverStatus.getIdMatchMap().remove(id);
                 }
             }
         }, 20000);//20 seconds
     }
     
-    
+    /**
+     * Returns a string for the move error
+     * 
+     * @return the response for the client to its command
+     */
     private String moveError(){
         return "Move syntax: move letter number. The letter can go from A to W, the number from 1 to 14.";
     }
     
+    /**
+     * Makes a player move in the specified sector if he can go there
+     * 
+     * @return the response for the client to its command
+     */
     private String movePlayer(){
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
             
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
             
@@ -313,8 +365,6 @@ public class ClientHandler implements Runnable{
         
         if(letter<0 || letter>=23 || number <0 || number >=14)
             return moveError();
-        
-        Match match = serverStatus.getIdMatchMap().get(id);
         
         Sector[][] sector = match.getMap().getSector();
         
@@ -343,16 +393,23 @@ public class ClientHandler implements Runnable{
         
     }    
     
+    /**
+     * Makes the player move and attack in the specified sector if he can go there
+     * 
+     * @return the response for the client to its command
+     */
     private String moveAndAttack(){
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
             
@@ -373,8 +430,6 @@ public class ClientHandler implements Runnable{
         
         if(letter<0 || letter>=23 || number <0 || number >=14)
             return moveError();
-        
-        Match match = serverStatus.getIdMatchMap().get(id);
         
         Sector[][] sector = match.getMap().getSector();
         
@@ -402,17 +457,25 @@ public class ClientHandler implements Runnable{
         return response;
     }
     
+    /**
+     * Makes the player use the specified card if he can
+     * 
+     * @return the response for the client to its command
+     */
     private String useCard(){
-        String response = null;
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        String response = "";
         
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }
         
@@ -420,14 +483,14 @@ public class ClientHandler implements Runnable{
             return "Use syntax: use cardname. Available cardnames are: Adrenaline, Attack, Sedatives, Spotlight, Teleport";
         }
         
-        Match match = serverStatus.getIdMatchMap().get(id);
+
         
-        for (Player playerList : match.getPlayers()) {
-            if(playerList.getName().equals(id)){
-                if(!(playerList instanceof Human)){
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName().equals(id)){
+                if(!(playerInList instanceof Human)){
                     return "You are an alien! You can't use Item Cards!";
                 }
-                if(playerList.needSectorNoise())
+                if(playerInList.needSectorNoise())
                     return "You need to specify a sector where make a noise";
             }
         }
@@ -450,11 +513,11 @@ public class ClientHandler implements Runnable{
             break;
        
         case "attack":            
-            response="You can not the Attack card!";
+            response="You can not use the Attack card!";
             break;
         
         case "defense":
-            response="You can not the Defense card!";
+            response="You can not use the Defense card!";
             break;
             
         case "sedatives":
@@ -526,6 +589,11 @@ public class ClientHandler implements Runnable{
         return response;
     }
     
+    /**
+     * Make a noise in the specified sector
+     * 
+     * @return the response for the client to its command
+     */
     private String makeNoise(){
         int letter;
         int number;
@@ -535,11 +603,11 @@ public class ClientHandler implements Runnable{
         if(checkIdIfPresent())
             return notInGame;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
+        if(!(match.getMatchState()==GameState.RUNNING)){
             return notStartedYet;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
             return notYourTurn;
         }     
         
@@ -570,6 +638,11 @@ public class ClientHandler implements Runnable{
         return "Noise done";
     }
     
+    /**
+     * Makes a client discard the specified card only of he has more than 3 card
+     * 
+     * @return the response for the client to its command
+     */
     private String discardCard() {
         String response = null;
         
@@ -607,7 +680,7 @@ public class ClientHandler implements Runnable{
         case "attack":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new AttackCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -619,7 +692,7 @@ public class ClientHandler implements Runnable{
         case "defense":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new DefenseCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -631,7 +704,7 @@ public class ClientHandler implements Runnable{
         case "sedatives":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new SedativesCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -639,23 +712,11 @@ public class ClientHandler implements Runnable{
             }
             response="You discarded the Sedatives card!";
             break;
-            
-        case "silence":
-            for (Player playerInList : match.getPlayers()) {
-                if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
-                    if(match.getGameLogic().hasCard(playerInList, card)){
-                        match.getGameLogic().discardItemCard(playerInList, card);
-                    }
-                }
-            }
-            response="You discarded the Silence card!";
-            break;
         
         case "spotlight":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new SpotlightCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -667,7 +728,7 @@ public class ClientHandler implements Runnable{
         case "teleport":
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
-                    Card card = new AdrenalineCard();
+                    Card card = new TeleportCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
                     }
@@ -679,7 +740,11 @@ public class ClientHandler implements Runnable{
         return response;
     }
     
-
+    /**
+     * Makes the player end his turn
+     * 
+     * @return the response for the client to its command
+     */
     private String endTurn() {
         
         Match match = serverStatus.getIdMatchMap().get(id);
