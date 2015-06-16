@@ -16,6 +16,11 @@ public class SpotlightCard extends Card {
      */
     public SpotlightCard() {
     }
+    
+    @Override
+    public String toString() {
+        return "Spotlight";
+    }
 
     /**
      * This method asks controller to ask view to ask human player the sector. <br>

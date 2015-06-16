@@ -15,6 +15,11 @@ public class SedativesCard extends Card {
      */
     public SedativesCard() {
     }
+    
+    @Override
+    public String toString() {
+        return "Sedatives";
+    }
 
     /**
      * This method prevents human to pick-up card.

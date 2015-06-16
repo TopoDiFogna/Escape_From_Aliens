@@ -18,6 +18,11 @@ public class AttackCard extends Card {
     public AttackCard() {
     }
 
+    @Override
+    public String toString() {
+        return "Attack";
+    }
+    
     /**
      * In this case gives the player the possibility to attack in his sector. <br>
      * The action calls attack method in PlayerController class (Attack method is the same for humans and aliens).

@@ -17,6 +17,11 @@ public class DefenseCard extends Card {
     public DefenseCard() {
     }
 
+    @Override
+    public String toString() {
+        return "Defence";
+    }
+    
     /**
      * This card can not be used from human, but auto-used when human is attacked.
      */

@@ -19,6 +19,8 @@ import it.polimi.ingsw.cg_23.network.rmi.RMIBroker;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.Timer;
@@ -33,12 +35,12 @@ import java.util.TimerTask;
  */
 public class SocketClientHandler implements Runnable{
     
-    private String notInGame = "You are not in a game! Join one first!";    
-    private String notStartedYet = "Game has not started yet!";
-    private String notYourTurn = "It's not your turn!";
-    private String cantUseCard = "You can't use that card!";
-    private String spotlightSyntax = "Spotlight syntax: use spotlight letter number";
-    private String noiseSyntax = "Noise syntax: noise letter number";
+    private static final String NOTINGAME = "You are not in a game! Join one first!";    
+    private static final String NOTRUNNING = "Game game is not running!";
+    private static final String NOTYOURTURN = "It's not your turn!";
+    private static final String CANTUSECARD = "You can't use that card!";
+    private static final String SPOTLIGHTSYNTAX = "Spotlight syntax: use spotlight letter number";
+    private static final String NOISESYNTAX = "Noise syntax: noise letter number";
     
     /**
      * The socket of the client
@@ -153,11 +155,11 @@ public class SocketClientHandler implements Runnable{
                 break;
                 
             case "move":
-                response = movePlayer();
+                response = movePlayer() + " " + getCards();
                 break;
                
             case "moveattack":
-                response = moveAndAttack();
+                response = moveAndAttack() + " " + getCards();
                 break;
                 
             case "use":
@@ -174,6 +176,10 @@ public class SocketClientHandler implements Runnable{
                      
             case "endturn":
                 response = endTurn();
+                break;
+                
+            case "getcards":
+                response = getCards();
                 break;
                 
             default:
@@ -215,19 +221,16 @@ public class SocketClientHandler implements Runnable{
         if("galilei".equals(mapName) || "fermi".equals(mapName) || "galvani".equals(mapName)){
             
             for (Match match : serverStatus.getMatchSocketBrokerMap().keySet()) {
-                if(match.getName().equals(mapName) && match.getMatchState() == GameState.WAITING && match.getPlayers().size()<8){
-                    joinGame(match, serverStatus.getMatchSocketBrokerMap().get(match));
-                    response = "You were added to a game with map "+mapName;
+                if(match.getName().equals(mapName) && match.getMatchState() == GameState.WAITING && match.getPlayers().size()<8){   
+                    response = "You were added to a game with map "+mapName+ " "+joinGame(match, serverStatus.getMatchSocketBrokerMap().get(match));
                 }
                 else{
-                    joinNewGame(mapName);
-                    response = "You were added to a new game with map "+mapName;
+                    response = "You were added to a new game with map "+mapName+" "+joinNewGame(mapName);
                 }
             }
             
             if(serverStatus.getMatchSocketBrokerMap().isEmpty()){
-                joinNewGame(mapName);
-                response = "You were added to a new game with map "+mapName;
+                response = "You were added to a new game with map "+mapName+" "+joinNewGame(mapName);;
             }
         }
         else
@@ -242,7 +245,7 @@ public class SocketClientHandler implements Runnable{
      * @param match the match to be joint
      * @param broker the broker linked to the match
      */
-    private void joinGame(Match match, SocketBroker broker){
+    private String joinGame(Match match, SocketBroker broker){
         
         BrokerThread brokerThread = new BrokerThread(socket);
         brokerThread.start();
@@ -271,6 +274,10 @@ public class SocketClientHandler implements Runnable{
         
         serverStatus.addPlayerToMatch(id, match);
         
+        if(nAlien>=nHuman)
+            return "You are an Human!";
+        else
+            return "You are an Alien";
     }
     
     /**
@@ -278,7 +285,7 @@ public class SocketClientHandler implements Runnable{
      * 
      * @param mapName the name of the map the palyer has chosen to play
      */
-    private void joinNewGame(String mapName){
+    private String joinNewGame(String mapName){
         
         Match match = new Match(mapName);
         
@@ -317,6 +324,7 @@ public class SocketClientHandler implements Runnable{
                 }
             }
         }, 20000);//20 seconds
+        return "You are an Alien";
     }
     
     /**
@@ -338,14 +346,14 @@ public class SocketClientHandler implements Runnable{
         Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
-            return notInGame;
+            return NOTINGAME;
         
         if(!(match.getMatchState()==GameState.RUNNING)){
-            return notStartedYet;
+            return NOTRUNNING;
         }
             
         if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return notYourTurn;
+            return NOTYOURTURN;
         }
             
         int letter;
@@ -374,18 +382,18 @@ public class SocketClientHandler implements Runnable{
                 if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                         response = match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
-                        response = response + "You moved in sector "+letter+" "+number;
+                        response = "You moved in sector "+letter+" "+number+ " " +response;
                         break;
                     }
                     else 
                         return "You can't move there!";
                 } else {
                     if(playerInList.needSectorNoise())
-                        response = response + "You need to specify a sector where make a noise ";
+                        response = response + " " + "You need to specify a sector where make a noise";
                     if(playerInList.hasFourCard())
-                        response =  response + "You need to specify what you want to di with the card in excess ";
+                        response =  response + " " + "You need to specify what you want to di with the card in excess";
                     if(playerInList.hasMoved())
-                        response =  response + "You have already moved! ";
+                        response =  response + " " + "You have already moved!";
                 }
             }
         } 
@@ -403,14 +411,14 @@ public class SocketClientHandler implements Runnable{
         Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
-            return notInGame;
+            return NOTINGAME;
         
         if(!(match.getMatchState()==GameState.RUNNING)){
-            return notStartedYet;
+            return NOTRUNNING;
         }
         
         if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return notYourTurn;
+            return NOTYOURTURN;
         }
             
         int letter;
@@ -446,11 +454,11 @@ public class SocketClientHandler implements Runnable{
                         return "You can't move there!";
                 } else {
                     if(playerInList.needSectorNoise())
-                        response = response + "You need to specify a sector where make a noise ";
+                        response = response + " " + "You need to specify a sector where make a noise";
                     if(playerInList.hasFourCard())
-                        response = response + "You need to specify what you want to di with the card in excess ";
+                        response = response + " " + "You need to specify what you want to di with the card in excess";
                     if(playerInList.hasMoved())
-                        response =  response + "You have already moved! ";
+                        response = response + " " + "You have already moved!";
                 }
             }
         } 
@@ -469,14 +477,14 @@ public class SocketClientHandler implements Runnable{
         String response = "";
         
         if(checkIdIfPresent())
-            return notInGame;
+            return NOTINGAME;
         
         if(!(match.getMatchState()==GameState.RUNNING)){
-            return notStartedYet;
+            return NOTRUNNING;
         }
         
         if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return notYourTurn;
+            return NOTYOURTURN;
         }
         
         if(!tokenizer.hasMoreTokens()){
@@ -506,7 +514,7 @@ public class SocketClientHandler implements Runnable{
                         response="You used the Adrenaline card!";
                     }
                     else 
-                        response=cantUseCard;
+                        response=CANTUSECARD;
                 }  
             }
             
@@ -529,7 +537,7 @@ public class SocketClientHandler implements Runnable{
                         response="You used the Sedatives card!";
                     }
                     else 
-                        response=cantUseCard;
+                        response=CANTUSECARD;
                 }
             }
             break;
@@ -542,16 +550,16 @@ public class SocketClientHandler implements Runnable{
                 letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
             
             else
-                return spotlightSyntax;
+                return SPOTLIGHTSYNTAX;
             
             if(tokenizer.hasMoreTokens())
                 number=Integer.parseInt(tokenizer.nextToken())-1;
 
             else
-                return spotlightSyntax;
+                return SPOTLIGHTSYNTAX;
             
             if(letter<0 || letter>=23 || number <0 || number >=14)
-                return spotlightSyntax;
+                return SPOTLIGHTSYNTAX;
             
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
@@ -561,7 +569,7 @@ public class SocketClientHandler implements Runnable{
                         response="You used the Spotlight card!";
                     }
                     else
-                        response = cantUseCard;
+                        response = CANTUSECARD;
                 }
             }
             
@@ -576,7 +584,7 @@ public class SocketClientHandler implements Runnable{
                         response="You used the Teleport card!";
                     }
                     else
-                        response = cantUseCard;
+                        response = CANTUSECARD;
                 }
             }
             break;
@@ -601,30 +609,30 @@ public class SocketClientHandler implements Runnable{
         Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
-            return notInGame;
+            return NOTINGAME;
         
         if(!(match.getMatchState()==GameState.RUNNING)){
-            return notStartedYet;
+            return NOTRUNNING;
         }
         
         if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return notYourTurn;
+            return NOTYOURTURN;
         }     
         
         if(tokenizer.hasMoreTokens())
             letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
         
         else
-            return noiseSyntax;
+            return NOISESYNTAX;
         
         if(tokenizer.hasMoreTokens())
             number=Integer.parseInt(tokenizer.nextToken())-1;
 
         else
-            return noiseSyntax;
+            return NOISESYNTAX;
         
         if(letter<0 || letter>=23 || number <0 || number >=14)
-            return noiseSyntax;
+            return NOISESYNTAX;
         
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id))
@@ -649,14 +657,14 @@ public class SocketClientHandler implements Runnable{
         Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
-            return notInGame;
+            return NOTINGAME;
         
         if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
-            return notStartedYet;
+            return NOTRUNNING;
         }
         
         if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return notYourTurn;
+            return NOTYOURTURN;
         }
         
         if(!tokenizer.hasMoreTokens()){
@@ -671,10 +679,12 @@ public class SocketClientHandler implements Runnable{
                     Card card = new AdrenalineCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
+                        response="You discarded the Adrenaline card!";
                     }
+                    else
+                        response = "You don't have an Adrenaline card!";
                 }
             }
-            response="You discarded the Adrenaline card!";
             break;
             
         case "attack":
@@ -683,10 +693,12 @@ public class SocketClientHandler implements Runnable{
                     Card card = new AttackCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
+                        response="You discarded the Attack card!";
                     }
+                    else
+                        response = "You don't have an Attack card!";
                 }
             }
-            response="You discarded the Attack card!";
             break;
         
         case "defense":
@@ -695,10 +707,12 @@ public class SocketClientHandler implements Runnable{
                     Card card = new DefenseCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
+                        response="You discarded the Defense card!";
                     }
+                    else
+                        response = "You don't have a Defence card!";
                 }
             }
-            response="You discarded the Defense card!";
             break;
             
         case "sedatives":
@@ -707,10 +721,12 @@ public class SocketClientHandler implements Runnable{
                     Card card = new SedativesCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
+                        response="You discarded the Sedatives card!";
                     }
+                    else 
+                        response = "You don't have a Defence card!";
                 }
             }
-            response="You discarded the Sedatives card!";
             break;
         
         case "spotlight":
@@ -719,10 +735,12 @@ public class SocketClientHandler implements Runnable{
                     Card card = new SpotlightCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
+                        response="You discarded the Spotlight card!";
                     }
+                    else
+                        response = "You don't have a Defence card!";
                 }
             }
-            response="You discarded the Spotlight card!";
             break;
             
         case "teleport":
@@ -731,11 +749,16 @@ public class SocketClientHandler implements Runnable{
                     Card card = new TeleportCard();
                     if(match.getGameLogic().hasCard(playerInList, card)){
                         match.getGameLogic().discardItemCard(playerInList, card);
+                        response="You discarded the Teleport card!";
                     }
+                    else
+                        response = "You don't have a Defence card!";
                 }
             }
-            response="You discarded the Teleport card!";
             break;
+            
+        default:
+            response = "That card doens't exist!";
         }
         return response;
     }
@@ -750,20 +773,27 @@ public class SocketClientHandler implements Runnable{
         Match match = serverStatus.getIdMatchMap().get(id);
         
         if(checkIdIfPresent())
-            return notInGame;
+            return NOTINGAME;
         
-        if(serverStatus.getIdMatchMap().get(id).getMatchState()!=GameState.RUNNING){
-            return notStartedYet;
+        if(match.getMatchState()!=GameState.RUNNING){
+            return NOTRUNNING;
         }
         
-        if(!serverStatus.getIdMatchMap().get(id).getCurrentPlayer().getName().equalsIgnoreCase(id)){
-            return notYourTurn;
+        if(!match.getCurrentPlayer().getName().equalsIgnoreCase(id)){
+            return NOTYOURTURN;
         }
+        
         
         String response = "";
 
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
+                if(playerInList.needSectorNoise()){
+                    return "You need to specify a sector where make a noise";
+                }
+                if(playerInList.hasFourCard()){
+                    return "You have four cards! You must discard one";
+                }
                 if(playerInList.hasMoved()){
                     match.getGameLogic().endTurn();
                     response = "Your turn has ended";
@@ -772,6 +802,35 @@ public class SocketClientHandler implements Runnable{
                     response = "You need to move before ending your turn!";
             }
         }
+        return response;
+    }
+    
+    private String getCards(){
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        String response = "You don't have any card";
+        
+        if(checkIdIfPresent())
+            return NOTINGAME;
+        
+        if(!(match.getMatchState()==GameState.RUNNING)){
+            return NOTRUNNING;
+        }
+        
+        List<Card> cards = new ArrayList<Card>();
+        
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName().equals(id)){
+                cards=playerInList.getCards();
+                response = "";
+            }
+        }
+        
+        for(Card playerCard : cards){
+            response=response+playerCard.toString()+" ";
+        }
+        
         return response;
     }
 }
