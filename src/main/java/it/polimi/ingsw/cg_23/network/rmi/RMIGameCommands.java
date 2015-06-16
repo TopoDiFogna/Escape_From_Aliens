@@ -419,10 +419,12 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         Card card = new AdrenalineCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You discarded the Adrenaline card!");
                         }
+                        else
+                            clientInterface.dispatchMessage("You don't have an Adrenlaine card!");
                     }
                 }
-                clientInterface.dispatchMessage("You discarded the Adrenaline card!");
                 break;
                 
             case "attack":
@@ -431,10 +433,13 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         Card card = new AttackCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You discarded the Attack card!");
                         }
+                        else
+                            clientInterface.dispatchMessage("You don't have an Attack card!");
                     }
                 }
-                clientInterface.dispatchMessage("You discarded the Attack card!");
+                
                 break;
             
             case "defense":
@@ -443,10 +448,13 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         Card card = new DefenseCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You discarded the Defense card!");
                         }
+                        else
+                            clientInterface.dispatchMessage("You don't have an Attack card!");
                     }
                 }
-                clientInterface.dispatchMessage("You discarded the Defense card!");
+
                 break;
                 
             case "sedatives":
@@ -455,10 +463,12 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         Card card = new SedativesCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You discarded the Sedatives card!");
                         }
+                        else
+                            clientInterface.dispatchMessage("You don't have a Defence card!");
                     }
                 }
-                clientInterface.dispatchMessage("You discarded the Sedatives card!");
                 break;
             
             case "spotlight":
@@ -467,10 +477,12 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         Card card = new SpotlightCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You discarded the Spotlight card!");
                         }
+                        else
+                            clientInterface.dispatchMessage("You don't have a Defence card!");
                     }
                 }
-                clientInterface.dispatchMessage("You discarded the Spotlight card!");
                 break;
                 
             case "teleport":
@@ -479,12 +491,18 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         Card card = new TeleportCard();
                         if(match.getGameLogic().hasCard(playerInList, card)){
                             match.getGameLogic().discardItemCard(playerInList, card);
+                            clientInterface.dispatchMessage("You discarded the Teleport card!");
                         }
+                        else
+                            clientInterface.dispatchMessage("You don't have a Defence card!");
                     }
                 }
-                clientInterface.dispatchMessage("You discarded the Teleport card!");
                 break;
+                
+            default:
+                clientInterface.dispatchMessage("That card doens't exist!");
             }
+            
         } catch (RemoteException e){
             System.err.println(ERROR_MESSAGE);
         }
@@ -523,6 +541,14 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         try {
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
+                    if(playerInList.needSectorNoise()){
+                        clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                        return;
+                    }
+                    if(playerInList.hasFourCard()){
+                        clientInterface.dispatchMessage("You have four cards! You must discard one");
+                        return;
+                    }
                     if(playerInList.hasMoved()){
                         match.getGameLogic().endTurn();
                         clientInterface.dispatchMessage("Your turn has ended");
@@ -536,6 +562,4 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         }
         
     }
-
-
 }

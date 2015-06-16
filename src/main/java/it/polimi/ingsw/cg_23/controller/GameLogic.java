@@ -304,8 +304,8 @@ public class GameLogic{
     public void discardItemCard(Player player, Card card) {
         for (Card playerCard : player.getCards()) {
             if(playerCard.getClass()==card.getClass())
-                player.getCards().remove(card);
-                match.getItemDeckDiscarded().add(card);
+                player.getCards().remove(playerCard);
+                match.getItemDeckDiscarded().add(playerCard);
                 player.setHasFourCard(false);
                 break;
         }

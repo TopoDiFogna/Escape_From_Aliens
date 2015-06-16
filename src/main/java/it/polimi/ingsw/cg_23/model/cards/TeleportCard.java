@@ -15,6 +15,11 @@ public class TeleportCard extends Card {
      */
     public TeleportCard() {
     }
+    
+    @Override
+    public String toString() {
+        return "Teleport";
+    }
 
     /**
      * The humans is moved to the starting human sector.

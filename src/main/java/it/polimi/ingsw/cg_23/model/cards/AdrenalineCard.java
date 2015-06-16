@@ -16,6 +16,11 @@ public class AdrenalineCard extends Card {
     public AdrenalineCard() {
     }
 
+    @Override
+    public String toString() {
+        return "Adrenaline";
+    }
+
     /**
      * Calls the specific method in GameLogic class.
      */
