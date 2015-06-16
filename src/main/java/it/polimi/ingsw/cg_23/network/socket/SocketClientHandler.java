@@ -230,7 +230,7 @@ public class SocketClientHandler implements Runnable{
             }
             
             if(serverStatus.getMatchSocketBrokerMap().isEmpty()){
-                response = "You were added to a new game with map "+mapName+" "+joinNewGame(mapName);;
+                response = "You were added to a new game with map "+mapName+" "+joinNewGame(mapName);
             }
         }
         else
@@ -724,7 +724,7 @@ public class SocketClientHandler implements Runnable{
                         response="You discarded the Sedatives card!";
                     }
                     else 
-                        response = "You don't have a Defence card!";
+                        response = "You don't have a Sedatives card!";
                 }
             }
             break;
@@ -738,7 +738,7 @@ public class SocketClientHandler implements Runnable{
                         response="You discarded the Spotlight card!";
                     }
                     else
-                        response = "You don't have a Defence card!";
+                        response = "You don't have a Spotlight card!";
                 }
             }
             break;
@@ -752,7 +752,7 @@ public class SocketClientHandler implements Runnable{
                         response="You discarded the Teleport card!";
                     }
                     else
-                        response = "You don't have a Defence card!";
+                        response = "You don't have a Teleport card!";
                 }
             }
             break;

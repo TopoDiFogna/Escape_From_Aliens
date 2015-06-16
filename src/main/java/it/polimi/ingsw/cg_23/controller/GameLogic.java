@@ -38,7 +38,7 @@ public class GameLogic{
     /**
      * The constructor.
      */
-    public GameLogic(Match match) {//TODO add rmibroker publishing and return drawn card
+    public GameLogic(Match match) {
         this.match = match;
     }
 

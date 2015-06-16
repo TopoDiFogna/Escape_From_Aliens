@@ -146,7 +146,6 @@ public class XMLParser extends DefaultHandler{
      * Calls getTextValue and returns a int value
      */
     private int getIntValue(Element ele, String tagName) {
-        //TODO in production application you would catch the exception
         return Integer.parseInt(getTextValue(ele,tagName));
     }
     
@@ -154,7 +153,6 @@ public class XMLParser extends DefaultHandler{
      * Calls getTextValue and returns a boolean value
      */
     private boolean getBooleanValue(Element ele, String tagName) {
-        //TODO in production application you would catch the exception
         return Boolean.parseBoolean(getTextValue(ele,tagName));
     }
     
@@ -162,7 +160,6 @@ public class XMLParser extends DefaultHandler{
      * Calls getTextValue and returns a SectorTypeEnum value
      */
     private SectorTypeEnum getSectorTypeValue(Element ele, String tagName) {
-        //TODO in production application you would catch the exception
         String value = getTextValue(ele, tagName).toUpperCase();
         return SectorTypeEnum.valueOf(value);
     }

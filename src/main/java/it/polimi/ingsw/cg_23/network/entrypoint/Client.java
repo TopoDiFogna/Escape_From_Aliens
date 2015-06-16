@@ -57,6 +57,11 @@ public class Client {
     private static final String NOISE_ERROR = "Noise sintax: move letter number. The letter can go from A to W, the number from 1 to 14.";
 
     /**
+     * String to display an error if the player is not in a game
+     */
+    private static final String NOT_IN_GAME = "NOT:IN_GAME!";
+    
+    /**
      * Scanner used to read from console command
      */
     private Scanner stdin;
@@ -279,7 +284,7 @@ public class Client {
      */
     private void discardCard(StringTokenizer tokenizer) throws RemoteException {
         if(!clientJoined){
-            System.out.println("you are not in a game");
+            System.out.println(NOT_IN_GAME);
             return;
         }
         
@@ -298,7 +303,7 @@ public class Client {
      */
     private void makeNoise(StringTokenizer tokenizer) throws RemoteException {
         if(!clientJoined){
-            System.out.println("you are not in a game");
+            System.out.println(NOT_IN_GAME);
             return;
         }
         
@@ -333,7 +338,7 @@ public class Client {
      */
     private void useCard(StringTokenizer tokenizer) throws RemoteException {
         if(!clientJoined){
-            System.out.println("you are not in a game");
+            System.out.println(NOT_IN_GAME);
             return;
         }
         
@@ -366,7 +371,7 @@ public class Client {
      */
     private void moveAndAttack(StringTokenizer tokenizer) throws RemoteException {
         if(!clientJoined){
-            System.out.println("you are not in a game");
+            System.out.println(NOT_IN_GAME);
             return;
         }
         
@@ -410,7 +415,7 @@ public class Client {
      */
     private void movePlayer(StringTokenizer tokenizer) throws RemoteException{
         if(!clientJoined){
-            System.out.println("you are not in a game");
+            System.out.println(NOT_IN_GAME);
             return;
         }
         

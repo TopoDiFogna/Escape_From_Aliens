@@ -253,7 +253,7 @@ public class Match extends Observable{
      * Adds a player to the list of player in the match.
      * @param player the player to be added
      */
-    public void addNewPlayerToList(Player player) {//TODO da controllare se serve davvero (in caso aggiungere all'uml)
+    public void addNewPlayerToList(Player player) {
         this.players.add(player);
     }
 
