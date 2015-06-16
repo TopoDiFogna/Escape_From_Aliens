@@ -373,7 +373,7 @@ public class GameLogic{
         useOtherCard(player, sectorCard);
         if(sectorCard instanceof NoiseInAnySectorCard){
             player.setNeedSectorNoise(true);
-            return "In which sector do you want a noise? ";
+            return "You drawn a noise in ANY sector card. In which sector do you want a noise?";
         }
         return "";
     }
