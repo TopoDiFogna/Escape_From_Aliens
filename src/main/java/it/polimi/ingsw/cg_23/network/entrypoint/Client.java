@@ -97,7 +97,7 @@ public class Client {
     private RMIClientHandlerInterface clientHandler;
     
     /**
-     * Where the interface containing the game commads is saved
+     * Where the interface containing the game commands is saved
      */
     private RMIGameCommandsInterface gameCommands=null;
     
@@ -116,7 +116,7 @@ public class Client {
         
         stdin = new Scanner(System.in);
         
-        System.out.println("inserisci indirizzo ip");
+        System.out.println("Enter IP address");
         ip = stdin.nextLine();
         System.out.println("Socket or RMI? (Default is Socket)");
         if("rmi".equalsIgnoreCase(stdin.nextLine())){
@@ -125,19 +125,8 @@ public class Client {
         }
         else
             port=10412;   
-        System.out.println("Inserisci nick");
+        System.out.println("Enter Nickname");
         name=stdin.nextLine(); 
-    }
-    
-    public Client(String ip, String connection, String nickname){
-        this.ip=ip;
-        if("rmi".equalsIgnoreCase(connection)){
-            rmi=true;
-            port=1099;            
-        }else{
-            port=10412;
-        }
-        this.name=nickname;        
     }
     
     /**

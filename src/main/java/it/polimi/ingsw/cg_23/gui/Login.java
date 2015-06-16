@@ -1,11 +1,7 @@
 package it.polimi.ingsw.cg_23.gui;
 
-import it.polimi.ingsw.cg_23.network.entrypoint.Client;
-
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -39,8 +35,7 @@ public class Login extends JPanel {
                     revalidate();
                 }
             }
-        });
-        
+        });        
         
         
         final JTextField ip = new JTextField("Enter IP address");
@@ -61,7 +56,7 @@ public class Login extends JPanel {
         
         String[] mapType = {"Galilei", "Galvani", "Fermi"};
         final JComboBox mapList = new JComboBox(mapType);;
-        mapList.setPreferredSize(new Dimension(90,25));
+        mapList.setPreferredSize(new Dimension(95,25));
         mapList.setFont(font);
         mapList.setSelectedIndex(0);
         add(mapList);
@@ -69,7 +64,7 @@ public class Login extends JPanel {
         
         String[] connectionType = {"Socket", "RMI"};
         final JComboBox connectionList = new JComboBox(connectionType);;
-        connectionList.setPreferredSize(new Dimension(90,25));
+        connectionList.setPreferredSize(new Dimension(95,25));
         connectionList.setSelectedIndex(0);
         connectionList.setFont(font);
         add(connectionList);
@@ -86,15 +81,15 @@ public class Login extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if(!nickname.getText().equals("Enter a Nickname") && !nickname.getText().equals("")){                    
                     
-                    Client client = new Client(ip.getText(), connectionList.getSelectedItem().toString().toLowerCase(), nickname.getText());
-                    if("rmi".equalsIgnoreCase(connectionList.getSelectedItem().toString())){
-                        client.startRMIClient();
-                    } else {
-                        client.startSocketClient();
-                    }
-                            
-                    StartingTable.initializeLoading();
+                                               
+                    //StartingTable.initializeLoading();
+                    
                     setVisible(false);
+                    StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
+                    StartingTable.initializeMoveAttack();
+                    StartingTable.initializeNoise();
+                    StartingTable.initializeEndTurn();
+                    StartingTable.initializeChat();
                     repaint();
                     revalidate();
                 }
