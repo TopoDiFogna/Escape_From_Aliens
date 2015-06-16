@@ -1,6 +1,8 @@
 package it.polimi.ingsw.cg_23.network.rmi;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import it.polimi.ingsw.cg_23.model.cards.AdrenalineCard;
 import it.polimi.ingsw.cg_23.model.cards.AttackCard;
@@ -560,6 +562,40 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         } catch (RemoteException e){
             System.err.println(ERROR_MESSAGE);
         }
+    }
+
+    @Override
+    public void getCards(RMIClientInterface clientInterface, String id) throws RemoteException {
+        ServerStatus serverStatus = ServerStatus.getInstance();
         
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        try{
+            if(checkIdIfPresent(id)){
+                clientInterface.dispatchMessage(ERROR_NOTINGAME);
+                return;
+            }
+            
+            if(!(match.getMatchState()==GameState.RUNNING)){
+                clientInterface.dispatchMessage(ERROR_NOTSTARTEDYET);
+                return;
+            }
+        } catch (RemoteException e){
+            System.err.println(ERROR_MESSAGE);
+        }
+        
+        List<Card> cards = new ArrayList<Card>();
+        
+        for (Player playerInList : match.getPlayers()) {
+            if(playerInList.getName().equals(id) && !playerInList.getCards().isEmpty()){
+                cards=playerInList.getCards();
+            }
+            else
+                clientInterface.dispatchMessage("You don't have any card");
+        }
+        
+        for(Card playerCard : cards){
+            clientInterface.dispatchMessage(playerCard.toString());
+        }       
     }
 }

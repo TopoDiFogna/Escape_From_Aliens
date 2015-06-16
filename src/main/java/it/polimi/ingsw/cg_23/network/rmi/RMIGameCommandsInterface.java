@@ -75,4 +75,13 @@ public interface RMIGameCommandsInterface extends Remote {
      * @throws RemoteException
      */
     public void endTurn(RMIClientInterface clientInterface, String id) throws RemoteException;
+    
+    /**
+     * Tells the player which cards has in his hand
+     * 
+     * @param clientInterface the interface of the client used to send messages
+     * @param id the unique identifier of the client
+     * @throws RemoteException
+     */
+    public void getCards(RMIClientInterface clientInterface, String id) throws RemoteException;
 }
