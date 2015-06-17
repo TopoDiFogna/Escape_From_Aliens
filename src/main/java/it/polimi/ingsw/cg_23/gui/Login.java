@@ -2,18 +2,22 @@ package it.polimi.ingsw.cg_23.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Login extends JPanel {
     
    
-    
     public Login(){
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
@@ -22,7 +26,7 @@ public class Login extends JPanel {
         
         
         final JTextField nickname = new JTextField("Enter a Nickname");
-        nickname.setPreferredSize(new Dimension(105,25));
+        nickname.setPreferredSize(new Dimension(105,22));
         nickname.setFont(font);
         add(nickname);
         
@@ -39,7 +43,7 @@ public class Login extends JPanel {
         
         
         final JTextField ip = new JTextField("Enter IP address");
-        ip.setPreferredSize(new Dimension(105,25));
+        ip.setPreferredSize(new Dimension(105,22));
         ip.setFont(font);
         add(ip);
         
@@ -56,15 +60,14 @@ public class Login extends JPanel {
         
         String[] mapType = {"Galilei", "Galvani", "Fermi"};
         final JComboBox mapList = new JComboBox(mapType);;
-        mapList.setPreferredSize(new Dimension(95,25));
+        mapList.setPreferredSize(new Dimension(95,22));
         mapList.setFont(font);
         mapList.setSelectedIndex(0);
-        add(mapList);
-        
+        add(mapList);        
         
         String[] connectionType = {"Socket", "RMI"};
         final JComboBox connectionList = new JComboBox(connectionType);;
-        connectionList.setPreferredSize(new Dimension(95,25));
+        connectionList.setPreferredSize(new Dimension(95,22));
         connectionList.setSelectedIndex(0);
         connectionList.setFont(font);
         add(connectionList);
@@ -72,9 +75,10 @@ public class Login extends JPanel {
         final JButton start = new JButton();
         start.setText("Start");
         start.setFont(font);
+        start.setPreferredSize(new Dimension(65, 22));
         add(start);   
         
-        
+       
         
         //This listener saves all fields on start button click, hides login components and calls initializeLoading method.
         start.addMouseListener(new MouseAdapter() {
@@ -87,7 +91,6 @@ public class Login extends JPanel {
                     setVisible(false);
                     StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
                     StartingTable.initializeMoveAttack();
-                    StartingTable.initializeNoise();
                     StartingTable.initializeEndTurn();
                     StartingTable.initializeChat();
                     repaint();
@@ -96,4 +99,6 @@ public class Login extends JPanel {
             }
         });       
     }
+    
+    
 }
