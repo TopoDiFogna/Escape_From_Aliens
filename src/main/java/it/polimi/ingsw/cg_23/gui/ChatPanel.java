@@ -22,7 +22,7 @@ public class ChatPanel extends JPanel {
         setBorder(BorderFactory.createEtchedBorder(new Color(191, 191, 191, 255), new Color(91, 91, 91, 255)));
         setBounds(20,110,235,469);
         
-        JLabel chat = new JLabel();
+        JLabel chat = new JLabel(); //potrei usare una JTextArea al posto della JLabel e poi farla setEditable(false);
         chat.setFont(font);
         chat.setBounds(2, 2, 230, 425);
         chat.setPreferredSize(new Dimension(230, 425));
