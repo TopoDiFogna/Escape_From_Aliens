@@ -182,6 +182,10 @@ public class SocketClientHandler implements Runnable{
                 response = getCards();
                 break;
                 
+            case "chat":
+                chat();
+                break;
+                
             default:
                 response="Command not found!";
                 break; 
@@ -189,6 +193,16 @@ public class SocketClientHandler implements Runnable{
         return response;
     }
     
+
+    /**
+     * Makes the player send a message to all players in the match
+     */
+    private void chat() {
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        if(tokenizer.hasMoreTokens())
+            match.getGameLogic().chat(id, tokenizer.nextToken());        
+    }
 
     /**
      * Sends Strings to the client
