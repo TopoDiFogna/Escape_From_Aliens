@@ -106,6 +106,9 @@ public class Client {
      */
     private SocketClientSubscriber receiver;
     
+    /**
+     * Is the player in a game?
+     */
     private boolean clientJoined = false;
     
     /**
@@ -259,6 +262,10 @@ public class Client {
                     case "endturn":
                         gameCommands.endTurn(clientInterface, name);
                         break;
+                        
+                    case "chat":
+                        chat(tokenizer);
+                        break;
     
                     case "exit":
                         System.out.println("Bye Bye!");
@@ -276,7 +283,22 @@ public class Client {
         } 
     }
     
+
     /**
+     * Makes the player send a message to all players in the match
+     * 
+     * @param tokenizer tokenizer to parse the remaining of the string
+     * @throws RemoteException
+     */
+   private void chat(StringTokenizer tokenizer) throws RemoteException{
+
+       if(tokenizer.hasMoreTokens()){
+           gameCommands.chat(clientInterface, name, tokenizer.nextToken());
+       }
+        
+    }
+
+     /**
      * This method execute the command discard card and calls the relative method on the server
      * 
      * @param tokenizer tokenizer to parse the remaining of the string
