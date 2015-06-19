@@ -1,6 +1,5 @@
 package it.polimi.ingsw.cg_23.gui;
 
-import it.polimi.ingsw.cg_23.network.rmi.RMIClient;
 import it.polimi.ingsw.cg_23.network.rmi.RMIClientHandlerInterface;
 import it.polimi.ingsw.cg_23.network.rmi.RMIClientInterface;
 import it.polimi.ingsw.cg_23.network.rmi.RMIGameCommandsInterface;
@@ -63,20 +62,55 @@ public class RMIConnection extends Connection {
         }
         System.out.println(letterAsInt+" " +numberAsInt);
         
-        //gameCommands.movePlayer(exportedClientInterface, nickname, letterAsInt, numberAsInt);
+        try {
+            gameCommands.movePlayer(exportedClientInterface, nickname, letterAsInt, numberAsInt);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
     @Override
-    public void moveAndAttack() {
-        // TODO Auto-generated method stub
+    public void moveAndAttack(String letter, String number) {
+        
+        int letterAsInt = Character.getNumericValue(letter.toLowerCase().charAt(0))-10;
+        int numberAsInt;
+        try{
+            numberAsInt = (Character.getNumericValue(number.toLowerCase().charAt(0))*10)+(Character.getNumericValue(number.toLowerCase().charAt(1)))-1;
+        }catch (IndexOutOfBoundsException e){
+            numberAsInt = Character.getNumericValue(number.toLowerCase().charAt(0))-1;
+        }
 
+        System.out.println(letterAsInt+" " +numberAsInt);
+        
+        try {
+            gameCommands.moveAndAttack(exportedClientInterface, nickname, letterAsInt, numberAsInt);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void makeNoise() {
-        // TODO Auto-generated method stub
-
+    public void makeNoise(String letter, String number) {
+        
+        int letterAsInt = Character.getNumericValue(letter.toLowerCase().charAt(0))-10;
+        int numberAsInt;
+        try{
+            numberAsInt = (Character.getNumericValue(number.toLowerCase().charAt(0))*10)+(Character.getNumericValue(number.toLowerCase().charAt(1)))-1;
+        }catch (IndexOutOfBoundsException e){
+            numberAsInt = Character.getNumericValue(number.toLowerCase().charAt(0))-1;
+        }
+        
+        System.out.println(letterAsInt+" " +numberAsInt);
+        
+        try {
+            gameCommands.makeNoise(exportedClientInterface, nickname, letterAsInt, numberAsInt);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -86,7 +120,7 @@ public class RMIConnection extends Connection {
     }
 
     @Override
-    public void chat() {
+    public void chat(String msg) {
         // TODO Auto-generated method stub
 
     }

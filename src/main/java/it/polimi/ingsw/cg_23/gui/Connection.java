@@ -4,12 +4,12 @@ public abstract class Connection {
 
     public abstract void move(String letter, String number);
     
-    public abstract void moveAndAttack();
+    public abstract void moveAndAttack(String letter, String number);
     
-    public abstract void makeNoise();
+    public abstract void makeNoise(String letter, String number);
     
     public abstract void endTurn();
     
-    public abstract void chat();
+    public abstract void chat(String msg);
 
 }

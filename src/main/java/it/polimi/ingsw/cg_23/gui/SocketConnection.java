@@ -13,13 +13,13 @@ public class SocketConnection extends Connection {
     }
 
     @Override
-    public void moveAndAttack() {
+    public void moveAndAttack(String letter, String number) {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void makeNoise() {
+    public void makeNoise(String letter, String number) {
         // TODO Auto-generated method stub
 
     }
@@ -31,7 +31,7 @@ public class SocketConnection extends Connection {
     }
 
     @Override
-    public void chat() {
+    public void chat(String msg) {
         // TODO Auto-generated method stub
 
     }

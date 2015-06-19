@@ -87,7 +87,6 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         ServerStatus serverStatus = ServerStatus.getInstance();
         
         Match match = serverStatus.getIdMatchMap().get(id);
-        
         try{
             if(checkIdIfPresent(id)){
                 clientInterface.dispatchMessage(ERROR_NOTINGAME);
@@ -103,7 +102,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 clientInterface.dispatchMessage(ERROR_NOTYOURTURN);
                 return;
             }
-                        
+           
             if(letter<0 || letter>=23 || number <0 || number >=14){
                 clientInterface.dispatchMessage("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
                 return;

@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 
 public class Login extends JPanel {
 
+    private static final long serialVersionUID = 1L;
     private Connection connection;
     
     public Login(){
@@ -80,20 +81,22 @@ public class Login extends JPanel {
         //This listener saves all fields on start button click, hides login components and calls initializeLoading method.
         start.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(!nickname.getText().equals("Enter a Nickname") && !nickname.getText().equals("") && !ip.getText().equals("Enter IP address") && !ip.getText().equals("")){    //TODO                
+                if(!nickname.getText().equals("Enter a Nickname") && !nickname.getText().equals("") && !ip.getText().equals("Enter IP address") && !ip.getText().equals("")){                
 
+                    setVisible(false);
+                    StartingTable.initializeChat();
+                    
                     if("rmi".equalsIgnoreCase((String)connectionList.getSelectedItem())){
                         connection = new RMIConnection(ip.getText(), nickname.getText(), (String)mapList.getSelectedItem());
                     }
                     else {
                         connection = new SocketConnection();
                     }
-                    
-                    setVisible(false);
+
+                    ChatPanel.setConnection(connection);
                     StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
                     StartingTable.initializeMoveAttackNoise(connection);
                     StartingTable.initializeEndTurn();
-                    StartingTable.initializeChat();
                     repaint();
                     revalidate();
                 }

@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 public class MoveAttackNoisePanel extends JPanel {
     
+    private static final long serialVersionUID = 1L;
     private JTextField letter;
     private JTextField number;
     
@@ -65,11 +66,25 @@ public class MoveAttackNoisePanel extends JPanel {
         attack.setFont(font);
         attack.setPreferredSize(new Dimension(110, 22));
         add(attack); 
+        attack.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(!"".equals(letter.getText()) && !"".equals(number.getText()) )
+                    connectionType.moveAndAttack(letter.getText(), number.getText());
+            }
+        });
         
         final JButton noise = new JButton();
         noise.setText("Make Noise");
         noise.setFont(font);
         noise.setPreferredSize(new Dimension(110, 22));
         add(noise);
+        noise.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(!"".equals(letter.getText()) && !"".equals(number.getText()) )
+                    connectionType.makeNoise(letter.getText(), number.getText());
+            }
+        });
     }
 }

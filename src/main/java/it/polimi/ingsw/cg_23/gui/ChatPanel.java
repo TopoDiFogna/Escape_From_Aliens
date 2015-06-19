@@ -17,9 +17,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.DefaultCaret;
 
 public class ChatPanel extends JPanel {
 
+    private static final long serialVersionUID = 1L;
+    private static JTextArea chat;
+    private static Connection connection;
+    
     public ChatPanel() {
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
@@ -28,8 +33,10 @@ public class ChatPanel extends JPanel {
         setBounds(20,110,235,469);
         
         
-        final JTextArea chat = new JTextArea();
+        chat = new JTextArea();
         JScrollPane scroll = new JScrollPane(chat);
+        DefaultCaret caret = (DefaultCaret)chat.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         scroll.setOpaque(false);
         scroll.getViewport().setOpaque(false);
         scroll.setBorder(null);
@@ -62,7 +69,7 @@ public class ChatPanel extends JPanel {
         textEntered.addActionListener(new ActionListener() {            
             @Override
             public void actionPerformed(ActionEvent e) {
-                appendMessages(chat, textEntered);
+                connection.chat(textEntered.getText());
                 textEntered.requestFocusInWindow(); 
                 repaint();
                 revalidate();
@@ -78,34 +85,22 @@ public class ChatPanel extends JPanel {
         send.addActionListener(new ActionListener() {            
             @Override
             public void actionPerformed(ActionEvent e) {
-                appendMessages(chat, textEntered);
+                connection.chat(textEntered.getText());
+                textEntered.setText("");
                 
             }
         });
     } 
     
     
-    public void appendMessages(JTextArea chat, JTextField textEntered){        
-            if(!"Click here to chat...".equals(textEntered.getText()) && !"".equals(textEntered.getText())){
-                chat.append("[Gino]: "+textEntered.getText()+"\n");
-                textEntered.setText("");                
+    public static void appendMessages(String textEntered){        
+            if(!"Click here to chat...".equals(textEntered) && !"".equals(textEntered)){
+                chat.append(textEntered+System.lineSeparator());                
             }
     }
-    
-    /*public void appendTextPane(String input, String name){
-        StyleContext style = StyleContext.getDefaultStyleContext();
-        AttributeSet attributeSet = style.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, name);
-
-        attributeSet = style.addAttribute(attributeSet, StyleConstants.FontFamily, "Lucida Console");
-        attributeSet = style.addAttribute(attributeSet, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
 
 
-        int length = chat.getDocument().getLength();
-        chat.setCaretPosition(length);
-        chat.setCharacterAttributes(attributeSet, false);
-        chat.replaceSelection(input+"\n");
-    }*/
-
-   
-    
+    public static void setConnection(Connection connection) {
+        ChatPanel.connection = connection;
+    }    
 }
