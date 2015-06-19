@@ -619,4 +619,15 @@ public class GameLogic{
         rmiBroker.publish("The game has ended!");
     }
 
+    /**
+     * Sends a chat message to all players
+     * 
+     * @param id the player who sends the message
+     * @param msg the message sent
+     */
+    public void chat(String id, String msg){
+        rmiBroker.publish("[CHAT]" + id + ": " + msg);
+        socketBroker.publish("[CHAT]" + id + ": " + msg);
+    }
+    
 }

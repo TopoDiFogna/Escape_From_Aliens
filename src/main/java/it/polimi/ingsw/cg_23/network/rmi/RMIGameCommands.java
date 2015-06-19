@@ -598,4 +598,27 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             clientInterface.dispatchMessage(playerCard.toString());
         }       
     }
+
+    /**
+     * Makes the player send a message to all players in the match
+     */
+    @Override
+    public void chat(RMIClientInterface clientInterface, String id, String msg) throws RemoteException {
+        ServerStatus serverStatus = ServerStatus.getInstance();
+        
+        Match match = serverStatus.getIdMatchMap().get(id);
+        
+        try{
+            if(checkIdIfPresent(id)){
+                clientInterface.dispatchMessage(ERROR_NOTINGAME);
+                return;
+            }
+
+        } catch (RemoteException e){
+            System.err.println(ERROR_MESSAGE);
+        }
+        
+        match.getGameLogic().chat(id, msg);
+        
+    }
 }
