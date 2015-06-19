@@ -2,22 +2,15 @@ package it.polimi.ingsw.cg_23.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Login extends JPanel {
     
-   
     public Login(){
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
@@ -29,6 +22,7 @@ public class Login extends JPanel {
         nickname.setPreferredSize(new Dimension(105,22));
         nickname.setFont(font);
         add(nickname);
+        nickname.getText();
         
         //This mouse listener delete Enter a Nickname when click on the text field.
         nickname.addMouseListener(new MouseAdapter() {
@@ -84,10 +78,7 @@ public class Login extends JPanel {
         start.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if(!nickname.getText().equals("Enter a Nickname") && !nickname.getText().equals("")){                    
-                    
-                                               
-                    //StartingTable.initializeLoading();
-                    
+
                     setVisible(false);
                     StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
                     StartingTable.initializeMoveAttackNoise();
