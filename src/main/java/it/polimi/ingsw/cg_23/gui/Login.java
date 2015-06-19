@@ -4,12 +4,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Login extends JPanel {
+
+    private Connection connection;
     
     public Login(){
         
@@ -53,14 +56,14 @@ public class Login extends JPanel {
         });
         
         String[] mapType = {"Galilei", "Galvani", "Fermi"};
-        final JComboBox mapList = new JComboBox(mapType);;
+        final JComboBox<String> mapList = new JComboBox<String>(mapType);;
         mapList.setPreferredSize(new Dimension(95,22));
         mapList.setFont(font);
         mapList.setSelectedIndex(0);
         add(mapList);        
         
         String[] connectionType = {"Socket", "RMI"};
-        final JComboBox connectionList = new JComboBox(connectionType);;
+        final JComboBox<String> connectionList = new JComboBox<String>(connectionType);;
         connectionList.setPreferredSize(new Dimension(95,22));
         connectionList.setSelectedIndex(0);
         connectionList.setFont(font);
@@ -77,11 +80,18 @@ public class Login extends JPanel {
         //This listener saves all fields on start button click, hides login components and calls initializeLoading method.
         start.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if(!nickname.getText().equals("Enter a Nickname") && !nickname.getText().equals("")){                    
+                if(!nickname.getText().equals("Enter a Nickname") && !nickname.getText().equals("") && !ip.getText().equals("Enter IP address") && !ip.getText().equals("")){    //TODO                
 
+                    if("rmi".equalsIgnoreCase((String)connectionList.getSelectedItem())){
+                        connection = new RMIConnection(ip.getText(), nickname.getText(), (String)mapList.getSelectedItem());
+                    }
+                    else {
+                        connection = new SocketConnection();
+                    }
+                    
                     setVisible(false);
                     StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
-                    StartingTable.initializeMoveAttackNoise();
+                    StartingTable.initializeMoveAttackNoise(connection);
                     StartingTable.initializeEndTurn();
                     StartingTable.initializeChat();
                     repaint();
@@ -90,6 +100,8 @@ public class Login extends JPanel {
             }
         });       
     }
-    
-    
+
+    public Connection getConnection() {
+        return connection;
+    }    
 }
