@@ -3,8 +3,8 @@ package it.polimi.ingsw.cg_23.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -53,24 +53,27 @@ public class MoveAttackNoisePanel extends JPanel {
         move.setFont(font);
         move.setPreferredSize(new Dimension(110, 22));
         add(move);  
-        move.addMouseListener(new MouseAdapter() {
+        move.addActionListener(new ActionListener() {
+            
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void actionPerformed(ActionEvent e) {
                 if(!"".equals(letter.getText()) && !"".equals(number.getText()) )
-                    connectionType.move(letter.getText(), number.getText());
+                    connectionType.move(letter.getText(), number.getText()); 
             }
         });
-        
+                
         final JButton attack = new JButton();
         attack.setText("Move&Attack");
         attack.setFont(font);
         attack.setPreferredSize(new Dimension(110, 22));
         add(attack); 
-        attack.addMouseListener(new MouseAdapter() {
+        attack.addActionListener(new ActionListener() {
+            
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void actionPerformed(ActionEvent e) {
                 if(!"".equals(letter.getText()) && !"".equals(number.getText()) )
                     connectionType.moveAndAttack(letter.getText(), number.getText());
+                
             }
         });
         
@@ -79,11 +82,13 @@ public class MoveAttackNoisePanel extends JPanel {
         noise.setFont(font);
         noise.setPreferredSize(new Dimension(110, 22));
         add(noise);
-        noise.addMouseListener(new MouseAdapter() {
+        noise.addActionListener(new ActionListener() {
+            
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void actionPerformed(ActionEvent e) {
                 if(!"".equals(letter.getText()) && !"".equals(number.getText()) )
                     connectionType.makeNoise(letter.getText(), number.getText());
+                
             }
         });
     }

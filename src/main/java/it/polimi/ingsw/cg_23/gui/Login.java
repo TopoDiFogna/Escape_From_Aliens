@@ -2,8 +2,11 @@ package it.polimi.ingsw.cg_23.gui;
 
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,19 +29,30 @@ public class Login extends JPanel {
         nickname.setPreferredSize(new Dimension(105,22));
         nickname.setFont(font);
         add(nickname);
-        nickname.getText();
         
         //This mouse listener delete Enter a Nickname when click on the text field.
-        nickname.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e){
-                if(nickname.getText().equals("Enter a Nickname")){
+        nickname.addFocusListener(new FocusListener() {
+            
+            @Override
+            public void focusLost(FocusEvent e) {
+                if("".equals(nickname.getText())){
+                    nickname.setText("Enter a Nickname");
+                    repaint();
+                    revalidate();
+                }
+                
+            }
+            
+            @Override
+            public void focusGained(FocusEvent e) {
+                if("Enter a Nickname".equals(nickname.getText())){
                     nickname.setText("");
                     repaint();
                     revalidate();
                 }
+                
             }
-        });        
-        
+        });       
         
         final JTextField ip = new JTextField("Enter IP address");
         ip.setPreferredSize(new Dimension(105,22));
@@ -46,8 +60,20 @@ public class Login extends JPanel {
         add(ip);
         
         //This mouse listener delete Enter IP address when click on the text field.
-        ip.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e){
+        ip.addFocusListener(new FocusListener() {
+            
+            @Override
+            public void focusLost(FocusEvent e) {
+                if("".equals(ip.getText())){
+                    ip.setText("Enter IP address");
+                    repaint();
+                    revalidate();
+                }
+                
+            }
+            
+            @Override
+            public void focusGained(FocusEvent e) {
                 if(ip.getText().equals("Enter IP address")){
                     ip.setText("");
                     repaint();
@@ -74,13 +100,15 @@ public class Login extends JPanel {
         start.setText("Start");
         start.setFont(font);
         start.setPreferredSize(new Dimension(65, 22));
-        add(start);   
+        add(start); 
         
        
         
         //This listener saves all fields on start button click, hides login components and calls initializeLoading method.
-        start.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+        start.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 if(!nickname.getText().equals("Enter a Nickname") && !nickname.getText().equals("") && !ip.getText().equals("Enter IP address") && !ip.getText().equals("")){                
 
                     setVisible(false);
@@ -96,15 +124,11 @@ public class Login extends JPanel {
                     ChatPanel.setConnection(connection);
                     StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
                     StartingTable.initializeMoveAttackNoise(connection);
-                    StartingTable.initializeEndTurn();
+                    StartingTable.initializeEndTurn(connection);
                     repaint();
                     revalidate();
                 }
             }
         });       
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }    
+    } 
 }

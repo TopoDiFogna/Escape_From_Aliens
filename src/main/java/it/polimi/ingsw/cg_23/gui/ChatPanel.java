@@ -7,8 +7,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+//import java.awt.event.MouseAdapter;
+//import java.awt.event.MouseEvent;
+
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -55,14 +58,26 @@ public class ChatPanel extends JPanel {
         textEntered.setPreferredSize(new Dimension(150,22));
         add(textEntered, BorderLayout.SOUTH);
         
-        textEntered.addMouseListener(new MouseAdapter() {
+        textEntered.addFocusListener(new FocusListener() {
+            
             @Override
-            public void mouseClicked(MouseEvent e){
-                if(textEntered.getText().equals("Click here to chat...")){
+            public void focusLost(FocusEvent e) {
+                if("".equals(textEntered.getText())){
+                    textEntered.setText("Click here to chat...");
+                    repaint();
+                    revalidate();
+                }
+                
+            }
+            
+            @Override
+            public void focusGained(FocusEvent e) {
+                if("Click here to chat...".equals(textEntered.getText())){
                     textEntered.setText("");
                     repaint();
                     revalidate();
                 }
+                
             }
         });
         

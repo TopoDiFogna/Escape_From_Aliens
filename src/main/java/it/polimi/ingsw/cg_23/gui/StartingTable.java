@@ -12,25 +12,23 @@ import javax.swing.ImageIcon;
 
 public class StartingTable extends JFrame {
     
+    private static final long serialVersionUID = 1L;
     private Image backgroundImage;
     private Image logoImage;
     private static Image mapImage;
     private static Image image1;
     private static Image image2;        
-    //private static Icon loadingImage;
     
     private JLabel backgroundLabel;
     private JLabel logoLabel;
     private static JLabel mapLabel;
     private JLabel image1Label;
     private JLabel image2Label;
-    //private static JLabel loadingLabel;
     private static JLayeredPane layeredPane;
     private final static int LAYER_BACKGROUND = 1;
     private final static int LAYER_LOGO = 2;
     private final static int LAYER_LOGIN = 3;
     private final static int LAYER_GAME = 4;
-    //private final static int LAYER_LOADING = 4;
     
     /**
      * The constructor. <br>
@@ -115,14 +113,7 @@ public class StartingTable extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    
-    /*protected static void initializeLoading() {
-        loadingLabel = new JLabel(loadingImage);
-        loadingLabel.setBounds(413, 250, 173, 132);
-        layeredPane.add(loadingLabel);
-        layeredPane.setLayer(loadingLabel, LAYER_LOADING);
-    }*/    
+    }   
     
     protected static void initializeMap(String map){
         loadMap(map);
@@ -152,8 +143,8 @@ public class StartingTable extends JFrame {
         actionPanel.setVisible(true);
     }
     
-    protected static void initializeEndTurn() {
-        EndTurnPanel endTurnPanel = new EndTurnPanel();
+    protected static void initializeEndTurn(Connection connection) {
+        EndTurnPanel endTurnPanel = new EndTurnPanel(connection);
         layeredPane.add(endTurnPanel);
         layeredPane.setLayer(endTurnPanel, LAYER_GAME); 
         endTurnPanel.setVisible(true);

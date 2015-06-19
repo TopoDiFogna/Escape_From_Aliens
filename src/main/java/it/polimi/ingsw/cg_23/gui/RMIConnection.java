@@ -22,7 +22,7 @@ public class RMIConnection extends Connection {
      */
     private RMIGameCommandsInterface gameCommands=null;
     
-    RMIClientInterface exportedClientInterface;
+    private RMIClientInterface exportedClientInterface;
     
     private static final int PORT = 1099;
     
@@ -115,13 +115,23 @@ public class RMIConnection extends Connection {
 
     @Override
     public void endTurn() {
-        // TODO Auto-generated method stub
+        try {
+            gameCommands.endTurn(exportedClientInterface, nickname);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void chat(String msg) {
-        // TODO Auto-generated method stub
+        try {
+            gameCommands.chat(exportedClientInterface, nickname, msg);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
     }
 
