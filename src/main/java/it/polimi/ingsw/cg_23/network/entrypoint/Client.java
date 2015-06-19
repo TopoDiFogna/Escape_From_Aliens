@@ -240,31 +240,31 @@ public class Client {
                         break;
                         
                     case "move":
-                        movePlayer(tokenizer);
+                        movePlayer(tokenizer, exportedClientInterface);
                         break;
                        
                     case "moveattack":
-                        moveAndAttack(tokenizer);
+                        moveAndAttack(tokenizer, exportedClientInterface);
                         break;
                         
                     case "use":
-                        useCard(tokenizer);
+                        useCard(tokenizer, exportedClientInterface);
                         break;
                         
                     case "noise":
-                        makeNoise(tokenizer);
+                        makeNoise(tokenizer, exportedClientInterface);
                         break;
                         
                     case "discard":
-                        discardCard(tokenizer);
+                        discardCard(tokenizer, exportedClientInterface);
                         break;
                              
                     case "endturn":
-                        gameCommands.endTurn(clientInterface, name);
+                        gameCommands.endTurn(exportedClientInterface, name);
                         break;
                         
                     case "chat":
-                        chat(tokenizer);
+                        chat(tokenizer, exportedClientInterface);
                         break;
     
                     case "exit":
@@ -290,13 +290,13 @@ public class Client {
      * @param tokenizer tokenizer to parse the remaining of the string
      * @throws RemoteException
      */
-   private void chat(StringTokenizer tokenizer) throws RemoteException{
+   private void chat(StringTokenizer tokenizer, RMIClientInterface exportedClientInterface) throws RemoteException{
 
        String msg="";
        while(tokenizer.hasMoreTokens()){
            msg=msg+tokenizer.nextToken()+ " ";
        }
-       gameCommands.chat(clientInterface, name, msg);
+       gameCommands.chat(exportedClientInterface, name, msg);
         
     }
 
@@ -306,14 +306,14 @@ public class Client {
      * @param tokenizer tokenizer to parse the remaining of the string
      * @throws RemoteException
      */
-    private void discardCard(StringTokenizer tokenizer) throws RemoteException {
+    private void discardCard(StringTokenizer tokenizer, RMIClientInterface exportedClientInterface) throws RemoteException {
         if(!clientJoined){
             System.out.println(NOT_IN_GAME);
             return;
         }
         
         if(tokenizer.hasMoreTokens())
-                gameCommands.discardCard(clientInterface, name, tokenizer.nextToken());
+                gameCommands.discardCard(exportedClientInterface, name, tokenizer.nextToken());
         else
             System.out.println("You need to specify a card to discard!");
         
@@ -325,7 +325,7 @@ public class Client {
      * @param tokenizer tokenizer to parse the remaining of the string
      * @throws RemoteException
      */
-    private void makeNoise(StringTokenizer tokenizer) throws RemoteException {
+    private void makeNoise(StringTokenizer tokenizer, RMIClientInterface exportedClientInterface) throws RemoteException {
         if(!clientJoined){
             System.out.println(NOT_IN_GAME);
             return;
@@ -350,7 +350,7 @@ public class Client {
             return;
         }
         
-        gameCommands.makeNoise(clientInterface, name, letter, number);
+        gameCommands.makeNoise(exportedClientInterface, name, letter, number);
         
     }
 
@@ -360,7 +360,7 @@ public class Client {
      * @param tokenizer tokenizer to parse the remaining of the string
      * @throws RemoteException
      */
-    private void useCard(StringTokenizer tokenizer) throws RemoteException {
+    private void useCard(StringTokenizer tokenizer, RMIClientInterface exportedClientInterface) throws RemoteException {
         if(!clientJoined){
             System.out.println(NOT_IN_GAME);
             return;
@@ -384,7 +384,7 @@ public class Client {
             number=Integer.parseInt(tokenizer.nextToken())-1;
         }
         
-        gameCommands.useCard(clientInterface, name, card, letter, number);
+        gameCommands.useCard(exportedClientInterface, name, card, letter, number);
         
     }
     /**
@@ -393,7 +393,7 @@ public class Client {
      * @param tokenizer tokenizer to parse the remaining of the string
      * @throws RemoteException
      */
-    private void moveAndAttack(StringTokenizer tokenizer) throws RemoteException {
+    private void moveAndAttack(StringTokenizer tokenizer, RMIClientInterface exportedClientInterface) throws RemoteException {
         if(!clientJoined){
             System.out.println(NOT_IN_GAME);
             return;
@@ -418,7 +418,7 @@ public class Client {
             return;
         }
         
-        gameCommands.moveAndAttack(clientInterface, name, letter, number);
+        gameCommands.moveAndAttack(exportedClientInterface, name, letter, number);
         
     }
 
@@ -437,7 +437,7 @@ public class Client {
      * @param tokenizer tokenizer to parse the remaining of the string
      * @throws RemoteException
      */
-    private void movePlayer(StringTokenizer tokenizer) throws RemoteException{
+    private void movePlayer(StringTokenizer tokenizer, RMIClientInterface exportedClientInterface) throws RemoteException{
         if(!clientJoined){
             System.out.println(NOT_IN_GAME);
             return;
@@ -462,7 +462,7 @@ public class Client {
             return;
         }
         
-        gameCommands.movePlayer(clientInterface, name, letter, number);
+        gameCommands.movePlayer(exportedClientInterface, name, letter, number);
         
     }
     
