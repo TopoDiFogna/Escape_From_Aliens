@@ -145,8 +145,8 @@ public class StartingTable extends JFrame {
         }
     }
 
-    protected static void initializeMoveAttackNoise() {
-        MoveAttackNoisePanel actionPanel = new MoveAttackNoisePanel();
+    protected static void initializeMoveAttackNoise(Connection connection) {
+        MoveAttackNoisePanel actionPanel = new MoveAttackNoisePanel(connection);
         layeredPane.add(actionPanel);
         layeredPane.setLayer(actionPanel, LAYER_GAME); 
         actionPanel.setVisible(true);

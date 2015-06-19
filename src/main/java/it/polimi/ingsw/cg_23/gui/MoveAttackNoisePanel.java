@@ -3,6 +3,9 @@ package it.polimi.ingsw.cg_23.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -11,7 +14,12 @@ import javax.swing.JTextField;
 
 public class MoveAttackNoisePanel extends JPanel {
     
-    public MoveAttackNoisePanel(){
+    private JTextField letter;
+    private JTextField number;
+    
+    public MoveAttackNoisePanel(Connection connection){
+        
+        final Connection connectionType = connection;
           
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
@@ -23,7 +31,7 @@ public class MoveAttackNoisePanel extends JPanel {
         textLetter.setText("Enter letter     ");
         textLetter.setFont(font);
         textLetter.setForeground(new Color(255, 255, 255, 255));
-        JTextField letter = new JTextField();
+        letter = new JTextField();
         letter.setPreferredSize(new Dimension(30,18));
         letter.setFont(font);
         add(textLetter);
@@ -33,7 +41,7 @@ public class MoveAttackNoisePanel extends JPanel {
         textNumber.setText("Enter number");
         textNumber.setFont(font);
         textNumber.setForeground(new Color(255, 255, 255, 255));
-        JTextField number = new JTextField();
+        number = new JTextField();
         number.setPreferredSize(new Dimension(30,18));
         number.setFont(font);
         add(textNumber);
@@ -44,6 +52,13 @@ public class MoveAttackNoisePanel extends JPanel {
         move.setFont(font);
         move.setPreferredSize(new Dimension(110, 22));
         add(move);  
+        move.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(!"".equals(letter.getText()) && !"".equals(number.getText()) )
+                    connectionType.move(letter.getText(), number.getText());
+            }
+        });
         
         final JButton attack = new JButton();
         attack.setText("Move&Attack");
@@ -57,5 +72,4 @@ public class MoveAttackNoisePanel extends JPanel {
         noise.setPreferredSize(new Dimension(110, 22));
         add(noise);
     }
-    
 }

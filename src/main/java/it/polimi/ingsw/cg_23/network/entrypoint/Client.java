@@ -87,7 +87,7 @@ public class Client {
     private boolean rmi;
     
     /**
-     * The interface to expose to the server to get responses when using rmi
+     * The class containing methods exposed to the server to get responses when using rmi
      */
     private RMIClient clientInterface;
     
