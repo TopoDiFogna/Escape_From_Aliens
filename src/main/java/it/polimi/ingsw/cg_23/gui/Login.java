@@ -90,9 +90,9 @@ public class Login extends JPanel {
                     
                     setVisible(false);
                     StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
-                    StartingTable.initializeMoveAttack();
+                    StartingTable.initializeMoveAttackNoise();
                     StartingTable.initializeEndTurn();
-                    StartingTable.initializeChat(nickname.toString());
+                    StartingTable.initializeChat();
                     repaint();
                     revalidate();
                 }

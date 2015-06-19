@@ -145,7 +145,7 @@ public class StartingTable extends JFrame {
         }
     }
 
-    protected static void initializeMoveAttack() {
+    protected static void initializeMoveAttackNoise() {
         MoveAttackNoisePanel actionPanel = new MoveAttackNoisePanel();
         layeredPane.add(actionPanel);
         layeredPane.setLayer(actionPanel, LAYER_GAME); 
@@ -159,8 +159,8 @@ public class StartingTable extends JFrame {
         endTurnPanel.setVisible(true);
     }
 
-    protected static void initializeChat(String name) {
-        ChatPanel chat = new ChatPanel(name);
+    protected static void initializeChat() {
+        ChatPanel chat = new ChatPanel();
         layeredPane.add(chat);
         layeredPane.setLayer(chat, LAYER_GAME);
         chat.setVisible(true);
