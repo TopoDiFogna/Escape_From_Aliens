@@ -159,8 +159,8 @@ public class StartingTable extends JFrame {
         endTurnPanel.setVisible(true);
     }
 
-    protected static void initializeChat() {
-        ChatPanel chat = new ChatPanel();
+    protected static void initializeChat(String name) {
+        ChatPanel chat = new ChatPanel(name);
         layeredPane.add(chat);
         layeredPane.setLayer(chat, LAYER_GAME);
         chat.setVisible(true);

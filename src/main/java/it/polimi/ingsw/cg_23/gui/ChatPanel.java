@@ -18,7 +18,7 @@ import javax.swing.JTextPane;
 
 public class ChatPanel extends JPanel {
 
-    public ChatPanel() {
+    public ChatPanel(String name) {
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);

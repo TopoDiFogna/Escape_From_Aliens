@@ -92,7 +92,7 @@ public class Login extends JPanel {
                     StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
                     StartingTable.initializeMoveAttack();
                     StartingTable.initializeEndTurn();
-                    StartingTable.initializeChat();
+                    StartingTable.initializeChat(nickname.toString());
                     repaint();
                     revalidate();
                 }
