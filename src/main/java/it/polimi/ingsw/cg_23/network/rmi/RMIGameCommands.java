@@ -68,7 +68,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
      * Checks if the specified id is already in a match
      * 
      * @param id the name identifier of a client
-     * @return true if the client is already associated with a match, false otherwise
+     * @return true if name is not in the list, false otherwise
      */
     private boolean checkIdIfPresent(String id){
         ServerStatus serverStatus = ServerStatus.getInstance();

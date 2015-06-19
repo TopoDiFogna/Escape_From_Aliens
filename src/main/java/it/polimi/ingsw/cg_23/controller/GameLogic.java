@@ -626,8 +626,10 @@ public class GameLogic{
      * @param msg the message sent
      */
     public void chat(String id, String msg){
-        rmiBroker.publish("[CHAT]" + id + ": " + msg);
-        socketBroker.publish("[CHAT]" + id + ": " + msg);
+        if(!"".equals(msg)){
+            rmiBroker.publish("[CHAT]" + id + ": " + msg);
+            socketBroker.publish("[CHAT]" + id + ": " + msg);
+        }
     }
     
 }
