@@ -200,8 +200,11 @@ public class SocketClientHandler implements Runnable{
     private void chat() {
         Match match = serverStatus.getIdMatchMap().get(id);
         
-        if(tokenizer.hasMoreTokens())
-            match.getGameLogic().chat(id, tokenizer.nextToken());        
+        String msg="";
+        while(tokenizer.hasMoreTokens()){
+            msg=msg+tokenizer.nextToken()+ " ";
+        }
+        match.getGameLogic().chat(id, msg);     
     }
 
     /**

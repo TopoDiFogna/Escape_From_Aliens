@@ -292,9 +292,11 @@ public class Client {
      */
    private void chat(StringTokenizer tokenizer) throws RemoteException{
 
-       if(tokenizer.hasMoreTokens()){
-           gameCommands.chat(clientInterface, name, tokenizer.nextToken());
+       String msg="";
+       while(tokenizer.hasMoreTokens()){
+           msg=msg+tokenizer.nextToken()+ " ";
        }
+       gameCommands.chat(clientInterface, name, msg);
         
     }
 
