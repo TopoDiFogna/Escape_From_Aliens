@@ -118,7 +118,7 @@ public class Login extends JPanel {
                         connection = new RMIConnection(ip.getText(), nickname.getText(), (String)mapList.getSelectedItem());
                     }
                     else {
-                        connection = new SocketConnection();
+                        connection = new SocketConnection(ip.getText(), nickname.getText(), (String)mapList.getSelectedItem());
                     }
 
                     ChatPanel.setConnection(connection);

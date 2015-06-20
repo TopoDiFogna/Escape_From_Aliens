@@ -59,7 +59,7 @@ public class Client {
     /**
      * String to display an error if the player is not in a game
      */
-    private static final String NOT_IN_GAME = "NOT:IN_GAME!";
+    private static final String NOT_IN_GAME = "You are not in a game!";
     
     /**
      * Scanner used to read from console command
