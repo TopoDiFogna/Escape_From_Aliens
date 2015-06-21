@@ -135,4 +135,27 @@ public class RMIConnection extends Connection {
 
     }
 
+    @Override
+    public void useCard(String card, int letter, int number) {
+        
+        try {
+            gameCommands.useCard(exportedClientInterface, nickname, card, letter, number);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+    }
+
+    @Override
+    public void discardCard(String card) {
+        try {
+            gameCommands.discardCard(exportedClientInterface, nickname, card);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+    }
+
 }

@@ -26,7 +26,7 @@ public class MoveAttackNoisePanel extends JPanel {
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);
         setBorder(BorderFactory.createEtchedBorder(new Color(191, 191, 191, 255), new Color(91, 91, 91, 255)));
-        setBounds(973,110,170,140);
+        setBounds(945,110,235,140);
         
         JLabel textLetter = new JLabel();
         textLetter.setText("Enter letter     ");

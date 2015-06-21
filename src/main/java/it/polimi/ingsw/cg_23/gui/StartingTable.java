@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -17,7 +18,7 @@ public class StartingTable extends JFrame {
     private Image logoImage;
     private static Image mapImage;
     private static Image image1;
-    private static Image image2;        
+    private static Image image2;   
     
     private JLabel backgroundLabel;
     private JLabel logoLabel;
@@ -78,7 +79,7 @@ public class StartingTable extends JFrame {
         layeredPane.setLayer(logoLabel, LAYER_LOGO);
     }
     
-    protected void initializeLogin() {
+    private void initializeLogin() {
         
         Login login = new Login();        
         layeredPane.add(login);
@@ -87,7 +88,7 @@ public class StartingTable extends JFrame {
         login.setVisible(true);
     }
     
-    protected void initializeImages(){
+    private void initializeImages(){
         loadImages();
         image1Label = new JLabel(new ImageIcon(image1));
         image1Label.setBounds(10, 150, 300, 429);
@@ -106,7 +107,7 @@ public class StartingTable extends JFrame {
     /**
      * Loads images added on background.
      */
-    protected static void loadImages(){
+    private void loadImages(){
         try {
             image1 = ImageIO.read(new File("./img/image1.png"));
             image2 = ImageIO.read(new File("./img/image2.png"));
@@ -128,7 +129,7 @@ public class StartingTable extends JFrame {
      * Loads map image according with parameter passed.
      * @param map
      */
-    protected static void loadMap(String map){
+    private static void loadMap(String map){
         try {
             mapImage = ImageIO.read(new File("./img/"+map+"650x469.png"));
         } catch (IOException e) {
@@ -156,5 +157,14 @@ public class StartingTable extends JFrame {
         layeredPane.setLayer(chat, LAYER_GAME);
         chat.setVisible(true);
     }
+    
+    protected static void initializeCardsPanel(Connection connection){
+        CardsPanel cards = new CardsPanel(connection);
+        layeredPane.add(cards);
+        layeredPane.setLayer(cards, LAYER_GAME);
+        cards.setVisible(true);
+    }
+    
+
     
 }

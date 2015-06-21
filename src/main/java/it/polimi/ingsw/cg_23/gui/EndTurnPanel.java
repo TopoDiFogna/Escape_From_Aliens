@@ -23,7 +23,7 @@ public class EndTurnPanel extends JPanel{
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);
         setBorder(BorderFactory.createEtchedBorder(new Color(191, 191, 191, 255), new Color(91, 91, 91, 255)));
-        setBounds(973,258,170,58);
+        setBounds(945,258,235,58);
         
         JLabel turnNumber = new JLabel();
         turnNumber.setText("Turn Number: "+turn);

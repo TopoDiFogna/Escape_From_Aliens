@@ -285,12 +285,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 break;
                 
             case "spotlight":
-                
-                if(letter == 0 || number == 0){
-                    clientInterface.dispatchMessage(ERROR_SPOTLIGHTSYNTAX);
-                    return;
-                }
-                                
+                                                
                 if(letter<0 || letter>=23 || number <0 || number >=14){
                     clientInterface.dispatchMessage(ERROR_SPOTLIGHTSYNTAX);
                     return;
@@ -584,18 +579,22 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         }
         
         List<Card> cards = new ArrayList<Card>();
+        String playerCards="";
         
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id) && !playerInList.getCards().isEmpty()){
                 cards=playerInList.getCards();
             }
-            else
-                clientInterface.dispatchMessage("You don't have any card");
+            else{
+                playerCards = "You don't have any card";
+            }
         }
         
         for(Card playerCard : cards){
-            clientInterface.dispatchMessage(playerCard.toString());
-        }       
+            playerCards=playerCards+playerCard.toString()+" ";
+        }      
+        clientInterface.dispatchMessage(playerCards);
+        
     }
 
     /**

@@ -94,6 +94,24 @@ public class SocketConnection extends Connection {
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());
     }
+    
+
+    @Override
+    public void useCard(String card, int letter, int number) {
+        createSockets();
+        socketOut.println(nickname+ " " + "use "+card+ " " + letter + " " + number);
+        socketOut.flush();
+        ChatPanel.appendMessages(socketIn.nextLine());  
+        
+    }
+
+    @Override
+    public void discardCard(String card) {
+        createSockets();
+        socketOut.println(nickname+ " " + "discard "+card);
+        socketOut.flush();
+        ChatPanel.appendMessages(socketIn.nextLine());    
+    }
 
     private void createSockets(){
         try {

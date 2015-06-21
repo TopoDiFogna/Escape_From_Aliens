@@ -367,8 +367,8 @@ public class Client {
         }
         
         String card="";
-        int letter = 0;
-        int number = 0;
+        int letter = -1;
+        int number = -1;
         
         if(tokenizer.hasMoreTokens()){
             card=tokenizer.nextToken();

@@ -11,5 +11,9 @@ public abstract class Connection {
     public abstract void endTurn();
     
     public abstract void chat(String msg);
+    
+    public abstract void useCard(String card, int letter, int number);
+    
+    public abstract void discardCard(String card);
 
 }

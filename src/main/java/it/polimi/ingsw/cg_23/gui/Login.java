@@ -125,6 +125,7 @@ public class Login extends JPanel {
                     StartingTable.initializeMap(mapList.getSelectedItem().toString().toLowerCase());
                     StartingTable.initializeMoveAttackNoise(connection);
                     StartingTable.initializeEndTurn(connection);
+                    StartingTable.initializeCardsPanel(connection);
                     repaint();
                     revalidate();
                 }
