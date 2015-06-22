@@ -28,6 +28,9 @@ import it.polimi.ingsw.cg_23.network.socket.SocketBroker;
  */
 
 public class GameLogic{
+    
+    private static final String ALLESCAPEUSED = "All escape hatches have been used or are unusable!";
+    private static final String NOISE = "Noise in sector ";
 
     private Match match;
     
@@ -39,6 +42,7 @@ public class GameLogic{
      * The constructor.
      */
     public GameLogic(Match match) {
+        
         this.match = match;
     }
 
@@ -146,8 +150,8 @@ public class GameLogic{
         match.removeEcapeHatch();
         removeAfterWinning(player);
         if(match.getnUsableEscapeHatch()==0){
-            socketBroker.publish("All escape hatches have been used or are unusable!");
-            rmiBroker.publish("All escape hatches have been used or are unusable!");
+            socketBroker.publish(ALLESCAPEUSED);
+            rmiBroker.publish(ALLESCAPEUSED);
             endGame();
         }
     }
@@ -166,8 +170,8 @@ public class GameLogic{
     public void useNoiseInYourSector(Player player) {
         char letter=(char) ((player.getCurrentSector().getLetter())+96);
         int number=player.getCurrentSector().getNumber();
-        socketBroker.publish("Noise in sector "+letter+" "+number);
-        rmiBroker.publish("Noise in sector "+letter+" "+number);
+        socketBroker.publish(NOISE+letter+" "+number);
+        rmiBroker.publish(NOISE+letter+" "+number);
 
     }
 
@@ -181,8 +185,8 @@ public class GameLogic{
         socketBroker.publish("The Escape Hatch "+letter+" "+number+" is broken!");
         rmiBroker.publish("The Escape Hatch "+letter+" "+number+" is broken!");
         if(match.getnUsableEscapeHatch()==0){
-            socketBroker.publish("All escape hatches have been used or are unusable!");
-            rmiBroker.publish("All escape hatches have been used or are unusable!");
+            socketBroker.publish(ALLESCAPEUSED);
+            rmiBroker.publish(ALLESCAPEUSED);
             endGame();
         }
     }
@@ -549,8 +553,8 @@ public class GameLogic{
     public void makeANoise(int letter, int number) {
         char noiseLetter = (char) (letter+97);
         number++;
-        socketBroker.publish("Noise in sector "+noiseLetter+" "+number);
-        rmiBroker.publish("Noise in sector "+noiseLetter+" "+number);
+        socketBroker.publish(NOISE+noiseLetter+" "+number);
+        rmiBroker.publish(NOISE+noiseLetter+" "+number);
         
     }
     
@@ -626,8 +630,10 @@ public class GameLogic{
      * @param msg the message sent
      */
     public void chat(String id, String msg){
-        rmiBroker.publish("[CHAT]" + id + ": " + msg);
-        socketBroker.publish("[CHAT]" + id + ": " + msg);
+        if(!"".equals(msg)){
+            rmiBroker.publish("[CHAT]" + id + ": " + msg);
+            socketBroker.publish("[CHAT]" + id + ": " + msg);
+        }
     }
     
 }

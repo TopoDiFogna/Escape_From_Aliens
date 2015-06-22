@@ -27,6 +27,16 @@ import it.polimi.ingsw.cg_23.network.ServerStatus;
 public class RMIGameCommands implements RMIGameCommandsInterface {
     
     /**
+     * Noise message
+     */
+    private static final String WHERENOISE = "You need to specify a sector where make a noise";
+    
+    /**
+     * Defense card message
+     */
+    private static final String DEFENSECARD = "You don't have a Defence card!";
+    
+    /**
      * Generic error message 
      */
     private static final String ERROR_MESSAGE = "Cannot send message to client!";
@@ -68,7 +78,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
      * Checks if the specified id is already in a match
      * 
      * @param id the name identifier of a client
-     * @return true if the client is already associated with a match, false otherwise
+     * @return true if name is not in the list, false otherwise
      */
     private boolean checkIdIfPresent(String id){
         ServerStatus serverStatus = ServerStatus.getInstance();
@@ -87,7 +97,6 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         ServerStatus serverStatus = ServerStatus.getInstance();
         
         Match match = serverStatus.getIdMatchMap().get(id);
-        
         try{
             if(checkIdIfPresent(id)){
                 clientInterface.dispatchMessage(ERROR_NOTINGAME);
@@ -103,7 +112,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 clientInterface.dispatchMessage(ERROR_NOTYOURTURN);
                 return;
             }
-                        
+           
             if(letter<0 || letter>=23 || number <0 || number >=14){
                 clientInterface.dispatchMessage("Move sintax: move letter number. The letter can go from A to W, the number from 1 to 14.");
                 return;
@@ -127,7 +136,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You can't move there!");
                     } else {
                         if(playerInList.needSectorNoise())
-                            clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                            clientInterface.dispatchMessage(WHERENOISE);
                         if(playerInList.hasFourCard())
                             clientInterface.dispatchMessage("You need to specify what you want to di with the card in excess");
                         if(playerInList.hasMoved())
@@ -189,7 +198,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You can't move there!");
                     } else {
                         if(playerInList.needSectorNoise())
-                            clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                            clientInterface.dispatchMessage(WHERENOISE);
                         if(playerInList.hasFourCard())
                             clientInterface.dispatchMessage("You need to specify what you want to di with the card in excess");
                         if(playerInList.hasMoved())
@@ -235,7 +244,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         return;
                     }
                     if(playerInList.needSectorNoise()){
-                        clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                        clientInterface.dispatchMessage(WHERENOISE);
                         return;
                     }
                 }
@@ -286,12 +295,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 break;
                 
             case "spotlight":
-                
-                if(letter == 0 || number == 0){
-                    clientInterface.dispatchMessage(ERROR_SPOTLIGHTSYNTAX);
-                    return;
-                }
-                                
+                                                
                 if(letter<0 || letter>=23 || number <0 || number >=14){
                     clientInterface.dispatchMessage(ERROR_SPOTLIGHTSYNTAX);
                     return;
@@ -468,7 +472,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You discarded the Sedatives card!");
                         }
                         else
-                            clientInterface.dispatchMessage("You don't have a Defence card!");
+                            clientInterface.dispatchMessage(DEFENSECARD);
                     }
                 }
                 break;
@@ -482,7 +486,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You discarded the Spotlight card!");
                         }
                         else
-                            clientInterface.dispatchMessage("You don't have a Defence card!");
+                            clientInterface.dispatchMessage(DEFENSECARD);
                     }
                 }
                 break;
@@ -496,7 +500,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You discarded the Teleport card!");
                         }
                         else
-                            clientInterface.dispatchMessage("You don't have a Defence card!");
+                            clientInterface.dispatchMessage(DEFENSECARD);
                     }
                 }
                 break;
@@ -544,7 +548,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
                     if(playerInList.needSectorNoise()){
-                        clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                        clientInterface.dispatchMessage(WHERENOISE);
                         return;
                     }
                     if(playerInList.hasFourCard()){
@@ -585,18 +589,23 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         }
         
         List<Card> cards = new ArrayList<Card>();
+        String playerCards="";
         
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id) && !playerInList.getCards().isEmpty()){
                 cards=playerInList.getCards();
+                playerCards = "Cards: ";
             }
-            else
-                clientInterface.dispatchMessage("You don't have any card");
+            else{
+                playerCards = "You don't have any card";
+            }
         }
         
         for(Card playerCard : cards){
-            clientInterface.dispatchMessage(playerCard.toString());
-        }       
+            playerCards=playerCards+playerCard.toString()+" ";
+        }      
+        clientInterface.dispatchMessage(playerCards);
+        
     }
 
     /**
