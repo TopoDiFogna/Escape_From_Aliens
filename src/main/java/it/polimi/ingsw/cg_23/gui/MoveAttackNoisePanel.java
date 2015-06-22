@@ -12,6 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * This class creates the move attack and noise fields and buttons
+ * 
+ * @author Arianna
+ *
+ */
 public class MoveAttackNoisePanel extends JPanel {
     
     private static final long serialVersionUID = 1L;

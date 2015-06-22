@@ -249,6 +249,11 @@ public class CardsPanel extends JPanel {
         }
     }
     
+    /**
+     * Enables the corresponding button
+     * 
+     * @param card the card button to enable
+     */
     public static void enableCard(String card){
         
         switch(card){
@@ -281,6 +286,11 @@ public class CardsPanel extends JPanel {
         }
     }
     
+    /**
+     * Disables the corresponding card button
+     * 
+     * @param card the card button to be disabled
+     */
     public static void disableCard(String card){
         
         switch(card){
