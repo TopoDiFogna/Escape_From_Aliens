@@ -27,6 +27,16 @@ import it.polimi.ingsw.cg_23.network.ServerStatus;
 public class RMIGameCommands implements RMIGameCommandsInterface {
     
     /**
+     * Noise message
+     */
+    private static final String WHERENOISE = "You need to specify a sector where make a noise";
+    
+    /**
+     * Defense card message
+     */
+    private static final String DEFENSECARD = "You don't have a Defence card!";
+    
+    /**
      * Generic error message 
      */
     private static final String ERROR_MESSAGE = "Cannot send message to client!";
@@ -126,7 +136,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You can't move there!");
                     } else {
                         if(playerInList.needSectorNoise())
-                            clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                            clientInterface.dispatchMessage(WHERENOISE);
                         if(playerInList.hasFourCard())
                             clientInterface.dispatchMessage("You need to specify what you want to di with the card in excess");
                         if(playerInList.hasMoved())
@@ -188,7 +198,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You can't move there!");
                     } else {
                         if(playerInList.needSectorNoise())
-                            clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                            clientInterface.dispatchMessage(WHERENOISE);
                         if(playerInList.hasFourCard())
                             clientInterface.dispatchMessage("You need to specify what you want to di with the card in excess");
                         if(playerInList.hasMoved())
@@ -234,7 +244,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         return;
                     }
                     if(playerInList.needSectorNoise()){
-                        clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                        clientInterface.dispatchMessage(WHERENOISE);
                         return;
                     }
                 }
@@ -462,7 +472,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You discarded the Sedatives card!");
                         }
                         else
-                            clientInterface.dispatchMessage("You don't have a Defence card!");
+                            clientInterface.dispatchMessage(DEFENSECARD);
                     }
                 }
                 break;
@@ -476,7 +486,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You discarded the Spotlight card!");
                         }
                         else
-                            clientInterface.dispatchMessage("You don't have a Defence card!");
+                            clientInterface.dispatchMessage(DEFENSECARD);
                     }
                 }
                 break;
@@ -490,7 +500,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                             clientInterface.dispatchMessage("You discarded the Teleport card!");
                         }
                         else
-                            clientInterface.dispatchMessage("You don't have a Defence card!");
+                            clientInterface.dispatchMessage(DEFENSECARD);
                     }
                 }
                 break;
@@ -538,7 +548,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
             for (Player playerInList : match.getPlayers()) {
                 if(playerInList.getName().equals(id)){
                     if(playerInList.needSectorNoise()){
-                        clientInterface.dispatchMessage("You need to specify a sector where make a noise");
+                        clientInterface.dispatchMessage(WHERENOISE);
                         return;
                     }
                     if(playerInList.hasFourCard()){

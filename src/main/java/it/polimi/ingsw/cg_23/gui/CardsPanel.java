@@ -23,10 +23,19 @@ import javax.swing.JTextField;
  * @author Arianna
  */
 public class CardsPanel extends JPanel {
-
+    
+    private static final String USEDISCARD = "Use or Discard";
+    private static final String WHAT_DO = "What you want to do?";
+    private static final String ADRENALINE = "Adrenaline";
+    private static final String ATTACK = "Attack";
+    private static final String DEFENSE = "Defense";
+    private static final String SEDATIVES = "Sedatives";
+    private static final String SPOTLIGHT = "Spotlight";
+    private static final String TELEPORT = "Teleport";
+    
     private static final long serialVersionUID = 1L;
     
-    private Connection connection;
+    private transient Connection connection;
     
     private static Image[] cards;
     private static JButton card0;
@@ -67,8 +76,8 @@ public class CardsPanel extends JPanel {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showOptionDialog(null, "What you wanto to do?", "Use or Discard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
-                card = "adrenaline";
+                int response = JOptionPane.showOptionDialog(null, WHAT_DO, USEDISCARD, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+                card = ADRENALINE;
                 if(response==JOptionPane.YES_OPTION){
                     useCard();
                 }
@@ -87,8 +96,8 @@ public class CardsPanel extends JPanel {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showOptionDialog(null, "What you wanto to do?", "Use or Discard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
-                card = "attack";
+                int response = JOptionPane.showOptionDialog(null, WHAT_DO, USEDISCARD, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+                card = ATTACK;
                 if(response==JOptionPane.YES_OPTION){
                     useCard();
                 }
@@ -108,8 +117,8 @@ public class CardsPanel extends JPanel {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showOptionDialog(null, "What you wanto to do?", "Use or Discard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
-                card = "defense";
+                int response = JOptionPane.showOptionDialog(null, WHAT_DO, USEDISCARD, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+                card = DEFENSE;
                 if(response==JOptionPane.YES_OPTION){
                     useCard();
                 }
@@ -129,8 +138,8 @@ public class CardsPanel extends JPanel {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showOptionDialog(null, "What you wanto to do?", "Use or Discard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
-                card = "sedatives";
+                int response = JOptionPane.showOptionDialog(null, WHAT_DO, USEDISCARD, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+                card = SEDATIVES;
                 if(response==JOptionPane.YES_OPTION){
                     useCard();
                 }
@@ -150,8 +159,8 @@ public class CardsPanel extends JPanel {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showOptionDialog(null, "What you wanto to do?", "Use or Discard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
-                card = "spotlight";
+                int response = JOptionPane.showOptionDialog(null, WHAT_DO, USEDISCARD, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+                card = SPOTLIGHT;
                 if(response==JOptionPane.YES_OPTION){
                     useSpotlight();
                 }
@@ -171,8 +180,8 @@ public class CardsPanel extends JPanel {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showOptionDialog(null, "What you wanto to do?", "Use or Discard", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
-                card = "teleport";
+                int response = JOptionPane.showOptionDialog(null, WHAT_DO, USEDISCARD, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+                card = TELEPORT;
                 if(response==JOptionPane.YES_OPTION){
                     useCard();
                 }
@@ -257,27 +266,27 @@ public class CardsPanel extends JPanel {
     public static void enableCard(String card){
         
         switch(card){
-            case "adrenaline":
+            case ADRENALINE:
                 card0.setEnabled(true);
                 break;
                 
-            case "attack":
+            case ATTACK:
                 card1.setEnabled(true);
                 break;
                 
-            case "defense":
+            case DEFENSE:
                 card2.setEnabled(true);
                 break;
                 
-            case "sedatives":
+            case SEDATIVES:
                 card3.setEnabled(true);
                 break;
                 
-            case "spotlight":
+            case SPOTLIGHT:
                 card4.setEnabled(true);
                 break;
                 
-            case "teleport":
+            case TELEPORT:
                 card5.setEnabled(true);
                 break;
               
@@ -294,27 +303,27 @@ public class CardsPanel extends JPanel {
     public static void disableCard(String card){
         
         switch(card){
-            case "adrenaline":
+            case ADRENALINE:
                 card0.setEnabled(false);
                 break;
                 
-            case "attack":
+            case ATTACK:
                 card1.setEnabled(false);
                 break;
                 
-            case "defense":
+            case DEFENSE:
                 card2.setEnabled(false);
                 break;
                 
-            case "sedatives":
+            case SEDATIVES:
                 card3.setEnabled(false);
                 break;
                 
-            case "spotlight":
+            case SPOTLIGHT:
                 card4.setEnabled(false);
                 break;
                 
-            case "teleport":
+            case TELEPORT:
                 card5.setEnabled(false);
                 break;
                 

@@ -23,7 +23,7 @@ public class BrokerThread extends Thread{
     private PrintWriter out;
 
     /**
-     * The buffer where the mesage to send is saved
+     * The buffer where the message to send is saved
      */
     ConcurrentLinkedQueue<String> buffer;
 

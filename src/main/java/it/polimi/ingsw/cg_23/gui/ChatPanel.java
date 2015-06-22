@@ -27,6 +27,8 @@ import javax.swing.text.DefaultCaret;
  */
 public class ChatPanel extends JPanel {
 
+    private static final String CLICK = "Click here to chat...";
+    
     private static final long serialVersionUID = 1L;
     private static JTextArea chat;
     private static Connection connection;
@@ -62,7 +64,7 @@ public class ChatPanel extends JPanel {
         chat.setWrapStyleWord(true);
         add(scroll);
         
-        final JTextField textEntered = new JTextField("Click here to chat...");
+        final JTextField textEntered = new JTextField(CLICK);
         textEntered.setFont(font);
         textEntered.setPreferredSize(new Dimension(150,22));
         add(textEntered, BorderLayout.SOUTH);
@@ -72,7 +74,7 @@ public class ChatPanel extends JPanel {
             @Override
             public void focusLost(FocusEvent e) {
                 if("".equals(textEntered.getText())){
-                    textEntered.setText("Click here to chat...");
+                    textEntered.setText(CLICK);
                     repaint();
                     revalidate();
                 }
@@ -81,7 +83,7 @@ public class ChatPanel extends JPanel {
             
             @Override
             public void focusGained(FocusEvent e) {
-                if("Click here to chat...".equals(textEntered.getText())){
+                if(CLICK.equals(textEntered.getText())){
                     textEntered.setText("");
                     repaint();
                     revalidate();
@@ -122,7 +124,7 @@ public class ChatPanel extends JPanel {
      * @param textEntered textEntered is the text write by player and send to all players and the system messages
      */
     public static void appendMessages(String textEntered){        
-            if(!"Click here to chat...".equals(textEntered) && !"".equals(textEntered)){
+            if(!CLICK.equals(textEntered) && !"".equals(textEntered)){
                 chat.append(textEntered+System.lineSeparator());                
             }
     }

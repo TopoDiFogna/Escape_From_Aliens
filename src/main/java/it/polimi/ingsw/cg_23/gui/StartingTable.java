@@ -21,8 +21,8 @@ public class StartingTable extends JFrame {
     
     private static final String ERR = "Unable to load images.";
     
-    private Image backgroundImage;
-    private Image logoImage;
+    private transient Image backgroundImage;
+    private transient Image logoImage;
     private static Image mapImage;
     private static Image image1;
     private static Image image2;
@@ -35,10 +35,10 @@ public class StartingTable extends JFrame {
     
     private static JLayeredPane layeredPane;
     
-    private final static int LAYER_BACKGROUND = 1;
-    private final static int LAYER_LOGO = 2;
-    private final static int LAYER_LOGIN = 3;
-    private final static int LAYER_GAME = 4;
+    private static final int LAYER_BACKGROUND = 1;
+    private static final int LAYER_LOGO = 2;
+    private static final int LAYER_LOGIN = 3;
+    private static final int LAYER_GAME = 4;
     
     /**
      * The constructor. <br>
@@ -116,14 +116,13 @@ public class StartingTable extends JFrame {
         image2Label.setBounds(890, 150, 300, 429);
         layeredPane.add(image2Label);
         layeredPane.setLayer(image2Label, LAYER_LOGIN);
-        image2Label.setVisible(true);
-       
+        image2Label.setVisible(true);       
     }
     
     /**
      * Loads images to add on background and catch an error if unable to load them.
      */
-    private void loadImages(){
+    private static void loadImages(){
         try {
             image1 = ImageIO.read(new File("./img/image1.png"));
             image2 = ImageIO.read(new File("./img/image2.png"));

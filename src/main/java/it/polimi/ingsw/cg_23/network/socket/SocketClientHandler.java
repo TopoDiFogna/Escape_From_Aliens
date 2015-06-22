@@ -35,6 +35,7 @@ import java.util.TimerTask;
  */
 public class SocketClientHandler implements Runnable{
     
+    private static final String WHERENOISE = "You need to specify a sector where make a noise";
     private static final String NOTINGAME = "You are not in a game! Join one first!";    
     private static final String NOTRUNNING = "Game game is not running!";
     private static final String NOTYOURTURN = "It's not your turn!";
@@ -406,7 +407,7 @@ public class SocketClientHandler implements Runnable{
                         return "You can't move there!";
                 } else {
                     if(playerInList.needSectorNoise())
-                        response = response + " " + "You need to specify a sector where make a noise";
+                        response = response + " " + WHERENOISE;
                     if(playerInList.hasFourCard())
                         response =  response + " " + "You need to specify what you want to di with the card in excess";
                     if(playerInList.hasMoved())
@@ -471,7 +472,7 @@ public class SocketClientHandler implements Runnable{
                         return "You can't move there!";
                 } else {
                     if(playerInList.needSectorNoise())
-                        response = response + " " + "You need to specify a sector where make a noise";
+                        response = response + " " + WHERENOISE;
                     if(playerInList.hasFourCard())
                         response = response + " " + "You need to specify what you want to di with the card in excess";
                     if(playerInList.hasMoved())
@@ -516,7 +517,7 @@ public class SocketClientHandler implements Runnable{
                     return "You are an alien! You can't use Item Cards!";
                 }
                 if(playerInList.needSectorNoise())
-                    return "You need to specify a sector where make a noise";
+                    return WHERENOISE;
             }
         }
         
@@ -806,7 +807,7 @@ public class SocketClientHandler implements Runnable{
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
                 if(playerInList.needSectorNoise()){
-                    return "You need to specify a sector where make a noise";
+                    return WHERENOISE;
                 }
                 if(playerInList.hasFourCard()){
                     return "You have four cards! You must discard one";
