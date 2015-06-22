@@ -58,4 +58,9 @@ public abstract class Connection {
      * @param card card to be discarded
      */
     public abstract void discardCard(String card);
+    
+    /**
+     * Asks the server for the cards the player has in his hand
+     */
+    public abstract void getCards();
 }

@@ -29,12 +29,12 @@ public class CardsPanel extends JPanel {
     private Connection connection;
     
     private static Image[] cards;
-    private JButton card0;
-    private JButton card1;
-    private JButton card2;
-    private JButton card3;
-    private JButton card4;
-    private JButton card5;
+    private static JButton card0;
+    private static JButton card1;
+    private static JButton card2;
+    private static JButton card3;
+    private static JButton card4;
+    private static JButton card5;
     
     private String[] options = {"Use", "Discard"};
 
@@ -61,7 +61,7 @@ public class CardsPanel extends JPanel {
         card0 = new JButton(new ImageIcon(cards[0]));
         card0.setBorder(BorderFactory.createEmptyBorder());
         card0.setContentAreaFilled(false);
-        card0.setEnabled(true);
+        card0.setEnabled(false);
         add(card0);
         card0.addActionListener(new ActionListener() {
             
@@ -144,7 +144,7 @@ public class CardsPanel extends JPanel {
         card4 = new JButton(new ImageIcon(cards[4]));
         card4.setBorder(BorderFactory.createEmptyBorder());
         card4.setContentAreaFilled(false);
-        card4.setEnabled(true);
+        card4.setEnabled(false);
         add(card4);
         card4.addActionListener(new ActionListener() {
             
@@ -204,6 +204,7 @@ public class CardsPanel extends JPanel {
      */
     private void useCard(){
         connection.useCard(card, -1, -1);
+        disableCard(card);
     }
     
     /**
@@ -212,6 +213,7 @@ public class CardsPanel extends JPanel {
      */
     private void discardCard(){
         connection.discardCard(card);
+        disableCard(card);
     }
     
     /**
@@ -241,7 +243,73 @@ public class CardsPanel extends JPanel {
         }
         
        
-        if(result==JOptionPane.OK_OPTION)
+        if(result==JOptionPane.OK_OPTION){
             connection.useCard(card, letterAsInt, numberAsInt);
+            disableCard(card);
+        }
+    }
+    
+    public static void enableCard(String card){
+        
+        switch(card){
+            case "adrenaline":
+                card0.setEnabled(true);
+                break;
+                
+            case "attack":
+                card1.setEnabled(true);
+                break;
+                
+            case "defense":
+                card2.setEnabled(true);
+                break;
+                
+            case "sedatives":
+                card3.setEnabled(true);
+                break;
+                
+            case "spotlight":
+                card4.setEnabled(true);
+                break;
+                
+            case "teleport":
+                card5.setEnabled(true);
+                break;
+              
+            default:
+                break;
+        }
+    }
+    
+    public static void disableCard(String card){
+        
+        switch(card){
+            case "adrenaline":
+                card0.setEnabled(false);
+                break;
+                
+            case "attack":
+                card1.setEnabled(false);
+                break;
+                
+            case "defense":
+                card2.setEnabled(false);
+                break;
+                
+            case "sedatives":
+                card3.setEnabled(false);
+                break;
+                
+            case "spotlight":
+                card4.setEnabled(false);
+                break;
+                
+            case "teleport":
+                card5.setEnabled(false);
+                break;
+                
+            default:
+                break;
+        }
     }
 }

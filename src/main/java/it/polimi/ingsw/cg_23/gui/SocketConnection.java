@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 /**
  * Class that calls methods on the server.
@@ -81,6 +82,7 @@ public class SocketConnection extends Connection {
         socketOut.println(nickname+" move "+letter+" "+number);
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());
+        getCards();
     }
 
     /**
@@ -92,6 +94,7 @@ public class SocketConnection extends Connection {
         socketOut.println(nickname+" moveattack "+letter+" "+number);
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());
+        getCards();
     }
 
     /**
@@ -147,6 +150,22 @@ public class SocketConnection extends Connection {
         socketOut.println(nickname+ " " + "discard "+card);
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());    
+    }
+    
+    /**
+     * Asks the server for the cards the player has in his hand
+     */
+    @Override
+    public void getCards() {
+        createSockets();
+        socketOut.println("getcards");
+        socketOut.flush();
+        String response = socketIn.nextLine();
+        ChatPanel.appendMessages(response);
+        StringTokenizer tokenizer = new StringTokenizer(response);
+        while(tokenizer.hasMoreTokens()){
+            CardsPanel.enableCard(tokenizer.nextToken().toLowerCase());
+        }
     }
 
     /**

@@ -64,8 +64,10 @@ public class MoveAttackNoisePanel extends JPanel {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!"".equals(letter.getText()) && !"".equals(number.getText()) )
-                    connectionType.move(letter.getText(), number.getText()); 
+                if(!"".equals(letter.getText()) && !"".equals(number.getText())){
+                    connectionType.move(letter.getText(), number.getText());
+                    
+                }
             }
         });
                 

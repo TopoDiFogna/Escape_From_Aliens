@@ -93,7 +93,7 @@ public class RMIConnection extends Connection {
         } catch (RemoteException e) {
             System.err.println(ERR);
         }
-
+        getCards();
     }
     
     /**
@@ -117,6 +117,7 @@ public class RMIConnection extends Connection {
         } catch (RemoteException e) {
             System.err.println(ERR);
         }
+        getCards();
     }
 
     /**
@@ -189,5 +190,17 @@ public class RMIConnection extends Connection {
         } catch (RemoteException e) {
             System.err.println(ERR);
         }        
+    }
+
+    /**
+     * Asks the server for the cards the player has in his hand
+     */
+    @Override
+    public void getCards() {
+        try {
+            gameCommands.getCards(clientInterface, nickname);
+        } catch (RemoteException e) {
+            System.err.println(ERR);
+        }   
     }
 }

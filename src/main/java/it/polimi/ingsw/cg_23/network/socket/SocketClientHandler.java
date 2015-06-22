@@ -840,7 +840,7 @@ public class SocketClientHandler implements Runnable{
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
                 cards=playerInList.getCards();
-                response = "";
+                response = "Cards: ";
             }
         }
         
