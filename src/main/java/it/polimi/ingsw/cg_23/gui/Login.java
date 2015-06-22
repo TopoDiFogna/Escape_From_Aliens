@@ -13,24 +13,34 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * Creates login panel.
+ * 
+ * @author Arianna
+ */
 public class Login extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private Connection connection;
     
+    /**
+     * The constructor. <br>
+     * Creates 2 JTextFields for nickname and IP address with relatives listener. <br>
+     * Creates 2 JComboBox for choice of connection type and map type.
+     */
     public Login(){
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);
-        setBounds(0,0,120,150);
-        
+        setBounds(0,0,120,150);        
         
         final JTextField nickname = new JTextField("Enter a Nickname");
         nickname.setPreferredSize(new Dimension(105,22));
         nickname.setFont(font);
         add(nickname);
         
-        //This mouse listener delete Enter a Nickname when click on the text field.
+        //This focus listener delete the default text if the field is on focus and rewrite the default text if lost focus
+        //and player doesn't write anything.
         nickname.addFocusListener(new FocusListener() {
             
             @Override
@@ -39,8 +49,7 @@ public class Login extends JPanel {
                     nickname.setText("Enter a Nickname");
                     repaint();
                     revalidate();
-                }
-                
+                }                
             }
             
             @Override
@@ -49,8 +58,7 @@ public class Login extends JPanel {
                     nickname.setText("");
                     repaint();
                     revalidate();
-                }
-                
+                }                
             }
         });       
         
@@ -59,7 +67,8 @@ public class Login extends JPanel {
         ip.setFont(font);
         add(ip);
         
-        //This mouse listener delete Enter IP address when click on the text field.
+        //This focus listener delete the default text if the field is on focus and rewrite the default text if lost focus
+        //and player doesn't write anything.
         ip.addFocusListener(new FocusListener() {
             
             @Override
@@ -102,9 +111,8 @@ public class Login extends JPanel {
         start.setPreferredSize(new Dimension(65, 22));
         add(start); 
         
-       
-        
-        //This listener saves all fields on start button click, hides login components and calls initializeLoading method.
+        //This listener hides login panel if all field are wrote and calls next gui elements for starting match
+        // (like map, chat, cards, end turn and other actions.
         start.addActionListener(new ActionListener() {
             
             @Override

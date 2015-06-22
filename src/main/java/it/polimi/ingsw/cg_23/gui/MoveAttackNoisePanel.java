@@ -18,22 +18,29 @@ public class MoveAttackNoisePanel extends JPanel {
     private JTextField letter;
     private JTextField number;
     
+    /**
+     * The constructor. <br>
+     * Creates all visual component to do action (move, attack and move, noise). <br>
+     * Creates 2 JTextFields for insert letter and number, 3 JButtons with different listener. <br>
+     * 3 buttons has listener that calls the right method according to the connection chose.
+     * 
+     * @param connection connection chose between socket and rmi to calls right method to play
+     */
     public MoveAttackNoisePanel(Connection connection){
         
-        final Connection connectionType = connection;
-          
+        final Connection connectionType = connection;          
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);
         setBorder(BorderFactory.createEtchedBorder(new Color(191, 191, 191, 255), new Color(91, 91, 91, 255)));
-        setBounds(945,110,235,140);
+        setBounds(955,140,215,113);
         
         JLabel textLetter = new JLabel();
-        textLetter.setText("Enter letter     ");
+        textLetter.setText("Enter letter");
         textLetter.setFont(font);
         textLetter.setForeground(new Color(255, 255, 255, 255));
         letter = new JTextField();
-        letter.setPreferredSize(new Dimension(30,18));
+        letter.setPreferredSize(new Dimension(20,18));
         letter.setFont(font);
         add(textLetter);
         add(letter);
@@ -43,7 +50,7 @@ public class MoveAttackNoisePanel extends JPanel {
         textNumber.setFont(font);
         textNumber.setForeground(new Color(255, 255, 255, 255));
         number = new JTextField();
-        number.setPreferredSize(new Dimension(30,18));
+        number.setPreferredSize(new Dimension(20,18));
         number.setFont(font);
         add(textNumber);
         add(number);        

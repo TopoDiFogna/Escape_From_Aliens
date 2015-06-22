@@ -10,24 +10,47 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * Class that calls methods on the server.
+ * 
+ * @author Paolo
+ */
 public class RMIConnection extends Connection {
     
+    private static final String ERR = "Cannot contact the server.";
+    
     /**
-     * The class containing methods exposed to the server to get responses when using rmi
+     * The interface containing methods exposed to the server to get responses when using rmi.
      */
     private RMIClientGui clientInterface;
     
     /**
-     * Where the interface containing the game commands is saved
+     * Where the interface containing the game commands is saved.
      */
     private RMIGameCommandsInterface gameCommands=null;
     
+    /**
+     * Interface exposed to the server.
+     */
     private RMIClientInterface exportedClientInterface;
     
+    /**
+     * Port to connect to the server.
+     */
     private static final int PORT = 1099;
     
+    /**
+     * Unique identifier of the client.
+     */
     private String nickname;
     
+    /**
+     * The constructor. Locates the registry on the specified ip, port, saves the server interface and joins a match
+     * 
+     * @param ip server ip
+     * @param nickname client identifier
+     * @param mapName the name of the map for the match
+     */
     public RMIConnection(String ip, String nickname, String mapName) {
         
         this.nickname=nickname;
@@ -50,6 +73,9 @@ public class RMIConnection extends Connection {
         } 
     }
 
+    /**
+     * Calls the method move on the server interface.
+     */
     @Override
     public void move(String letter, String number) {
         
@@ -65,12 +91,14 @@ public class RMIConnection extends Connection {
         try {
             gameCommands.movePlayer(exportedClientInterface, nickname, letterAsInt, numberAsInt);
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println(ERR);
         }
 
     }
-
+    
+    /**
+     * Calls the method move and attack on the server interface.
+     */
     @Override
     public void moveAndAttack(String letter, String number) {
         
@@ -87,11 +115,13 @@ public class RMIConnection extends Connection {
         try {
             gameCommands.moveAndAttack(exportedClientInterface, nickname, letterAsInt, numberAsInt);
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println(ERR);
         }
     }
 
+    /**
+     * Calls the method noise on the server interface.
+     */
     @Override
     public void makeNoise(String letter, String number) {
         
@@ -108,54 +138,56 @@ public class RMIConnection extends Connection {
         try {
             gameCommands.makeNoise(exportedClientInterface, nickname, letterAsInt, numberAsInt);
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println(ERR);
         }
     }
 
+    /**
+     * Calls the method end turn on the server interface.
+     */
     @Override
     public void endTurn() {
         try {
             gameCommands.endTurn(exportedClientInterface, nickname);
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println(ERR);
         }
-
     }
 
+    /**
+     * Calls the method chat on the server interface.
+     */
     @Override
     public void chat(String msg) {
         try {
             gameCommands.chat(exportedClientInterface, nickname, msg);
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.err.println(ERR);
         }
-
     }
 
+    /**
+     * Calls the method use card on the server interface.
+     */
     @Override
     public void useCard(String card, int letter, int number) {
         
         try {
             gameCommands.useCard(exportedClientInterface, nickname, card, letter, number);
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
+            System.err.println(ERR);
+        }        
     }
 
+    /**
+     * Calls the method discard card on the server interface.
+     */
     @Override
     public void discardCard(String card) {
         try {
             gameCommands.discardCard(exportedClientInterface, nickname, card);
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
+            System.err.println(ERR);
+        }        
     }
-
 }

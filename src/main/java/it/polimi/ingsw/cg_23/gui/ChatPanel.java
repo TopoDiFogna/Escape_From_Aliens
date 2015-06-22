@@ -20,18 +20,29 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.text.DefaultCaret;
 
+/**
+ * Creates chat panel.
+ * 
+ * @author Arianna
+ */
 public class ChatPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private static JTextArea chat;
     private static Connection connection;
     
+    /**
+     * The constructor. <br>
+     * Creates a panel to chat. The messages are visualized in a JTextArea not editable and scrollable (because inside a JScrollPane). <br>
+     * Creates a JTextField to write messages (can send messages pushing Enter keyboard button or clicking on send JButton). <br>
+     * And creates a JButton to send messages.
+     */
     public ChatPanel() {
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);
         setBorder(BorderFactory.createEtchedBorder(new Color(191, 191, 191, 255), new Color(91, 91, 91, 255)));
-        setBounds(20,110,235,469);
+        setBounds(20,140,235,469);
         
         
         chat = new JTextArea();
@@ -105,14 +116,22 @@ public class ChatPanel extends JPanel {
         });
     } 
     
-    
+    /**
+     * Appends message send at the bottom of the chat panel.
+     * 
+     * @param textEntered textEntered is the text write by player and send to all players and the system messages
+     */
     public static void appendMessages(String textEntered){        
             if(!"Click here to chat...".equals(textEntered) && !"".equals(textEntered)){
                 chat.append(textEntered+System.lineSeparator());                
             }
     }
 
-
+    /**
+     * Sets the type of connection choose.
+     * 
+     * @param connection
+     */
     public static void setConnection(Connection connection) {
         ChatPanel.connection = connection;
     }    

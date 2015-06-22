@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
- * This class handles the thread to receive message from the server
+ * This class handles the thread to receive message from the server.
  * 
  * @author Paolo
  *
@@ -14,12 +14,12 @@ import java.net.Socket;
 public class SocketClientSubscriberGui extends Thread{
     
     /**
-     * The reader to receive the messages
+     * The reader to receive the messages.
      */
     private BufferedReader socketIn;
     
     /**
-     * Socket associates to the subscriber in the broker
+     * Socket associates to the subscriber in the broker.
      */
     private Socket socket;
     
@@ -38,8 +38,7 @@ public class SocketClientSubscriberGui extends Thread{
     }
 
     /**
-     * Main method of the thread. Receives the messages and calls a method tho handle them
-     * 
+     * Main method of the thread. Receives the messages and calls a method to handle them.
      */
     @Override
     public void run() {
@@ -48,13 +47,13 @@ public class SocketClientSubscriberGui extends Thread{
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Cannot pause the thread.");
             }
         }
     }
     
     /**
-     * If the input from the server is not empty prints it on the console
+     * If the input from the server is not empty prints it on the chat.
      */
     private void receive() {
         String msg = null;
@@ -64,7 +63,7 @@ public class SocketClientSubscriberGui extends Thread{
                 ChatPanel.appendMessages(msg);
             }
         } catch (IOException e) {                
-            e.printStackTrace();
+            System.err.println("Cannot read the server stream.");
         }
     }
 }

@@ -2,8 +2,17 @@ package it.polimi.ingsw.cg_23.gui;
 
 import javax.swing.SwingUtilities;
 
-public class Main {
+/**
+ * Client gui class to start gui.
+ * 
+ * @author Arianna
+ */
+public class ClientGUI {
 
+    /**
+     * Starting class to launch gui.
+     * @param args
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             

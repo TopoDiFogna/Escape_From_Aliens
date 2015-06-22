@@ -6,20 +6,25 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+/**
+ * Class that calls methods on the server.
+ * 
+ * @author Paolo
+ */
 public class SocketConnection extends Connection {
     
     /**
-     * Socket used to connect to the server
+     * Socket used to connect to the server.
      */
     private Socket socket = null;
     
     /**
-     * Scanner used to read server input
+     * Scanner used to read server input.
      */
     private Scanner socketIn = null;
     
     /**
-     * PrintWriter to send to the server the commands
+     * PrintWriter to send to the server the commands.
      */
     private PrintWriter socketOut = null;
     
@@ -28,12 +33,28 @@ public class SocketConnection extends Connection {
      */
     private SocketClientSubscriberGui receiver;
     
+    /**
+     * Port to connect to the server.
+     */
     private static final int PORT = 10412;
-    
+
+    /**
+     * Unique identifier of the client.
+     */
     private final String nickname;
     
+    /**
+     * Server IP address.
+     */
     private final String ip;
 
+    /**
+     * The constructor. Connects to the server using sockets and join a game.
+     * 
+     * @param ip server ip address
+     * @param nickname client identifier
+     * @param mapName map name to join a match
+     */
     public SocketConnection(String ip, String nickname, String mapName) {
         
         this.nickname=nickname;
@@ -51,42 +72,53 @@ public class SocketConnection extends Connection {
         receiver.start();
     }
 
+    /**
+     * Sends a string corresponding to the move command.
+     */
     @Override
     public void move(String letter, String number) {
         createSockets();
         socketOut.println(nickname+" move "+letter+" "+number);
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());
-
     }
 
+    /**
+     * Sends a string corresponding to the move and attack command.
+     */
     @Override
     public void moveAndAttack(String letter, String number) {
         createSockets();
         socketOut.println(nickname+" moveattack "+letter+" "+number);
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());
-
     }
 
+    /**
+     * Sends a string corresponding to the noise command.
+     */
     @Override
     public void makeNoise(String letter, String number) {
         createSockets();
         socketOut.println(nickname+" noise "+letter+" "+number);
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());
-
     }
 
+    /**
+     * Sends a string corresponding to the end turn command.
+     */
     @Override
     public void endTurn() {
         createSockets();
         socketOut.println(nickname+" endturn");
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());
-
     }
-
+    
+    /**
+     * Sends a string corresponding to the chat command.
+     */
     @Override
     public void chat(String msg) {
         createSockets();
@@ -95,16 +127,20 @@ public class SocketConnection extends Connection {
         ChatPanel.appendMessages(socketIn.nextLine());
     }
     
-
+    /**
+     * Sends a string corresponding to the use card command.
+     */
     @Override
     public void useCard(String card, int letter, int number) {
         createSockets();
         socketOut.println(nickname+ " " + "use "+card+ " " + letter + " " + number);
         socketOut.flush();
-        ChatPanel.appendMessages(socketIn.nextLine());  
-        
+        ChatPanel.appendMessages(socketIn.nextLine());          
     }
 
+    /**
+     * Sends a string corresponding to the discard card command.
+     */
     @Override
     public void discardCard(String card) {
         createSockets();
@@ -113,6 +149,9 @@ public class SocketConnection extends Connection {
         ChatPanel.appendMessages(socketIn.nextLine());    
     }
 
+    /**
+     * Creates communication socket.
+     */
     private void createSockets(){
         try {
             socket = new Socket(ip,PORT);

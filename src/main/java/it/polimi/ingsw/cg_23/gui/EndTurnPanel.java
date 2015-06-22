@@ -11,19 +11,32 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Creates end turn panel.
+ * 
+ * @author Arianna
+ */
 public class EndTurnPanel extends JPanel{
 
     private static final long serialVersionUID = 1L;
     private int turn = 0;
     
+    /**
+     * The constructor. <br>
+     * Creates a button to communicate that player ends his turn. <br>
+     * 
+     * @param connection connection chose between socket and rmi to calls right method to play
+     */
     public EndTurnPanel(Connection connection) {        
         
         final Connection connectionType = connection;
+       
+        
         
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);
         setBorder(BorderFactory.createEtchedBorder(new Color(191, 191, 191, 255), new Color(91, 91, 91, 255)));
-        setBounds(945,258,235,58);
+        setBounds(955,262,215,37);        
         
         JLabel turnNumber = new JLabel();
         turnNumber.setText("Turn Number: "+turn);
@@ -43,8 +56,6 @@ public class EndTurnPanel extends JPanel{
                 connectionType.endTurn();
                 
             }
-        });
-       
+        });       
     }
-
 }
