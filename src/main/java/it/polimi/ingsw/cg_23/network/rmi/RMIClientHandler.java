@@ -90,7 +90,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
                 System.err.println(ERROR_MESSAGE);
             }
         }
-        if("galilei".equals(mapName.toLowerCase()) || "fermi".equals(mapName.toLowerCase()) || "galvani".equals(mapName.toLowerCase())){
+        if("galilei".equalsIgnoreCase(mapName) || "fermi".equalsIgnoreCase(mapName) || "galvani".equalsIgnoreCase(mapName)){
             
             for (Match match : serverStatus.getMatchRMIBrokerMap().keySet()) {
                 if(match.getName().equals(mapName) && match.getMatchState() == GameState.WAITING && match.getPlayers().size()<8){
