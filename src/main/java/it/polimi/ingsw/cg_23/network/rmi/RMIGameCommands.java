@@ -592,12 +592,14 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
         String playerCards="";
         
         for (Player playerInList : match.getPlayers()) {
-            if(playerInList.getName().equals(id) && !playerInList.getCards().isEmpty()){
-                cards=playerInList.getCards();
-                playerCards = "Cards: ";
-            }
-            else{
-                playerCards = "You don't have any card";
+            if(playerInList.getName().equals(id)){
+                if(!playerInList.getCards().isEmpty()){
+                    cards=playerInList.getCards();
+                    playerCards = "Cards: ";
+                }
+                else{
+                    playerCards = "You don't have any card";
+                }
             }
         }
         

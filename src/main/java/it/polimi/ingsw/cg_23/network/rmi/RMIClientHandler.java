@@ -94,9 +94,13 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
             
             for (Match match : serverStatus.getMatchRMIBrokerMap().keySet()) {
                 if(match.getName().equals(mapName) && match.getMatchState() == GameState.WAITING && match.getPlayers().size()<8){
-                    joinGame(id, clientInterface, match, serverStatus.getMatchRMIBrokerMap().get(match));
+                    boolean alien = joinGame(id, clientInterface, match, serverStatus.getMatchRMIBrokerMap().get(match));
                     try {
                         clientInterface.dispatchMessage("You were added to a game with map "+mapName);
+                        if(alien)
+                            clientInterface.dispatchMessage("You are an Alien");
+                        else
+                            clientInterface.dispatchMessage("You are a Human");
                     } catch (RemoteException e) {
                         System.err.println(ERROR_MESSAGE);
                     }
@@ -105,6 +109,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
                     joinNewGame(id, clientInterface, mapName);
                     try {
                         clientInterface.dispatchMessage("You were added to a new game with map "+mapName);
+                        clientInterface.dispatchMessage("You are an Alien");
                     } catch (RemoteException e) {
                         System.err.println(ERROR_MESSAGE);
                     }
@@ -115,6 +120,7 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
                 joinNewGame(id, clientInterface, mapName);
                 try {
                     clientInterface.dispatchMessage("You were added to a new game with map "+mapName);
+                    clientInterface.dispatchMessage("You are an Alien");
                 } catch (RemoteException e) {
                     System.err.println(ERROR_MESSAGE);
                 }
@@ -139,7 +145,9 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
      * @param match the match to be joined
      * @param broker the broker associated to the match that is joined
      */
-    private void joinGame(String id, RMIClientInterface clientInterface, Match match, RMIBroker broker){
+    private boolean joinGame(String id, RMIClientInterface clientInterface, Match match, RMIBroker broker){
+        
+        boolean alien = true;
         
         broker.subscribe(clientInterface);
         
@@ -157,14 +165,18 @@ public class RMIClientHandler implements RMIClientHandlerInterface {
                 nHuman++;
         }
         
-        if(nAlien>=nHuman)
+        if(nAlien>=nHuman){
             newPlayer = new Human(id);
+            alien = false;
+        }
         else
             newPlayer = new Alien(id);
             
         match.addNewPlayerToList(newPlayer);
         
         serverStatus.addPlayerToMatch(id, match);
+        
+        return alien;
         
     }
     

@@ -86,7 +86,6 @@ public class RMIConnection extends Connection {
         }catch (IndexOutOfBoundsException e){
             numberAsInt = Character.getNumericValue(number.toLowerCase().charAt(0))-1;
         }
-        System.out.println(letterAsInt+" " +numberAsInt);
         
         try {
             gameCommands.movePlayer(exportedClientInterface, nickname, letterAsInt, numberAsInt);
@@ -109,8 +108,6 @@ public class RMIConnection extends Connection {
         }catch (IndexOutOfBoundsException e){
             numberAsInt = Character.getNumericValue(number.toLowerCase().charAt(0))-1;
         }
-
-        System.out.println(letterAsInt+" " +numberAsInt);
         
         try {
             gameCommands.moveAndAttack(exportedClientInterface, nickname, letterAsInt, numberAsInt);
@@ -133,8 +130,6 @@ public class RMIConnection extends Connection {
         }catch (IndexOutOfBoundsException e){
             numberAsInt = Character.getNumericValue(number.toLowerCase().charAt(0))-1;
         }
-        
-        System.out.println(letterAsInt+" " +numberAsInt);
         
         try {
             gameCommands.makeNoise(exportedClientInterface, nickname, letterAsInt, numberAsInt);

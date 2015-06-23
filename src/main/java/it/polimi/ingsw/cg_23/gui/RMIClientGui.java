@@ -27,9 +27,7 @@ public class RMIClientGui implements RMIClientInterface {
         ChatPanel.appendMessages(msg);
         StringTokenizer tokenizer = new StringTokenizer(msg);
         while(tokenizer.hasMoreTokens()){
-            if("Cards:".equals(tokenizer.nextToken()))
-            CardsPanel.enableCard(tokenizer.nextToken());
+            CardsPanel.enableCard(tokenizer.nextToken().toLowerCase());
         }
     }
-
 }
