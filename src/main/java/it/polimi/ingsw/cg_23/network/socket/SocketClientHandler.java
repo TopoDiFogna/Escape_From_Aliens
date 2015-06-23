@@ -184,7 +184,7 @@ public class SocketClientHandler implements Runnable{
                 break;
                 
             case "chat":
-                chat();
+                response = chat();
                 break;
                 
             default:
@@ -198,14 +198,16 @@ public class SocketClientHandler implements Runnable{
     /**
      * Makes the player send a message to all players in the match
      */
-    private void chat() {
+    private String chat() {
         Match match = serverStatus.getIdMatchMap().get(id);
         
         String msg="";
         while(tokenizer.hasMoreTokens()){
             msg=msg+tokenizer.nextToken()+ " ";
         }
-        match.getGameLogic().chat(id, msg);     
+        match.getGameLogic().chat(id, msg); 
+        
+        return "Message sent!";
     }
 
     /**
