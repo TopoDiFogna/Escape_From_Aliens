@@ -158,7 +158,7 @@ public class SocketConnection extends Connection {
     @Override
     public void getCards() {
         createSockets();
-        socketOut.println(nickname + "getcards");
+        socketOut.println(nickname + " getcards");
         socketOut.flush();
         String response = socketIn.nextLine();
         ChatPanel.appendMessages(response);
