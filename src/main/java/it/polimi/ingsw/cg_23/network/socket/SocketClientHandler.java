@@ -462,7 +462,7 @@ public class SocketClientHandler implements Runnable{
         String response = null;
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
-                if(!(playerInList.needSectorNoise() || playerInList.hasFourCard())){
+                if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                         match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
                         response = "You moved and attacked in sector "+letter+" "+number;

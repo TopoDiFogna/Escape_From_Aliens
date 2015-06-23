@@ -125,7 +125,7 @@ public class SocketConnection extends Connection {
     @Override
     public void chat(String msg) {
         createSockets();
-        socketOut.println(nickname+" "+ msg);
+        socketOut.println(nickname+" chat "+ msg);
         socketOut.flush();
         ChatPanel.appendMessages(socketIn.nextLine());
     }
@@ -158,7 +158,7 @@ public class SocketConnection extends Connection {
     @Override
     public void getCards() {
         createSockets();
-        socketOut.println("getcards");
+        socketOut.println(nickname + "getcards");
         socketOut.flush();
         String response = socketIn.nextLine();
         ChatPanel.appendMessages(response);
