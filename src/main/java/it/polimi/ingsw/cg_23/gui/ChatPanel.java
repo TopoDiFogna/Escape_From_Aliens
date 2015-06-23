@@ -96,7 +96,8 @@ public class ChatPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 connection.chat(textEntered.getText());
-                textEntered.requestFocusInWindow(); 
+                textEntered.requestFocusInWindow();
+                textEntered.setText("");
                 repaint();
                 revalidate();
             }
