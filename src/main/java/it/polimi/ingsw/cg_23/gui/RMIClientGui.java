@@ -26,9 +26,9 @@ public class RMIClientGui implements RMIClientInterface {
     public void dispatchMessage(String msg) throws RemoteException {
         ChatPanel.appendMessages(msg);
         StringTokenizer tokenizer = new StringTokenizer(msg);
-        if("Cards:".equals(tokenizer.nextToken())){
-            while(tokenizer.hasMoreTokens())
-                CardsPanel.enableCard(tokenizer.nextToken());
+        while(tokenizer.hasMoreTokens()){
+            if("Cards:".equals(tokenizer.nextToken()))
+            CardsPanel.enableCard(tokenizer.nextToken());
         }
     }
 
