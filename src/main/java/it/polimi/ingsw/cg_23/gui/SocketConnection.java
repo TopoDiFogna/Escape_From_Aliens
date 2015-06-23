@@ -135,10 +135,19 @@ public class SocketConnection extends Connection {
      */
     @Override
     public void useCard(String card, int letter, int number) {
+        String response = "";
         createSockets();
         socketOut.println(nickname+ " " + "use "+card+ " " + letter + " " + number);
         socketOut.flush();
-        ChatPanel.appendMessages(socketIn.nextLine());          
+        response=socketIn.nextLine();
+        ChatPanel.appendMessages(response);
+        StringTokenizer tokenizer = new StringTokenizer(response);
+        while(tokenizer.hasMoreTokens()){
+            if("used".equals(tokenizer.nextToken())){
+                CardsPanel.disableCard(card);
+            }
+        }
+        getCards();
     }
 
     /**
@@ -149,7 +158,8 @@ public class SocketConnection extends Connection {
         createSockets();
         socketOut.println(nickname+ " " + "discard "+card);
         socketOut.flush();
-        ChatPanel.appendMessages(socketIn.nextLine());    
+        ChatPanel.appendMessages(socketIn.nextLine()); 
+        getCards();
     }
     
     /**
@@ -161,7 +171,7 @@ public class SocketConnection extends Connection {
         socketOut.println(nickname + " getcards");
         socketOut.flush();
         String response = socketIn.nextLine();
-        ChatPanel.appendMessages(response);
+        //ChatPanel.appendMessages(response);
         StringTokenizer tokenizer = new StringTokenizer(response);
         while(tokenizer.hasMoreTokens()){
             CardsPanel.enableCard(tokenizer.nextToken().toLowerCase());

@@ -213,7 +213,6 @@ public class CardsPanel extends JPanel {
      */
     private void useCard(){
         connection.useCard(card, -1, -1);
-        disableCard(card);
     }
     
     /**
@@ -254,7 +253,6 @@ public class CardsPanel extends JPanel {
        
         if(result==JOptionPane.OK_OPTION){
             connection.useCard(card, letterAsInt, numberAsInt);
-            disableCard(card);
         }
     }
     
