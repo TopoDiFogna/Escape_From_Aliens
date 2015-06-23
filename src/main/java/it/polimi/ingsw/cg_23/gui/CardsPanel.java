@@ -26,12 +26,12 @@ public class CardsPanel extends JPanel {
     
     private static final String USEDISCARD = "Use or Discard";
     private static final String WHAT_DO = "What you want to do?";
-    private static final String ADRENALINE = "Adrenaline";
-    private static final String ATTACK = "Attack";
-    private static final String DEFENSE = "Defense";
-    private static final String SEDATIVES = "Sedatives";
-    private static final String SPOTLIGHT = "Spotlight";
-    private static final String TELEPORT = "Teleport";
+    private static final String ADRENALINE = "adrenaline";
+    private static final String ATTACK = "attack";
+    private static final String DEFENSE = "defense";
+    private static final String SEDATIVES = "sedatives";
+    private static final String SPOTLIGHT = "spotlight";
+    private static final String TELEPORT = "teleport";
     
     private static final long serialVersionUID = 1L;
     

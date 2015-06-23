@@ -156,11 +156,11 @@ public class SocketClientHandler implements Runnable{
                 break;
                 
             case "move":
-                response = movePlayer() + " " + getCards();
+                response = movePlayer();
                 break;
                
             case "moveattack":
-                response = moveAndAttack() + " " + getCards();
+                response = moveAndAttack();
                 break;
                 
             case "use":
@@ -461,7 +461,7 @@ public class SocketClientHandler implements Runnable{
         
         Sector[][] sector = match.getMap().getSector();
         
-        String response = null;
+        String response = "";
         for (Player playerInList : match.getPlayers()) {
             if(playerInList.getName().equals(id)){
                 if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){

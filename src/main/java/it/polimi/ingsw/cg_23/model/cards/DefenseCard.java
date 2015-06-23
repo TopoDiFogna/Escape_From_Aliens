@@ -19,7 +19,7 @@ public class DefenseCard extends Card {
 
     @Override
     public String toString() {
-        return "Defence";
+        return "Defense";
     }
     
     /**
