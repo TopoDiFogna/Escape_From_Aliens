@@ -385,8 +385,14 @@ public class SocketClientHandler implements Runnable{
         else
             return moveError();
         
-        if(tokenizer.hasMoreTokens())
-            number=Integer.parseInt(tokenizer.nextToken())-1;
+        if(tokenizer.hasMoreTokens()){
+            String tempNumber = tokenizer.nextToken();
+            try{
+                number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
+            }catch (IndexOutOfBoundsException e){
+                number = Character.getNumericValue(tempNumber.charAt(0))-1;
+            }
+        }
 
         else
             return moveError();
@@ -450,8 +456,14 @@ public class SocketClientHandler implements Runnable{
         else
             return moveError();
         
-        if(tokenizer.hasMoreTokens())
-            number=Integer.parseInt(tokenizer.nextToken())-1;
+        if(tokenizer.hasMoreTokens()){
+            String tempNumber = tokenizer.nextToken();
+        try{
+            number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
+        }catch (IndexOutOfBoundsException e){
+            number = Character.getNumericValue(tempNumber.charAt(0))-1;
+        }
+    }
 
         else
             return moveError();
@@ -572,8 +584,14 @@ public class SocketClientHandler implements Runnable{
             else
                 return SPOTLIGHTSYNTAX;
             
-            if(tokenizer.hasMoreTokens())
-                number=Integer.parseInt(tokenizer.nextToken())-1;
+            if(tokenizer.hasMoreTokens()){
+                String tempNumber = tokenizer.nextToken();
+            try{
+                number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
+            }catch (IndexOutOfBoundsException e){
+                number = Character.getNumericValue(tempNumber.charAt(0))-1;
+            }
+        }
 
             else
                 return SPOTLIGHTSYNTAX;
@@ -645,8 +663,14 @@ public class SocketClientHandler implements Runnable{
         else
             return NOISESYNTAX;
         
-        if(tokenizer.hasMoreTokens())
-            number=Integer.parseInt(tokenizer.nextToken())-1;
+        if(tokenizer.hasMoreTokens()){
+            String tempNumber = tokenizer.nextToken();
+        try{
+            number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
+        }catch (IndexOutOfBoundsException e){
+            number = Character.getNumericValue(tempNumber.charAt(0))-1;
+        }
+    }
 
         else
             return NOISESYNTAX;

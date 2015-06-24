@@ -343,7 +343,12 @@ public class Client {
         }
         
         if(tokenizer.hasMoreTokens()){
-            number=Integer.parseInt(tokenizer.nextToken())-1;
+            String tempNumber = tokenizer.nextToken();
+            try{
+                number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
+            }catch (IndexOutOfBoundsException e){
+                number = Character.getNumericValue(tempNumber.charAt(0))-1;
+            }
         }
         else{
             System.out.println(NOISE_ERROR);
@@ -381,7 +386,12 @@ public class Client {
         }
         
         if(tokenizer.hasMoreTokens()){
-            number=Integer.parseInt(tokenizer.nextToken())-1;
+            String tempNumber = tokenizer.nextToken();
+            try{
+                number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
+            }catch (IndexOutOfBoundsException e){
+                number = Character.getNumericValue(tempNumber.charAt(0))-1;
+            }
         }
         
         gameCommands.useCard(exportedClientInterface, name, card, letter, number);
@@ -411,7 +421,12 @@ public class Client {
         }
         
         if(tokenizer.hasMoreTokens()){
-            number=Integer.parseInt(tokenizer.nextToken())-1;
+            String tempNumber = tokenizer.nextToken();
+            try{
+                number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
+            }catch (IndexOutOfBoundsException e){
+                number = Character.getNumericValue(tempNumber.charAt(0))-1;
+            }
         }
         else{
             System.out.println(MOVE_ERROR);
@@ -455,7 +470,12 @@ public class Client {
         }
         
         if(tokenizer.hasMoreTokens()){
-            number=Integer.parseInt(tokenizer.nextToken())-1;
+            String tempNumber = tokenizer.nextToken();
+            try{
+                number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
+            }catch (IndexOutOfBoundsException e){
+                number = Character.getNumericValue(tempNumber.charAt(0))-1;
+            }
         }
         else{
             System.out.println(MOVE_ERROR);
