@@ -402,7 +402,7 @@ public class SocketClientHandler implements Runnable{
                 if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                         response = match.getGameLogic().movePlayer(playerInList, sector[letter][number]);
-                        response = "You moved in sector "+letter+" "+number+ " " +response;
+                        response = "You moved in sector "+(char)(letter+97)+" "+(number+1)+ " " +response;
                         break;
                     }
                     else 
@@ -467,7 +467,7 @@ public class SocketClientHandler implements Runnable{
                 if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                         match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
-                        response = "You moved and attacked in sector "+letter+" "+number;
+                        response = "You moved and attacked in sector "+(char)(letter+97)+" "+(number+1);
                         break;
                     }
                     else 
