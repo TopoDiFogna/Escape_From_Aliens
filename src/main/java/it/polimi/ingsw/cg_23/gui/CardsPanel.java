@@ -222,6 +222,7 @@ public class CardsPanel extends JPanel {
     private void discardCard(){
         connection.discardCard(card);
         disableCard(card);
+        connection.getCards();
     }
     
     /**

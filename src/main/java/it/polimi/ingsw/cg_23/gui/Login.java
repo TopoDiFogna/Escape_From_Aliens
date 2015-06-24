@@ -137,6 +137,7 @@ public class Login extends JPanel {
                     StartingTable.initializeMoveAttackNoise(connection);
                     StartingTable.initializeEndTurn(connection);
                     StartingTable.initializeCardsPanel(connection);
+                    StartingTable.writeName(nickname.getText());
                     repaint();
                     revalidate();
                 }
