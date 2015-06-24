@@ -129,7 +129,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                     if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                         if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                             clientInterface.dispatchMessage(match.getGameLogic().movePlayer(playerInList, sector[letter][number]));
-                            clientInterface.dispatchMessage("You moved in sector "+letter+" "+number);
+                            clientInterface.dispatchMessage("You moved in sector "+(char)(letter+97)+" "+(number+1));
                             break;
                         }
                         else 
@@ -191,7 +191,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                     if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                         if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
                             match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
-                            clientInterface.dispatchMessage("You moved and attacked in sector "+letter+" "+number);
+                            clientInterface.dispatchMessage("You moved and attacked in sector "+(char)(letter+97)+" "+(number+1));
                             break;
                         }
                         else 
