@@ -7,10 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -113,8 +111,7 @@ public class ChatPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 connection.chat(textEntered.getText());
-                textEntered.setText("");
-                
+                textEntered.setText("");                
             }
         });
     } 
@@ -124,10 +121,10 @@ public class ChatPanel extends JPanel {
      * 
      * @param textEntered textEntered is the text write by player and send to all players and the system messages
      */
-    public static void appendMessages(String textEntered){        
-            if(!CLICK.equals(textEntered) && !"".equals(textEntered)){
-                chat.append(textEntered+System.lineSeparator());                
-            }
+    public static void appendMessages(String textEntered){
+        if(!CLICK.equals(textEntered) && !"".equals(textEntered)){
+            chat.append(textEntered+System.lineSeparator());              
+        }
     }
 
     /**

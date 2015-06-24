@@ -1,5 +1,6 @@
 package it.polimi.ingsw.cg_23.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
@@ -208,8 +209,9 @@ public class StartingTable extends JFrame {
     protected static void writeName(String nickname){
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         JLabel name = new JLabel(nickname.toUpperCase());
-        name.setBounds(30, 110, 100, 22);
+        name.setBounds(20, 115, 100, 22);
         name.setFont(font);
+        name.setForeground(new Color(255, 255, 255, 255));
         layeredPane.add(name);
         layeredPane.setLayer(name, LAYER_GAME);
         name.setVisible(true);
