@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
 import it.polimi.ingsw.cg_23.model.cards.GreenCard;
@@ -128,10 +129,13 @@ public class GameLogic{
                 playerAttacked.setDead();
                 playerIterator.remove();
                 removeAfterDying(playerAttacked);
-            } else if (hasCard(playerAttacked, new DefenseCard()))
+            } else if (hasCard(playerAttacked, new DefenseCard())){
                 //this condition do nothing because useDefence hasn't instruction
                 useDefense(playerAttacked);
+                discardItemCard(playerAttacked, new DefenseCard());
+            }
         }
+        discardItemCard(playerWhoAttack, new AttackCard());
     }
 
     /**

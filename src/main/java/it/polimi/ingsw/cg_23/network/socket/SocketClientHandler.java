@@ -478,9 +478,13 @@ public class SocketClientHandler implements Runnable{
             if(playerInList.getName().equals(id)){
                 if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
-                        match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
-                        response = "You moved and attacked in sector "+(char)(letter+97)+" "+(number+1);
-                        break;
+                        if((playerInList instanceof Human && match.getGameLogic().hasCard(playerInList, new AttackCard())) || playerInList instanceof Alien){
+                            match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
+                            response = "You moved and attacked in sector "+(char)(letter+97)+" "+(number+1);
+                            break;
+                        }
+                        else
+                            return "You don't have an attack card";
                     }
                     else 
                         return "You can't move there!";
@@ -605,6 +609,7 @@ public class SocketClientHandler implements Runnable{
                     if(match.getGameLogic().hasCard(playerInList, card)) {
                         match.getGameLogic().useSpotlight(letter, number);
                         response="You used the Spotlight card!";
+                        match.getGameLogic().discardItemCard(playerInList, card);
                     }
                     else
                         response = CANTUSECARD;

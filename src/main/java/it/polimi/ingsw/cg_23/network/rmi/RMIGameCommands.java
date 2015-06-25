@@ -12,6 +12,7 @@ import it.polimi.ingsw.cg_23.model.cards.SedativesCard;
 import it.polimi.ingsw.cg_23.model.cards.SpotlightCard;
 import it.polimi.ingsw.cg_23.model.cards.TeleportCard;
 import it.polimi.ingsw.cg_23.model.map.Sector;
+import it.polimi.ingsw.cg_23.model.players.Alien;
 import it.polimi.ingsw.cg_23.model.players.Human;
 import it.polimi.ingsw.cg_23.model.players.Player;
 import it.polimi.ingsw.cg_23.model.status.GameState;
@@ -190,9 +191,13 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 if(playerInList.getName().equals(id)){
                     if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                         if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
-                            match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
-                            clientInterface.dispatchMessage("You moved and attacked in sector "+(char)(letter+97)+" "+(number+1));
-                            break;
+                            if((playerInList instanceof Human && match.getGameLogic().hasCard(playerInList, new AttackCard())) || playerInList instanceof Alien){
+                                match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
+                                clientInterface.dispatchMessage("You moved and attacked in sector "+(char)(letter+97)+" "+(number+1));
+                                break;
+                            }
+                            else
+                                clientInterface.dispatchMessage("You don't have an attack card");
                         }
                         else 
                             clientInterface.dispatchMessage("You can't move there!");
@@ -316,6 +321,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                         if(match.getGameLogic().hasCard(playerInList, card)) {
                             match.getGameLogic().useSpotlight(letterAsInt, numberAsInt);
                             clientInterface.dispatchMessage("You used the Spotlight card!");
+                            match.getGameLogic().discardItemCard(playerInList, card);
                         }
                         else
                             clientInterface.dispatchMessage(ERROR_CANTUSECARD);
