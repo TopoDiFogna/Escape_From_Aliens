@@ -232,9 +232,8 @@ public class GameLogic{
         
         for (Player players : sector[letter][number].getPlayer()) {
             String name = players.getName();
-            String type = players.toString();
-            socketBroker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
-            rmiBroker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
+            socketBroker.publish(""+name+" is in sector "+letterAsChar+" "+(number+1));
+            rmiBroker.publish(""+name+" is in sector "+letterAsChar+" "+(number+1));
         }
         
         for (Sector sectors : sector[letter][number].getNeighbors()) {
@@ -244,9 +243,8 @@ public class GameLogic{
 
             for (Player players : sectors.getPlayer()) {
                 String name = players.getName();
-                String type = players.toString();
-                socketBroker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
-                rmiBroker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
+                socketBroker.publish(""+name+" is in sector "+neighborLetter+" "+(neighborNumber+1));
+                rmiBroker.publish(""+name+" is in sector "+neighborLetter+" "+(neighborNumber+1));
             }
         }
     }
