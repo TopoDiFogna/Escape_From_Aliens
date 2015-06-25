@@ -171,7 +171,6 @@ public class SocketConnection extends Connection {
         socketOut.println(nickname + " getcards");
         socketOut.flush();
         String response = socketIn.nextLine();
-        //ChatPanel.appendMessages(response);
         StringTokenizer tokenizer = new StringTokenizer(response);
         while(tokenizer.hasMoreTokens()){
             CardsPanel.enableCard(tokenizer.nextToken().toLowerCase());
