@@ -417,7 +417,7 @@ public class SocketClientHandler implements Runnable{
                     if(playerInList.needSectorNoise())
                         response = response + " " + WHERENOISE;
                     if(playerInList.hasFourCard())
-                        response =  response + " " + "You need to specify what you want to di with the card in excess";
+                        response =  response + " " + "You need to specify what you want to do with the card in excess";
                     if(playerInList.hasMoved())
                         response =  response + " " + "You have already moved!";
                 }
@@ -836,7 +836,7 @@ public class SocketClientHandler implements Runnable{
                     return WHERENOISE;
                 }
                 if(playerInList.hasFourCard()){
-                    return "You have four cards! You must discard one";
+                    return "You have four cards! You must discard or use one";
                 }
                 if(playerInList.hasMoved()){
                     match.getGameLogic().endTurn();
