@@ -208,7 +208,7 @@ public class StartingTable extends JFrame {
     
     protected static void writeName(String nickname){
         Font font = new Font("Open Sans", Font.PLAIN, 12);
-        JLabel name = new JLabel(nickname.toUpperCase());
+        JLabel name = new JLabel(nickname);
         name.setBounds(20, 115, 100, 22);
         name.setFont(font);
         name.setForeground(new Color(255, 255, 255, 255));

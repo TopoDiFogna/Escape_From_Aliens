@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -19,7 +18,6 @@ import javax.swing.JPanel;
 public class EndTurnPanel extends JPanel{
 
     private static final long serialVersionUID = 1L;
-    private int turn = 0;
     
     /**
      * The constructor. <br>
@@ -36,13 +34,7 @@ public class EndTurnPanel extends JPanel{
         Font font = new Font("Open Sans", Font.PLAIN, 12);
         setOpaque(false);
         setBorder(BorderFactory.createEtchedBorder(new Color(191, 191, 191, 255), new Color(91, 91, 91, 255)));
-        setBounds(955,262,215,37);        
-        
-        JLabel turnNumber = new JLabel();
-        turnNumber.setText("Turn Number: "+turn);
-        turnNumber.setFont(font);
-        turnNumber.setForeground(new Color(255, 255, 255, 255));
-        add(turnNumber);
+        setBounds(955,262,215,37);
         
         final JButton end = new JButton();
         end.setText("End Turn");
