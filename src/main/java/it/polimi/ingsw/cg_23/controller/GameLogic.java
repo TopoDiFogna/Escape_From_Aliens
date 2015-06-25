@@ -31,7 +31,8 @@ public class GameLogic{
     
     private static final String ALLESCAPEUSED = "All escape hatches have been used or are unusable!";
     private static final String NOISE = "Noise in sector ";
-
+    private static final String ALLESCAPED = "All Humans have escaped!";
+    
     private Match match;
     
     private SocketBroker socketBroker;
@@ -152,6 +153,16 @@ public class GameLogic{
         if(match.getnUsableEscapeHatch()==0){
             socketBroker.publish(ALLESCAPEUSED);
             rmiBroker.publish(ALLESCAPEUSED);
+            endGame();
+        }
+        int numberOfHumans=0;
+        for (Player playerInGame : match.getPlayers()) {
+            if(playerInGame instanceof Human)
+                numberOfHumans++;
+        }
+        if(numberOfHumans == 0){
+            socketBroker.publish(ALLESCAPED);
+            rmiBroker.publish(ALLESCAPED);
             endGame();
         }
     }
