@@ -215,7 +215,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
      * Makes the client use a specified card
      */
     @Override
-    public void useCard(RMIClientInterface clientInterface, String id, String cardUsed, int letter, int number) {
+    public void useCard(RMIClientInterface clientInterface, String id, String cardUsed, String letter, String number) {
         
         ServerStatus serverStatus = ServerStatus.getInstance();
 
@@ -295,8 +295,17 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                 break;
                 
             case "spotlight":
-                                                
-                if(letter<0 || letter>=23 || number <0 || number >=14){
+                           
+                int letterAsInt = Character.getNumericValue(letter.toLowerCase().charAt(0))-10;
+                int numberAsInt;
+                
+                try{
+                    numberAsInt = (Character.getNumericValue(number.toLowerCase().charAt(0))*10)+(Character.getNumericValue(number.charAt(1)))-1;
+                }catch (IndexOutOfBoundsException e){
+                    numberAsInt = Character.getNumericValue(number.charAt(0))-1;
+                }
+                
+                if(letterAsInt<0 || letterAsInt>=23 || numberAsInt <0 || numberAsInt >=14){
                     clientInterface.dispatchMessage(ERROR_SPOTLIGHTSYNTAX);
                     return;
                 }
@@ -305,7 +314,7 @@ public class RMIGameCommands implements RMIGameCommandsInterface {
                     if(playerInList.getName().equals(id)){
                         Card card = new SpotlightCard();
                         if(match.getGameLogic().hasCard(playerInList, card)) {
-                            match.getGameLogic().useSpotlight(letter, number);
+                            match.getGameLogic().useSpotlight(letterAsInt, numberAsInt);
                             clientInterface.dispatchMessage("You used the Spotlight card!");
                         }
                         else

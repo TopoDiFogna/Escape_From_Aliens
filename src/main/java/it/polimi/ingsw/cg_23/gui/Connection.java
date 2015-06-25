@@ -50,7 +50,7 @@ public abstract class Connection {
      * @param letter use only in case of spotlight card and indicates the letter where he want to use spotlight
      * @param number use only in case of spotlight card and indicates the number where he want to use spotlight
      */
-    public abstract void useCard(String card, int letter, int number);
+    public abstract void useCard(String card, String letter, String number);
     
     /**
      * Allows the player to discard a card.

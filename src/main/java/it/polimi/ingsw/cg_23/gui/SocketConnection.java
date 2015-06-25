@@ -134,7 +134,7 @@ public class SocketConnection extends Connection {
      * Sends a string corresponding to the use card command.
      */
     @Override
-    public void useCard(String card, int letter, int number) {
+    public void useCard(String card, String letter, String number) {
         String response = "";
         createSockets();
         socketOut.println(nickname+ " " + "use "+card+ " " + letter + " " + number);

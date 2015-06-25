@@ -44,7 +44,7 @@ public interface RMIGameCommandsInterface extends Remote {
      * @param number this parameter is used only when a spotlight card is used. If not used it's set to 0. Indicates the sector's number where the player wants to use the spotlight card
      * @throws RemoteException
      */
-    public void useCard(RMIClientInterface clientInterface, String id, String cardUsed, int letter, int number) throws RemoteException;
+    public void useCard(RMIClientInterface clientInterface, String id, String cardUsed, String letter, String number) throws RemoteException;
     
     /**
      * Make a noise in a sector when the player needs to do that and letter and number of the sector are specified 

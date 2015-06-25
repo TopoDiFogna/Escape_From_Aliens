@@ -372,8 +372,8 @@ public class Client {
         }
         
         String card="";
-        int letter = -1;
-        int number = -1;
+        String letter = "z";
+        String number = "99";
         
         if(tokenizer.hasMoreTokens()){
             card=tokenizer.nextToken();
@@ -382,16 +382,11 @@ public class Client {
             System.out.println(CARD_ERROR);
         
         if(tokenizer.hasMoreTokens()){
-            letter = Character.getNumericValue(tokenizer.nextToken().toLowerCase().charAt(0))-10;
+            letter=tokenizer.nextToken();
         }
         
         if(tokenizer.hasMoreTokens()){
-            String tempNumber = tokenizer.nextToken();
-            try{
-                number = (Character.getNumericValue(tempNumber.toLowerCase().charAt(0))*10)+(Character.getNumericValue(tempNumber.charAt(1)))-1;
-            }catch (IndexOutOfBoundsException e){
-                number = Character.getNumericValue(tempNumber.charAt(0))-1;
-            }
+            number=tokenizer.nextToken();
         }
         
         gameCommands.useCard(exportedClientInterface, name, card, letter, number);
