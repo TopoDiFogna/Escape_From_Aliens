@@ -175,7 +175,7 @@ public class GameLogic{
      * Asks view to ask user in what sector there is noise.
      */
     public void useNoiseInAnySector(Player player) {
-        //Qua non fa niente
+        //Nothing to do
     }
 
     /**
@@ -243,7 +243,7 @@ public class GameLogic{
         for (Sector sectors : sector[letter][number].getNeighbors()) {
             
             char neighborLetter=(char) (sectors.getLetter()+96);
-            int neighborNumber=(sectors.getNumber()-1);
+            int neighborNumber = sectors.getNumber()-1;
 
             for (Player players : sectors.getPlayer()) {
                 String name = players.getName();
