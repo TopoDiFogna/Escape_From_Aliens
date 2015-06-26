@@ -242,8 +242,8 @@ public class GameLogic{
         
         for (Sector sectors : sector[letter][number].getNeighbors()) {
             
-            char neighborLetter=(char) (sectors.getLetter()+97);
-            int neighborNumber=sectors.getNumber();
+            char neighborLetter=(char) (sectors.getLetter()+96);
+            int neighborNumber=(sectors.getNumber()-1);
 
             for (Player players : sectors.getPlayer()) {
                 String name = players.getName();
