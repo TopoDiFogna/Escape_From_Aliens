@@ -212,7 +212,7 @@ public class CardsPanel extends JPanel {
      * Calls the method useCard according the connection choose before.
      */
     private void useCard(){
-        connection.useCard(card, -1, -1);
+        connection.useCard(card, "z", "99");
     }
     
     /**
@@ -241,19 +241,10 @@ public class CardsPanel extends JPanel {
         panel.add(new JLabel("Number: "));
         panel.add(number);
         
-        int result = JOptionPane.showConfirmDialog(null, panel, "", JOptionPane.OK_CANCEL_OPTION);
-        
-        int letterAsInt = Character.getNumericValue(letter.getText().toLowerCase().charAt(0))-10;
-        int numberAsInt;
-        try{
-            numberAsInt = (Character.getNumericValue(number.getText().toLowerCase().charAt(0))*10)+(Character.getNumericValue(number.getText().toLowerCase().charAt(1)))-1;
-        }catch (IndexOutOfBoundsException e){
-            numberAsInt = Character.getNumericValue(number.getText().toLowerCase().charAt(0))-1;
-        }
-        
+        int result = JOptionPane.showConfirmDialog(null, panel, "", JOptionPane.OK_CANCEL_OPTION);      
        
         if(result==JOptionPane.OK_OPTION){
-            connection.useCard(card, letterAsInt, numberAsInt);
+            connection.useCard(card, letter.getText(), number.getText());
         }
     }
     

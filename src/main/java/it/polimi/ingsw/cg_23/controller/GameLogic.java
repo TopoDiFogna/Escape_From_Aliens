@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import it.polimi.ingsw.cg_23.model.cards.AttackCard;
 import it.polimi.ingsw.cg_23.model.cards.Card;
 import it.polimi.ingsw.cg_23.model.cards.DefenseCard;
 import it.polimi.ingsw.cg_23.model.cards.GreenCard;
@@ -31,7 +32,8 @@ public class GameLogic{
     
     private static final String ALLESCAPEUSED = "All escape hatches have been used or are unusable!";
     private static final String NOISE = "Noise in sector ";
-
+    private static final String ALLESCAPED = "All Humans have escaped!";
+    
     private Match match;
     
     private SocketBroker socketBroker;
@@ -127,10 +129,13 @@ public class GameLogic{
                 playerAttacked.setDead();
                 playerIterator.remove();
                 removeAfterDying(playerAttacked);
-            } else if (hasCard(playerAttacked, new DefenseCard()))
+            } else if (hasCard(playerAttacked, new DefenseCard())){
                 //this condition do nothing because useDefence hasn't instruction
                 useDefense(playerAttacked);
+                discardItemCard(playerAttacked, new DefenseCard());
+            }
         }
+        discardItemCard(playerWhoAttack, new AttackCard());
     }
 
     /**
@@ -152,6 +157,16 @@ public class GameLogic{
         if(match.getnUsableEscapeHatch()==0){
             socketBroker.publish(ALLESCAPEUSED);
             rmiBroker.publish(ALLESCAPEUSED);
+            endGame();
+        }
+        int numberOfHumans=0;
+        for (Player playerInGame : match.getPlayers()) {
+            if(playerInGame instanceof Human)
+                numberOfHumans++;
+        }
+        if(numberOfHumans == 0){
+            socketBroker.publish(ALLESCAPED);
+            rmiBroker.publish(ALLESCAPED);
             endGame();
         }
     }
@@ -221,21 +236,19 @@ public class GameLogic{
         
         for (Player players : sector[letter][number].getPlayer()) {
             String name = players.getName();
-            String type = players.toString();
-            socketBroker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
-            rmiBroker.publish(""+name+" ["+type+"] is in sector "+letterAsChar+" "+(number+1));
+            socketBroker.publish(""+name+" is in sector "+letterAsChar+" "+(number+1));
+            rmiBroker.publish(""+name+" is in sector "+letterAsChar+" "+(number+1));
         }
         
         for (Sector sectors : sector[letter][number].getNeighbors()) {
             
-            char neighborLetter=(char) (sectors.getLetter()+97);
-            int neighborNumber=sectors.getNumber();
+            char neighborLetter=(char) (sectors.getLetter()+96);
+            int neighborNumber=(sectors.getNumber()-1);
 
             for (Player players : sectors.getPlayer()) {
                 String name = players.getName();
-                String type = players.toString();
-                socketBroker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
-                rmiBroker.publish(""+name+" ["+type+"] is in sector "+neighborLetter+" "+(neighborNumber+1));
+                socketBroker.publish(""+name+" is in sector "+neighborLetter+" "+(neighborNumber+1));
+                rmiBroker.publish(""+name+" is in sector "+neighborLetter+" "+(neighborNumber+1));
             }
         }
     }
@@ -307,11 +320,12 @@ public class GameLogic{
      */
     public void discardItemCard(Player player, Card card) {
         for (Card playerCard : player.getCards()) {
-            if(playerCard.getClass()==card.getClass())
+            if(playerCard.getClass()==card.getClass()){
                 player.getCards().remove(playerCard);
                 match.getItemDeckDiscarded().add(playerCard);
                 player.setHasFourCard(false);
                 break;
+            }
         }
     }
 

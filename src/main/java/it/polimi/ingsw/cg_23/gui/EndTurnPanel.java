@@ -39,7 +39,7 @@ public class EndTurnPanel extends JPanel{
         final JButton end = new JButton();
         end.setText("End Turn");
         end.setFont(font);
-        end.setPreferredSize(new Dimension(90, 22));
+        end.setPreferredSize(new Dimension(110, 22));
         add(end);
         end.addActionListener(new ActionListener() {
             

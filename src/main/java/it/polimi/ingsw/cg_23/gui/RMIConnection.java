@@ -166,7 +166,7 @@ public class RMIConnection extends Connection {
      * Calls the method use card on the server interface.
      */
     @Override
-    public void useCard(String card, int letter, int number) {
+    public void useCard(String card, String letter, String number) {
         
         try {
             gameCommands.useCard(exportedClientInterface, nickname, card, letter, number);

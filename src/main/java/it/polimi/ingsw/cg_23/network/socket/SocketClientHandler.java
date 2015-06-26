@@ -87,14 +87,14 @@ public class SocketClientHandler implements Runnable{
         try {
             socketIn=new Scanner(socket.getInputStream());
         } catch (IOException e1) {
-            e1.printStackTrace();
+            System.err.println("Cannot create input stream.");
 
         }
         
         try {
             socketOut = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Cannot create output stream.");
         }
     }
     
@@ -417,7 +417,7 @@ public class SocketClientHandler implements Runnable{
                     if(playerInList.needSectorNoise())
                         response = response + " " + WHERENOISE;
                     if(playerInList.hasFourCard())
-                        response =  response + " " + "You need to specify what you want to di with the card in excess";
+                        response =  response + " " + "You need to specify what you want to do with the card in excess";
                     if(playerInList.hasMoved())
                         response =  response + " " + "You have already moved!";
                 }
@@ -478,9 +478,13 @@ public class SocketClientHandler implements Runnable{
             if(playerInList.getName().equals(id)){
                 if(!(playerInList.needSectorNoise() || playerInList.hasFourCard() || playerInList.hasMoved())){
                     if(match.getGameLogic().validMove(playerInList, sector[letter][number])){
-                        match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
-                        response = "You moved and attacked in sector "+(char)(letter+97)+" "+(number+1);
-                        break;
+                        if((playerInList instanceof Human && match.getGameLogic().hasCard(playerInList, new AttackCard())) || playerInList instanceof Alien){
+                            match.getGameLogic().movePlayerAndAttack(playerInList, sector[letter][number]);
+                            response = "You moved and attacked in sector "+(char)(letter+97)+" "+(number+1);
+                            break;
+                        }
+                        else
+                            return "You don't have an attack card";
                     }
                     else 
                         return "You can't move there!";
@@ -605,6 +609,7 @@ public class SocketClientHandler implements Runnable{
                     if(match.getGameLogic().hasCard(playerInList, card)) {
                         match.getGameLogic().useSpotlight(letter, number);
                         response="You used the Spotlight card!";
+                        match.getGameLogic().discardItemCard(playerInList, card);
                     }
                     else
                         response = CANTUSECARD;
@@ -836,7 +841,7 @@ public class SocketClientHandler implements Runnable{
                     return WHERENOISE;
                 }
                 if(playerInList.hasFourCard()){
-                    return "You have four cards! You must discard one";
+                    return "You have four cards! You must discard or use one";
                 }
                 if(playerInList.hasMoved()){
                     match.getGameLogic().endTurn();

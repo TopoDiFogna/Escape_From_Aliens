@@ -38,7 +38,7 @@ public class SocketClientSubscriber extends Thread{
     }
 
     /**
-     * Main method of the thread. Receives the messages and calls a method tho handle them
+     * Main method of the thread. Receives the messages and calls a method to handle them
      * 
      */
     @Override
@@ -48,7 +48,7 @@ public class SocketClientSubscriber extends Thread{
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.err.println("Cannot pause the thread.");
             }
         }
     }
@@ -63,8 +63,8 @@ public class SocketClientSubscriber extends Thread{
             if(msg!=null){
                 System.out.println(msg);
             }
-        } catch (IOException e) {                
-            e.printStackTrace();
+        } catch (IOException e) {  
+            System.err.println("Cannot read the stream.");
         }
     }
 }

@@ -45,7 +45,7 @@ public class RMIBroker implements RMIBrokerInterface {
                 try {
                     sub.dispatchMessage(msg);
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    System.err.println("Cannot contact the client.");
                 }
             }
         } else {
