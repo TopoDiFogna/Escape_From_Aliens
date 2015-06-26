@@ -87,14 +87,14 @@ public class SocketClientHandler implements Runnable{
         try {
             socketIn=new Scanner(socket.getInputStream());
         } catch (IOException e1) {
-            e1.printStackTrace();
+            System.err.println("Cannot create input stream.");
 
         }
         
         try {
             socketOut = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Cannot create output stream.");
         }
     }
     

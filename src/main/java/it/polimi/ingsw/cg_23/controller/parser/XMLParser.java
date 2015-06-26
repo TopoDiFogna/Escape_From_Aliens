@@ -24,6 +24,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XMLParser extends DefaultHandler{
     
+    private static final String ERROR = "Cannot parse the map file.";
     
     /**
      * The XML file converted to DOM
@@ -137,7 +138,6 @@ public class XMLParser extends DefaultHandler{
             Element el = (Element)nodeList.item(0);
             textValue = el.getFirstChild().getNodeValue();
         }
-
         return textValue;
     }
 
@@ -164,8 +164,6 @@ public class XMLParser extends DefaultHandler{
         return SectorTypeEnum.valueOf(value);
     }
 
-
-
     /**
      * Parse the xml file to check if it's correct.
      * 
@@ -185,11 +183,11 @@ public class XMLParser extends DefaultHandler{
 
 
         }catch(ParserConfigurationException pce) {
-            pce.printStackTrace();
+            System.err.println(ERROR);
         }catch(SAXException se) {
-            se.printStackTrace();
+            System.err.println(ERROR);
         }catch(IOException ioe) {
-            ioe.printStackTrace();
+            System.err.println(ERROR);
         }
     }  
 }
